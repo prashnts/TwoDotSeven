@@ -1,6 +1,5 @@
 <?php
 namespace TwoDot7\Config;
-
 #  _____                      _____ 
 # /__   \__      _____       |___  |
 #   / /\/\ \ /\ / / _ \         / / 
@@ -35,3 +34,4 @@ define("MAXIMUM_CONCURRENT_LOGINS", 5);
 error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE); 	# Comment it out in Production Environment.
 #error_reporting(0); # Comment it out in Development Environment.
 ?>
+CP

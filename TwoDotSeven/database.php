@@ -50,7 +50,7 @@ class Handler {
 	 * @param array $Arr Optional. Contains $Query parameters.
 	 * @return \PDO Binding.
 	 */
-	public function Query ($Query, $Arr = FALSE) {
+	public function Query($Query, $Arr = array()) {
 		try {
 			$this->DbHandle->beginTransaction();
 			$Binding = $this->DbHandle->prepare($Query);
