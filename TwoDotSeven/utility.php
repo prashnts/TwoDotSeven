@@ -46,7 +46,7 @@ class Crypt {
 	}
 
 	/**
-	 * This function Decrypts a Encrypted String Candidate.
+	 * This function Decrypts an Encrypted String Candidate.
 	 * @param	$Candidate: String, To-Be decrypted.
 	 * @param	$KeyOverride: Array, Overrides Keys set in Configuration.
 	 * @return	String, Decrypted String.

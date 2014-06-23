@@ -40,6 +40,8 @@ class Handler {
 			return TRUE;
 		}
 		catch (\PDOException $E) {
+			echo $E;
+			\TwoDot7\Exception\RenderError();
 			return FALSE;
 		}
 	}

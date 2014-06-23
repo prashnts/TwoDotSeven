@@ -20,3 +20,8 @@ class BadUserName extends \Exception {
 class AuthError extends \Exception {
 	protected $message = "Authentication Failure.";
 }
+
+function RenderError() {
+	echo "Nope. Database Errors";
+	die();
+}
