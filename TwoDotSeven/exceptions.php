@@ -21,6 +21,14 @@ class AuthError extends \Exception {
 	protected $message = "Authentication Failure.";
 }
 
+class InvalidArgument extends \Exception {
+	// Empty class.
+}
+
+class IncompleteArgument extends \Exception {
+	// Empty class.
+}
+
 function RenderError() {
 	echo "Nope. Database Errors";
 	die();

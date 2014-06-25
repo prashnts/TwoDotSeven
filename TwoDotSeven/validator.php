@@ -1,5 +1,5 @@
 <?php
-namespace TwoDot7\Validator;
+namespace TwoDot7\Validate;
 #  _____                      _____ 
 # /__   \__      _____       |___  |
 #   / /\/\ \ /\ / / _ \         / / 
@@ -7,17 +7,94 @@ namespace TwoDot7\Validator;
 #  \/      \_/\_/ \___/  (_)  /_/   
 
 /**
- * Builds a User Handler object. Requires Configuration NameSpace, Database Namespace to Work.
- * Handler is Dynamic and can add Any Attibute dynamically.
+ * This function validates an Email ID.
+ * @param	$Candidate -string- Email ID.
+ * @param	$_Override -bool- Overrides the return.
+ * @return	$_Override -true- Default. Returns the EMail ID if found valid, else returns False.
+ * @return	$_Override -false- -bool- True if Valid.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 20072014
+ * @since	v0.0 25072014
  * @version	0.0
  */
+function EMail($Candidate, $_Override = True) {
+	/**
+	 * EMail RegEx pattern. Modified to span in multiple lines.
+	 * @copyright Michael Rushton 2009-10 http://squiloople.com/
+	 * @link	http://lxr.php.net/xref/PHP_5_4/ext/filter/logical_filters.c#501
+	 */
 
-function isUser($Candidate) {
-	//
+	$PatternEMail = 
+		'/^(?!(?:(?:\\x22?\\x5C[\\x00-\\x7E]\\x22?)|(?:\\x22?[^\\x5C\\x22]\\x22?))'.
+		'{255,})(?!(?:(?:\\x22?\\x5C[\\x00-\\x7E]\\x22?)|(?:\\x22?[^\\x5C\\x22]\\x22?))'.
+		'{65,}@)(?:(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2F-\\x39\\x3D\\x3F\\x5E-\\x7E]+)|'.
+		'(?:\\x22(?:[\\x01-\\x08\\x0B\\x0C\\x0E-\\x1F\\x21\\x23-\\x5B\\x5D-\\x7F]|'.
+		'(?:\\x5C[\\x00-\\x7F]))*\\x22))(?:\\.(?:(?:'.
+		'[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2F-\\x39\\x3D\\x3F\\x5E-\\x7E]+)|(?:\\x22'.
+		'(?:[\\x01-\\x08\\x0B\\x0C\\x0E-\\x1F\\x21\\x23-\\x5B\\x5D-\\x7F]|(?:\\x5C[\\x00-\\x7F])'.
+		')*\\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z0-9]+(?:-+[a-z0-9]+)*\\.){1,126})'.
+		'{1,}(?:(?:[a-z][a-z0-9]*)|(?:(?:xn--)[a-z0-9]+))(?:-+[a-z0-9]+)*)|(?:\\[(?:(?:IPv6:'.
+		'(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){7})|(?:(?!(?:.*[a-f0-9][:\\]]){7,})(?:[a-f0-9]'.
+		'{1,4}(?::[a-f0-9]{1,4}){0,5})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?)))|'.
+		'(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){5}:)|(?:(?!(?:.*[a-f0-9]:)'.
+		'{5,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3})?::(?:[a-f0-9]{1,4}'.
+		'(?::[a-f0-9]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|'.
+		'(?:[1-9]?[0-9]))(?:\\.(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9])'.
+		')){3}))\\]))$/iD';
+	
+	$Result = (bool)(preg_match($PatternEMail, $Candidate));
+
+	if($_Override)
+		return $Result ? $Candidate : False;
+	else
+		return $Result;
 }
 
+/**
+ * This function validates a Password.
+ * @param	$Candidate -string- Password.
+ * @param	$_Override -bool- Overrides the return.
+ * @return	$_Override -true- Returns the Password if found valid, else returns False.
+ * @return	$_Override -false- -bool- Default. True if Valid.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 25072014
+ * @version	0.0
+ */
+function Password($Candidate, $_Override = False) {
+	if($_Override)
+		return (bool)(strlen($Candidate) > 5) ? $Candidate : False;
+	else
+		return (bool)(strlen($Candidate) > 5);
+}
+
+/**
+ * This function validates a Username. Username specification in example.
+ * @param	$Candidate -string- Username.
+ * @param	$_Override -bool- Overrides the return.
+ * @return	$_Override -true- Default. Returns the lowercase Username if found valid, else returns False.
+ * @return	$_Override -false- -bool- True if Valid.
+ * @example	Valid Usernames are between 5-32 characters long. May contain A-Z, 0-9, _(Underscore), ~(Tilde). Usernames are case insensetive. System will support 3.44e50 unique lowercase Usernames in total.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 25072014
+ * @version	0.0
+ */
+function UserName($Candidate, $_Override = True) {
+	$Pattern = "/^[A-Za-z0-9_~-]{5,32}$/";
+	$Result = (bool)(preg_match($Pattern, $Candidate));
+	if($_Override)
+		return $Result ? strtolower($Candidate) : False;
+	else
+		return $Result;
+}
+
+/**
+ * This function decides whether the user is on a Mobile device and disables
+ * the Editing feature on Template pages.
+ * @return	-bool- True if User is on a Mobile Device.
+ * @author	Chad Smith, https://twitter.com/chadsmith
+ * @link	http://detectmobilebrowsers.com/
+ * @since	v0.0 25072014
+ * @version	0.0
+ */
 function isUserOnMobile() {
 	$UserAgent=$_SERVER['HTTP_USER_AGENT'];
 	$Pattern1 =	
@@ -45,4 +122,42 @@ function isUserOnMobile() {
 		"|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83".
 		"|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i";
 	return (preg_match($Pattern1,$UserAgent)||preg_match($Pattern2,substr($UserAgent,0,4))) ? true : false;
+}
+
+
+
+function afValidateInput($Candidate, $Action="AlphaNum", $MAX=0, $MIN=0) {
+
+
+	
+	$PatternAlphaNumLim = "/^[A-Za-z0-9_~-]{".(($MIN > $MAX) ? $MAX : $MIN).",".(($MIN > $MAX) ? $MIN : $MAX)."}$/";	# Compensates for the Type Errors, Possible.
+	$PatternAlphaNumWhiteLim = "/^[A-Za-z0-9_~ -]{".(($MIN > $MAX) ? $MAX : $MIN).",".(($MIN > $MAX) ? $MIN : $MAX)."}$/";	# Compensates for the Type Errors, Possible.
+	#$PatternTel = "/^[0-9+-]{".(($MIN > $MAX) ? $MAX : $MIN).",".(($MIN > $MAX) ? $MIN : $MAX)."}$/"; TODO
+	
+
+	/**
+	 ** Taken from http://stackoverflow.com/a/15504877/3680826
+	 ** No Author Specified.
+	**/
+	$PatternDate =	"^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)".
+					"(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)".
+					"0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:".
+					"(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)".
+					"(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$";
+
+	afPutLogEntry("afValidateInput", DEBUG);
+	switch($Action) {
+		case "EMail"				:	return (bool)(preg_match($PatternEMail, $Candidate));
+		case "Date"					:	#TODO
+		case "Tel"					:	#TODO
+		case "AlphaNum"				:	return (bool)(preg_match("/^[A-Za-z0-9_~-]+$/", $Candidate));
+		case "AlphaNumWhite"		:	return (bool)(preg_match("/^[A-Za-z0-9_~ -]+$/", $Candidate));
+		case "Address"				:	return TRUE;	# TODO
+		case "AlphaNumTimes"		:	return (bool)(preg_match($PatternAlphaNumLim, $Candidate));
+		case "AlphaNumTimesWhite"	:	return (bool)(preg_match($PatternAlphaNumWhiteLim, $Candidate));
+		case "UserName"				:	return (bool)(preg_match("/^[A-Za-z0-9_~-]{5,32}$/", $Candidate));
+		case "Numeric"				:	return (bool)(preg_match($MAX > 0 ? "/^[0-9]{$MAX}$/" : "/^[0-9]+$/", $Candidate));
+		case "Designation"			:	return (bool)(is_numeric($Candidate) && ($Candidate >= 0 && $Candidate <= 6));
+		default						:	afPutLogEntry("Bad usage of function afValidate().", DEBUG); return FALSE;
+	}
 }
