@@ -5,3 +5,6 @@
 #  \/      \_/\_/ \___/  (_)  /_/   
 
 Addhandler cgi-script .py .pl .cgi
+RewriteEngine On
+RewriteRule ^dev/ TwoDotSeven/rest/index.php
+RewriteRule ^dev TwoDotSeven/rest/index.php
