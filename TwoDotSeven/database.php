@@ -7,11 +7,12 @@ namespace TwoDot7\Database;
 #  \/      \_/\_/ \___/  (_)  /_/   
 
 /**
- * Builds a Database Handler object. Requires Configuration NameSpace to Work.
+ * Builds a MySQL Database Handler object. Requires Configuration NameSpace to Work.
  * Handler Takes care of SQL Best Practices and Prevetion of Injection attacks by itself.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
  * @since	v0.0 20072014
- * @version	0.0
+ * @version	0.0 20072014
+ * @version	1.0 25072014
  */
 class Handler {
 	/**
@@ -46,6 +47,9 @@ class Handler {
 		}
 	}
 
+	// Sometimes
+	// I believe all my Comments are ignored..
+
 	/**
 	 * Executes a Query.
 	 * @param string $Query Formed Query String.
@@ -66,5 +70,21 @@ class Handler {
 			return FALSE;
 		}
 	}
+
+	/**
+	 * Executes a stand-alone query without explicit Database object.
+	 * @see		<class> Handler
+	 * @static
+	 * @example	Preffered usage is in Single query environments. Create a object in all other cases.
+	 * @param string $Query Formed Query String.
+	 * @param array $Arr Optional. Contains $Query parameters.
+	 * @return	\PDO Binding
+	 */
+	public static function Exec($Query, $Arr = array()) {
+		$InnerHandle = new Handler;
+		Handler::$Count++;
+		return $InnerHandle->Query($Query, $Arr);
+	}
 }
+
 ?>

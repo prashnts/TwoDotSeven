@@ -69,14 +69,13 @@ class Crypt {
  * Copyright (c) 2013, Taylor Hornby
  * All rights reserved.
  * @author	Taylor Hornby
- * @author	(Wrapped and Ported) Prashant Sinha <firstname,lastname>@outlook.com
  * @since	v0.0 20072014
  * @version	0.0
- */
+ */ 
 class PBKDF2 {
 	/**
 	 * Initialization Constants. Can be changed without any effect to existing Hashes.
-	 * Copyright (c) 2013, Taylor Hornby
+	 * @copyright (c) 2013, Taylor Hornby
 	 */
 	private static $PBKDF2_HASH_ALGORITHM ="sha256";
 	private static $PBKDF2_ITERATIONS = 1000;
@@ -103,7 +102,7 @@ class PBKDF2 {
 			));
 	}
 
-	public static function ValidatePassword($Password, $CorrectHash){
+	public static function ValidatePassword($Password, $CorrectHash) {
 		$params = explode(":", $CorrectHash);
 		if(Count($params) < self::$HASH_SECTIONS)
 		   return false;
@@ -136,7 +135,7 @@ class PBKDF2 {
 	 * This implementation of PBKDF2 was originally created by https://defuse.ca
 	 * With improvements by http://www.variations-of-shadow.com
 	 */
-	private static function PBKDF2($Algorithm, $Password, $Salt, $Count, $KeyLength, $RawOutput = false){
+	private static function PBKDF2($Algorithm, $Password, $Salt, $Count, $KeyLength, $RawOutput = false) {
 		$Algorithm = strtolower($Algorithm);
 		if(!in_array($Algorithm, hash_algos(), true))
 			trigger_error('PBKDF2 ERROR: Invalid hash Algorithm.', E_USER_ERROR);
@@ -171,6 +170,33 @@ class PBKDF2 {
 			return substr($output, 0, $KeyLength);
 		else
 			return bin2hex(substr($output, 0, $KeyLength));
+	}
+}
+
+/**
+ * Puts a Log entry in logs folder.
+ * @param	$Message - Logging message.
+ * @param	$__Arg - Target Log file.
+ * @return	null
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 25072014
+ * @version	0.0
+ */
+function Log($Message, $__Arg = "SILENT") {
+	# Time Offset puts the Local Time.
+	$UTC			=	time();
+	$FormattedTime	=	date("{D,d-M-Y, H:i:s}",$UTC+TIMEOFFSET);
+
+	# This finds the Log folder, and eliminates the multiple Log File locations.
+	$AbsPath		=	$_SERVER['DOCUMENT_ROOT'];
+	$AbsPath		.=	is_dir($AbsPath."/TwoDotSeven/logs") ? "/TwoDotSeven/logs" : is_dir($AbsPath."/".ROOTDIR."/TwoDotSeven/logs") ? "/".ROOTDIR."/TwoDotSeven/logs" : "" ;
+
+	switch ($__Arg) {
+		case "SILENT"	: fWrite(fopen("$AbsPath/InfoLog.log",	"a+"),	"$FormattedTime ($UTC)\t$Message\n");			break;
+		case "DEBUG"	: fWrite(fopen("$AbsPath/DebugLog.log",	"a+"),	"$FormattedTime ($UTC)\t$Message\n");			break;
+		case "ALERT"	: fWrite(fopen("$AbsPath/AlertLog.log",	"a+"),	"$FormattedTime ($UTC)\t$Message\n");			break;
+		case "DIE"		: fWrite(fopen("$AbsPath/FatalLog.log",	"a+"),	"$FormattedTime ($UTC)\t$Message\n"); die();	break;
+		default			: fWrite(fopen("$AbsPath/DebugLog.log",	"a+"),	"$FormattedTime ($UTC)\tBad Usage of function Log. Bad Argument\n");
 	}
 }
 
