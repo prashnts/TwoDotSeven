@@ -36,8 +36,10 @@ Icon
 .Spotlight-V100
 .Trashes
 
-# Configuration Files
+# Logs
+TwoDotSeven/logs
 
+# Configuration Files
 TwoDotSeven/config.php
 
 #Test Files
