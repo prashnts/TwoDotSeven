@@ -1,53 +1,66 @@
 <?php
 namespace TwoDot7\REST;
-#  _____                      _____ 
-# /__   \__      _____       |___  |
-#   / /\/\ \ /\ / / _ \         / / 
-#  / /    \ V  V / (_) |  _    / /  
-#  \/      \_/\_/ \___/  (_)  /_/   
-                                  
+#  _____                      _____                         
+# /__   \__      _____       |___  |     ___  ______________
+#   / /\/\ \ /\ / / _ \         / /     / _ \/ __/ __/_  __/
+#  / /    \ V  V / (_) |  _    / /     / , _/ _/_\ \  / /   
+#  \/      \_/\_/ \___/  (_)  /_/     /_/|_/___/___/ /_/    
+
 /**
- * This Invokes and processes the AJAX api calls. 
+ * This Invokes and processes the AJAX api calls.
  * @author Prashant Sinha <prashantsinha@outlook.com>
  * @since 0.0
  */
 
-require_once "apiconfig.php";
-require_once "../config.php";
-require_once "../inc/cron.php";
-require_once "../inc/database.php";
-require_once "../inc/exceptions.php";
-require_once "../inc/install.php";
-require_once "../inc/templatehandler.php";
-require_once "../inc/user.php";
-require_once "../inc/utility.php";
-require_once "../inc/validator.php";
+require "../config.php";
+require "../inc/cron.php";
+require "../inc/database.php";
+require "../inc/exceptions.php";
+require "../inc/install.php";
+require "../inc/mailer.php";
+require "../inc/templatehandler.php";
+require "../inc/user.php";
+require "../inc/utility.php";
+require "../inc/validator.php";
+require "apiconfig.php";
+require "__initAccount.php";
 
 # Parse incoming URI and then process it.
 $URI = preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']);
 $URIparse = explode('/', $URI);
 
-switch(strtolower(isset($URIparse[2]) ? $URIparse[2] : False)) {
+const BASE = 2;
+
+switch(strtolower(isset($URIparse[BASE]) ? $URIparse[BASE] : False)) {
+	case 'account':
+		/**
+		 * @internal	Parse URI template: DOMAIN/dev/account/[add, remove, verify, confirmEmail.]
+		 */
+		$_GET = array(
+			'Function' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False);
+		Account\init();
+		break;
+	/*
 	case 'getqr':
 		# Parse URI template: one.ducic.ac.in/dev/getqr/[Encrypted QR Data, padded under serialized array.]
 		$_GET = array(
-			'Content' => isset($URIparse[3]) ? $URIparse[3] : False,
-			'Auth' => isset($URIparse[4]) ? $URIparse[4] : False);
+			'Content' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False,
+			'Auth' => isset($URIparse[BASE+2]) ? $URIparse[BASE+2] : False);
 		__initQR();
 		break;
 
 	case 'user':
 		# Parse URI template: one.ducic.ac.in/dev/user/[username]/[getprofile/[public, private, mini], postprofile]
 		$_GET = array(
-			'UserName' => isset($URIparse[3]) ? $URIparse[3] : False);
+			'UserName' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False);
 			__initUser();
 			break;
 
 	case 'ajax':
 		# Parse URI template: one.ducic.ac.in/dev/ajax/[function]
-		$_GET = array(	'Function'		=>	isset($URIparse[4]) ? $URIparse[4] : false);
+		$_GET = array(	'Function'		=>	isset($URIparse[BASE+2]) ? $URIparse[BASE+2] : false);
 		__initAjax();
-		break;
+		break; */
 
 	default:				
 		http_response_code(400);

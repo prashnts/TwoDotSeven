@@ -25,17 +25,6 @@ class Handler {
 		$DatabaseHandle->Query($UserQuery);
 		$UserData = pass;
 	}
-/*
-	function __construct($UserName) {
-		if(TwoDot7\Validate\Username($UserName)) {
-			$DatabaseHandle = new TwoDot7\Database\Handler;
-			$UserQuery = "SELECT * FROM 'TwoDot_User' WHERE 'UserName' = :UserName";
-			$DatabaseHandle->Query($UserQuery, array('UserName' => $UserName));
-		}
-		else {
-			throw new Exception\BadUserName();
-		}
-	}*/
 }
 /**
  * Wrapper for the User Login Related functions.
