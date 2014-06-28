@@ -2,7 +2,7 @@
 $(function() {	
 
 	var Blur = function afBlur() {
-		$(".BG-Secondary").fadeIn(400);
+		$(".BG-Secondary").fadeIn(900);
 	}
 	var UnBlur = function afunBlur() {
 		//$(".Bg-Gen-Hack").fadeOut(400);
@@ -284,7 +284,7 @@ $(function() {
 
 	// Supporting functions.
 	function TintPage(Target) {
-		var Speed = 300;
+		var Speed = 400;
 		switch(Target) {
 			case 'RED'		: 	$(".BG-Secondary-Green-Tint").fadeOut(Speed);
 								$(".BG-Secondary-Red-Tint").fadeIn(Speed);

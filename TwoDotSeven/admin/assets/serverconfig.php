@@ -9,9 +9,9 @@ namespace TwoDot7\Admin\AssetServer\Config;
 const Logo = "/TwoDotSeven/admin/assets/images/logo.png";
 
 const BackgroundImageRoot = "/TwoDotSeven/admin/assets/images/backgrounds/";
-const BackgroundImagePrimary = "Concrete-Primary.jpg";
-const BackgroundImageSecondary = "Concrete-Secondary.jpg";
+const BackgroundImagePrimary = "Pixelroma-P.jpg";
+const BackgroundImageSecondary = "Pixelroma-S.jpg";
 const TintRoot = "/TwoDotSeven/admin/assets/images/tints/";
-const TintRed = "tintRed.png";
-const TintGreen = "tintGreen.png";
-const TintBlue = "tintBlue.png";
+const TintRed = "TransparencyHackRed15p.png";
+const TintGreen = "TransparencyHackGreen15p.png";
+const TintBlue = "TransparencyHackBlue15p.png";
