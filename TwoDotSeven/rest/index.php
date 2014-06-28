@@ -23,6 +23,7 @@ _Import('user.php');
 _Import('cron.php');
 require "apiconfig.php";
 require "__initAccount.php";
+require "__initRedundant.php";
 
 # Parse incoming URI and then process it.
 $URI = preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']);
@@ -54,12 +55,15 @@ switch(strtolower(isset($URIparse[BASE]) ? $URIparse[BASE] : False)) {
 			'UserName' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False);
 			__initUser();
 			break;
-
-	case 'ajax':
-		# Parse URI template: one.ducic.ac.in/dev/ajax/[function]
-		$_GET = array(	'Function'		=>	isset($URIparse[BASE+2]) ? $URIparse[BASE+2] : false);
-		__initAjax();
-		break; */
+	*/
+	case 'redundant':
+		/**
+		 * @internal	Parse URI template: DOMAIN/dev/exists/[Email, Username]
+		 */
+		$_GET = array(
+			'Function' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False);
+		Redundant\init();
+		break;
 
 	default:				
 		http_response_code(400);

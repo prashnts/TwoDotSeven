@@ -42,8 +42,20 @@ function _Import($Name) {
 		require "../../inc/$Name";
 		return 5;
 	}
+	elseif (file_exists("$Name")) {
+		require "$Name";
+		return 6;
+	}
 	else {
-		//Todo
+		require $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/login.signup.errors.php';
+		\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+			'Call' => 'Error',
+			'ErrorMessageHead' => 'Sorry, there was a Server Error',
+			'ErrorMessageFoot' => 'Couldn\'t load some of the required files.',
+			'ErrorCode' => 'ImportError: '.$Name,
+			'Code' => 500,
+			'Mood' => 'WHITE'));
+		die();
 		return 0;
 	}
 }

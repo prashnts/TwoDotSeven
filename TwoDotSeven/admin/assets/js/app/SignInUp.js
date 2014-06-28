@@ -2,7 +2,7 @@
 $(function() {	
 
 	var Blur = function afBlur() {
-		$(".Bg-Gen-Hack").fadeIn(1600);
+		$(".BG-Secondary").fadeIn(400);
 	}
 	var UnBlur = function afunBlur() {
 		//$(".Bg-Gen-Hack").fadeOut(400);
@@ -41,7 +41,7 @@ $(function() {
 	$("#Mode2F1").change(function() {
 		$.ajax({
 			type: 'POST',
-			url: 'dev/ajax/IsUser',
+			url: 'dev/redundant/username',
 			data: {
 				  UserName: $("#Mode2F1").val()
 			},
@@ -86,7 +86,7 @@ $(function() {
 	$("#Mode2F2").change(function() {
 		$.ajax({
 			type: 'POST',
-			url: 'dev/ajax/IsEMail',
+			url: 'dev/redundant/email',
 			data: {
 				  EMail: $("#Mode2F2").val()
 			},
@@ -192,7 +192,7 @@ $(function() {
 	$("#Mode4F1").change(function() {
 		$.ajax({
 			type: 'POST',
-			url: 'dev/ajax/IsEMail',
+			url: 'dev/redundant/email',
 			data: {
 				  EMail: $("#Mode4F1").val()
 			},
@@ -286,17 +286,17 @@ $(function() {
 	function TintPage(Target) {
 		var Speed = 300;
 		switch(Target) {
-			case 'RED'		: 	$(".Bg-Gen-Hack-Green-Tint").fadeOut(Speed);
-								$(".Bg-Gen-Hack-Red-Tint").fadeIn(Speed);
-								$(".Bg-Gen-Hack-Blue-Tint").fadeOut(Speed);
+			case 'RED'		: 	$(".BG-Secondary-Green-Tint").fadeOut(Speed);
+								$(".BG-Secondary-Red-Tint").fadeIn(Speed);
+								$(".BG-Secondary-Blue-Tint").fadeOut(Speed);
 								break;
-			case 'GREEN'	: 	$(".Bg-Gen-Hack-Green-Tint").fadeIn(Speed);
-								$(".Bg-Gen-Hack-Red-Tint").fadeOut(Speed);
-								$(".Bg-Gen-Hack-Blue-Tint").fadeOut(Speed);
+			case 'GREEN'	: 	$(".BG-Secondary-Green-Tint").fadeIn(Speed);
+								$(".BG-Secondary-Red-Tint").fadeOut(Speed);
+								$(".BG-Secondary-Blue-Tint").fadeOut(Speed);
 								break;
-			case 'BLUE'		: 	$(".Bg-Gen-Hack-Green-Tint").fadeOut(Speed);
-								$(".Bg-Gen-Hack-Red-Tint").fadeOut(Speed);
-								$(".Bg-Gen-Hack-Blue-Tint").fadeIn(Speed);
+			case 'BLUE'		: 	$(".BG-Secondary-Green-Tint").fadeOut(Speed);
+								$(".BG-Secondary-Red-Tint").fadeOut(Speed);
+								$(".BG-Secondary-Blue-Tint").fadeIn(Speed);
 								break;
 		}
 	}

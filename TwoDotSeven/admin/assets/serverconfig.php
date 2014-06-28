@@ -6,10 +6,12 @@ namespace TwoDot7\Admin\AssetServer\Config;
 #  / /    \ V  V / (_) |  _    / /    / __ |(_-<(_-</ -_) __/ _\ \/ -_) __/ |/ / -_) __/
 #  \/      \_/\_/ \___/  (_)  /_/    /_/ |_/___/___/\__/\__/ /___/\__/_/  |___/\__/_/   
 
-const BackgroundImageRoot = "/TwoDotSeven/admin/assets/images/";
-const BackgroundImagePrimary = "Image1.jpg";
-const BackgroundImageSecondary = "Image2.jpg";
-const TintRoot = "";
-const TintRed = "";
-const TintGreen = "";
-const TintBlue = "";
+const Logo = "/TwoDotSeven/admin/assets/images/logo.png";
+
+const BackgroundImageRoot = "/TwoDotSeven/admin/assets/images/backgrounds/";
+const BackgroundImagePrimary = "Concrete-Primary.jpg";
+const BackgroundImageSecondary = "Concrete-Secondary.jpg";
+const TintRoot = "/TwoDotSeven/admin/assets/images/tints/";
+const TintRed = "tintRed.png";
+const TintGreen = "tintGreen.png";
+const TintBlue = "tintBlue.png";
