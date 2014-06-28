@@ -12,16 +12,15 @@ namespace TwoDot7\REST;
  * @since 0.0
  */
 
-require "../config.php";
-require "../inc/cron.php";
-require "../inc/database.php";
-require "../inc/exceptions.php";
-require "../inc/install.php";
-require "../inc/mailer.php";
-require "../inc/templatehandler.php";
-require "../inc/user.php";
-require "../inc/utility.php";
-require "../inc/validator.php";
+require "../../import.php";
+_Import('config.php');
+_Import('database.php');
+_Import('exceptions.php');
+_Import('validator.php');
+_Import('utility.php');
+_Import('install.php');
+_Import('user.php');
+_Import('cron.php');
 require "apiconfig.php";
 require "__initAccount.php";
 
