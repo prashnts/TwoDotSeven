@@ -19,11 +19,59 @@ require "views/login.signup.errors.php";
  * @version	0.0
  */
 function init() {
-	if()
-	\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
-		'Title' => 'Please Login',
-		'MetaDescription' => 'Login using your TwoDotSeven account to access admin panel.',
-		'Call' => 'Login',
-		'Brand' => 'Please Login to Proceed',
-		'Trailer' => 'Use your TwoDotSeven or CIC One account.'));
+	if(\TwoDot7\User\Session::Status(array(
+		'UserName' => isset($_COOKIE['Two_7User']) ? $_COOKIE['Two_7User'] : False,
+		'Hash' => isset($_COOKIE['Two_7Hash']) ? $_COOKIE['Two_7Hash'] : False))['LoggedIn']) {
+		\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+			'Call' => 'Error',
+			'ErrorMessageHead' => 'Wait. You\'re already logged In.',
+			'ErrorMessageFoot' => 'You cannot access this page when logged in.',
+			'ErrorCode' => 'UserError: Relogin Attempt',
+			'Code' => 403,
+			'Mood' => 'RED'));
+		die();
+	}
+	elseif (isset($_POST["UserName"]) && isset($_POST["Password"])) {
+		$Response = \TwoDot7\User\Session::Login(array(
+			'UserName' => $_POST['UserName'],
+			'Password' => $_POST['Password']));
+		if($Response['Success']) {
+			// Set Cookie
+			setcookie(
+				'Two_7User',
+				$Response['UserName'],
+				isset($_POST['Remember']) ? time()+(30*24*60*60) : 0,
+				'/',
+				'',
+				False,
+				False);
+			setcookie(
+				'Two_7Hash',
+				$Response['Hash'],
+				isset($_POST['Remember']) ? time()+(30*24*60*60) : 0,
+				'/',
+				'',
+				False,
+				True);
+			header('Location: /');
+		}
+		else {
+			\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+				'Title' => 'Please Login',
+				'MetaDescription' => 'Login using your TwoDotSeven account to access admin panel.',
+				'Call' => 'Login',
+				'Brand' => 'Please Login to Proceed',
+				'Messages' => $Response['Messages'],
+				'Trailer' => 'Use your TwoDotSeven or CIC One account.',
+				'Mood' => 'RED'));
+		}
+	}
+	else {
+		\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+			'Title' => 'Please Login',
+			'MetaDescription' => 'Login using your TwoDotSeven account to access admin panel.',
+			'Call' => 'Login',
+			'Brand' => 'Please Login to Proceed',
+			'Trailer' => 'Use your TwoDotSeven or CIC One account.'));
+	}
 }

@@ -33,8 +33,65 @@ class Handler {
  * @version	0.0
  */
 class Session {
-	static function User() {
-		//
+	/**
+	 * This function Authenticates and Handles Sign In process.
+	 * @param	$Data -array- UserName and Password are sent to it.
+	 * @return	-array- Contains Success status, Tokens and Status on successful authentication.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	public static function Login($Data) {
+		if(!Validate\UserName($Data['UserName'], False)) {
+			return array(
+				'Success' => False,
+				'Messages' => array(
+					array(
+						'Message' => 'Invalid UserName or Password.',
+						'Class' => 'ERROR')));
+		}
+		$DatabaseHandle = new \TwoDot7\Database\Handler;
+		$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
+			'UserName' => $Data['UserName']))->fetch();
+		if($DBResponse) {
+			/**
+			 * @internal	This Block means that the UserName is valid and Existing.
+			 */
+			if(\TwoDot7\Util\PBKDF2::ValidatePassword($Data['Password'], $DBResponse['Password'])) {
+				/**
+				 * @internal	Valid User. Execute Login.
+				 */
+				$HashGen = Util\Crypt::RandHash();
+				$Hash = self::AddToken(array(
+					'JSON' => $DBResponse['Hash'],
+					'Token' => $HashGen));
+				$DatabaseHandle->Query("UPDATE _user SET Hash=:Hash WHERE UserName=:UserName;", array(
+					'Hash' => $Hash,
+					'UserName' => $Data['UserName']));
+				$Expire=time()+(300*24*60*60);
+				return array(
+					'Success' => True,
+					'Hash' => $HashGen,
+					'UserName' => $Data['UserName']);
+			}
+			else {
+				return array(
+					'Success' => False,
+					'Messages' => array(
+						array(
+							'Message' => 'Invalid UserName or Password.',
+							'Class' => 'ERROR')));
+			}
+		}
+		else {
+			return array(
+				'Success' => False,
+				'Messages' => array(
+					array(
+						'Message' => 'Invalid UserName or Password.',
+						'Class' => 'ERROR')));
+		}
 	}
 	/**
 	 * This function Authenticates and Check the session status of user.
@@ -45,28 +102,114 @@ class Session {
 	 * @since	v0.0 29072014
 	 * @version	0.0
 	 */
-	static function UserStatus($Data) {
+	public static function Status($Data) {
 		if( isset($Data['UserName']) &&
 			isset($Data['Hash'])) {
 			//
 			$Query = "SELECT * FROM _user WHERE UserName=:UserName";
-			$DBResponse = \TwoDot7\Database\Handler::Exec($Query, array('UserName' => $_COOKIE['UserName']))->fetch();
-			if(Util\Crypt::EagerCompare($DBResponse['Hash'], $Data['Hash'])) {
+			$DBResponse = \TwoDot7\Database\Handler::Exec($Query, array('UserName' => $Data['UserName']))->fetch();
+			if(self::IsToken(array(
+				'JSON' => isset($DBResponse['Hash']) ? $DBResponse['Hash'] : False,
+				'Token' => $Data['Hash']))) {
+
 				return array (
 					'Success' => True,
+					'LoggedIn' => True,
 					'UserName' => $Data['UserName'],
+					'Hash' => $DBResponse['Hash'],
 					'Tokens' => $DBResponse['Tokens'],
 					'Status' => $DBResponse['Status']);
 			}
 			else {
-				Util\Log("Failed to Add the Account. POST data: ".json_encode($SignupData), "TRACK");
+				Util\Log("Failed to Verify Session. Data: ".json_encode($Data), "TRACK");
 				return array(
 					'Success' => False,
+					'LoggedIn' => False,
 					'UserName' => False);
 			}
 		}
 		else {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::UserStatus");
+		}
+	}
+	/**
+	 * This function Adds Token, Rolling over to a Max Size MAXIMUM_CONCURRENT_LOGINS in Config file.
+	 * @param	$Data -array- JSON initial string and Token to be added.
+	 * @return	-string- JSON string containing Tokens.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	private static function AddToken($Data) {
+		if( isset($Data['JSON']) &&
+			isset($Data['Token'])) {
+			$Tokens = json_decode($Data['JSON']);
+			if(is_array($Tokens)) {
+				if(count($Tokens) >= \TwoDot7\Config\MAXIMUM_CONCURRENT_LOGINS) {
+					$Tokens = array_diff($Tokens, array($Tokens[0]));
+					$Tokens = array_merge($Tokens, array($Data['Token']));
+					return json_encode($Tokens);
+				}
+				else {
+					return json_encode(array_merge($Tokens, array($Data['Token'])));
+				}
+			}
+			else {
+				return json_encode(array(
+					$Data['Token']));
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::AddToken");
+		}
+	}
+	/**
+	 * This function Removes a token from the JSON string.
+	 * @param	$Data -array- JSON initial string and Token to be removed.
+	 * @return	-string- JSON string containing Tokens.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	private static function RemoveToken($Data) {
+		if( isset($Data['JSON']) &&
+			isset($Data['Token'])) {
+			$Tokens = json_decode($Data['JSON']);
+			if(is_array($Tokens)) {
+				return json_encode(array_diff($Tokens, array($Data['Token'])));
+			}
+			else {
+				return json_encode(array());
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::RemoveToken");
+		}
+	}
+	/**
+	 * This function Checks if a Key exists in the JSON string.
+	 * @param	$Data -array- JSON initial string and Token to be checked.
+	 * @return	-boolean- Self Explanatory.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	private static function IsToken($Data) {
+		if( isset($Data['JSON']) &&
+			isset($Data['Token'])) {
+			$Tokens = json_decode($Data['JSON']);
+			if(is_array($Tokens)) {
+				return in_array($Data['Token'], $Tokens);
+			}
+			else {
+				return False;
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::IsToken");
 		}
 	}
 }

@@ -28,7 +28,7 @@ const SHA_INITIAL_VECTOR = "--Fill Your Info Here --";
 # Default Offset to GMT +5:30, Indian time zone. Set 0 for GMT.
 define("TIME_OFFSET", 9800);
 # Maximum number of Concurrent logins.
-define("MAXIMUM_CONCURRENT_LOGINS", 5);
+const MAXIMUM_CONCURRENT_LOGINS = 10;
 
 # Environment Settings.
 error_reporting(E_ALL); 	# Comment it out in Production Environment.

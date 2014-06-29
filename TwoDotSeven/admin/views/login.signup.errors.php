@@ -3,10 +3,10 @@ namespace TwoDot7\Admin\Template\Login_SignUp_Error;
 use TwoDot7\Admin\Template\Login_SignUp_Error as Node;
 
 #  _____                      _____ 
-# /__   \__      _____       |___  |
-#   / /\/\ \ /\ / / _ \         / / 
-#  / /    \ V  V / (_) |  _    / /  
-#  \/      \_/\_/ \___/  (_)  /_/   
+# /__   \__      _____       |___  |     _   ___              
+#   / /\/\ \ /\ / / _ \         / /     | | / (_)__ _    _____
+#  / /    \ V  V / (_) |  _    / /      | |/ / / -_) |/|/ (_-<
+#  \/      \_/\_/ \___/  (_)  /_/       |___/_/\__/|__,__/___/
 
 /**
  * _init throws the actual Markup.
@@ -31,9 +31,9 @@ function _init($Data = False) {
 		<div class="BG-Secondary-Blue-Tint"></div>
 		<div class="BG-Secondary-Green-Tint"></div>
 		<div class="BG-Secondary-No-Tint"></div>
+		<?PHP Node\Mood($Data); ?>
 		<div id="AutogenContainer">
 			<?php
-				Node\Mood($Data);
 				if(method_exists("TwoDot7\Admin\Template\Login_SignUp_Error\Render", isset($Data['Call']) ? $Data['Call'] : False)) {
 					Node\Render::$Data['Call']($Data);
 				}
@@ -217,25 +217,27 @@ class Render {
 					<div class="messages">
 						<?php Node\Messages($Data); ?>
 					</div>
-					<div class="list-group">
-						<div class="list-group-item Field-Override-Hack">
-							<input type="text" placeholder="UserName" name="UserName" class="form-control no-border" required id="Mode1F1">
-						</div>
-						<div class="list-group-item Field-Override-Hack">
-							<input type="password" placeholder="Password" name="Password" class="form-control no-border" required id="Mode1F2">
-						</div>
-						<div class="list-group-item Field-Override-Hack">
-							<div class="checkbox i-checks" style="margin-left:10px;">
-								<label>
-									<input type="checkbox" checked name="Remember" id="Mode1F3">
-									<i></i> Remember me
-								</label>
+					<form action="/admin/login" method="POST">
+						<div class="list-group">
+							<div class="list-group-item Field-Override-Hack">
+								<input type="text" placeholder="UserName" name="UserName" class="form-control no-border" required id="Mode1F1">
+							</div>
+							<div class="list-group-item Field-Override-Hack">
+								<input type="password" placeholder="Password" name="Password" class="form-control no-border" required id="Mode1F2">
+							</div>
+							<div class="list-group-item Field-Override-Hack">
+								<div class="checkbox i-checks" style="margin-left:10px;">
+									<label>
+										<input type="checkbox" checked name="Remember" id="Mode1F3">
+										<i></i> Remember me
+									</label>
+								</div>
 							</div>
 						</div>
-					</div>
-					<button type="submit" class="btn btn-lg btn-success btn-block">
-						Sign in
-					</button>
+						<button type="submit" class="btn btn-lg btn-success btn-block">
+							Sign in
+						</button>
+					</form>
 					<div class="text-center m-t m-b">
 						<a href="<?php echo AbsURI_PasswordRecovery; ?>" id="MoodBlur">
 							<small>Forgot password?</small>

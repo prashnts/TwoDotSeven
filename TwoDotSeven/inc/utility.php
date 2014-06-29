@@ -62,6 +62,12 @@ class Crypt {
 		$Vector = substr(hash('sha256', $Keys[1]), 0, 16);
 		return openssl_decrypt(base64_decode($Candidate), $Method, $Key, 0, $Vector);
 	}
+
+	public static function RandHash() {
+		$Var=str_shuffle(time());
+		$Var.=substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 15);
+		return md5($Var);
+	}
 }
 
 /**
