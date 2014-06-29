@@ -3,10 +3,10 @@ namespace TwoDot7\Admin\Template\Login_SignUp_Error;
 use TwoDot7\Admin\Template\Login_SignUp_Error as Node;
 
 #  _____                      _____ 
-# /__   \__      _____       |___  |     _   ___              
-#   / /\/\ \ /\ / / _ \         / /     | | / (_)__ _    _____
-#  / /    \ V  V / (_) |  _    / /      | |/ / / -_) |/|/ (_-<
-#  \/      \_/\_/ \___/  (_)  /_/       |___/_/\__/|__,__/___/
+# /__   \__      _____       |___  |
+#   / /\/\ \ /\ / / _ \         / / 
+#  / /    \ V  V / (_) |  _    / /  
+#  \/      \_/\_/ \___/  (_)  /_/   
 
 /**
  * _init throws the actual Markup.

@@ -27,17 +27,47 @@ class Handler {
 	}
 }
 /**
- * Wrapper for the User Login Related functions.
+ * Wrapper for the User Session Related functions.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
  * @since	v0.0 23072014
  * @version	0.0
  */
-class Login {
+class Session {
 	static function User() {
 		//
 	}
-	static function UserStatus() {
-		//
+	/**
+	 * This function Authenticates and Check the session status of user.
+	 * @param	$Data -array- UserName and Hash are sent to it.
+	 * @return	-array- Contains Success status, Tokens and Status on successful authentication.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	static function UserStatus($Data) {
+		if( isset($Data['UserName']) &&
+			isset($Data['Hash'])) {
+			//
+			$Query = "SELECT * FROM _user WHERE UserName=:UserName";
+			$DBResponse = \TwoDot7\Database\Handler::Exec($Query, array('UserName' => $_COOKIE['UserName']))->fetch();
+			if(Util\Crypt::EagerCompare($DBResponse['Hash'], $Data['Hash'])) {
+				return array (
+					'Success' => True,
+					'UserName' => $Data['UserName'],
+					'Tokens' => $DBResponse['Tokens'],
+					'Status' => $DBResponse['Status']);
+			}
+			else {
+				Util\Log("Failed to Add the Account. POST data: ".json_encode($SignupData), "TRACK");
+				return array(
+					'Success' => False,
+					'UserName' => False);
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::UserStatus");
+		}
 	}
 }
 
@@ -190,51 +220,6 @@ class Account {
 	}
 
 	public static function RecoverPassword($Data) {
-	}
-}
-function fSetCookie($__Arg="Default") {
-
-	/*
-	**	Description: User Authorization.
-	**	API Level: Not Applicable. Function for the Web-App only.
-	**	Authorization: Not Required, Not an option.
-	**	Clearance: Top / Not Vulnerable.
-	**	Authored: prashant@ducic.ac.in
-	**	Package: CIC One API
-	**	First Commit: 03-24-2014
-	**	Arguments:	$__Arg: Optional, Defines Return-type.
-	*/
-
-	if ( isset($_COOKIE["UserNameCookie"]) && 
-		 isset($_COOKIE["UserHashCookie"])) {
-
-		$Handle = new DatabaseHandle;
-		$DbResult = $Handle->qQuery("SELECT * FROM oneusers WHERE UserName=:UserName", array('UserName'=>$_COOKIE["UserNameCookie"]))->fetch();
-		
-		if ($DbResult["Hash"]==$_COOKIE["UserHashCookie"]) {
-			if ($__Arg=="Default") {
-				return 1;
-			}
-			elseif ($__Arg=="Clearance") {
-				return $DbResult["Clearance"];
-			}
-			elseif ($__Arg=="UserName") {
-				return $DbResult["UserName"];
-			}
-			else {
-				afPutLogEntry ("Bad Argument in function fSetCookie.", DEBUG);
-				return 0;
-			}
-		}
-		else {
-			afPutLogEntry ("Failed User Query, Bad Cookie. User: ".$_COOKIE["UserNameCookie"], ALERT);
-			setcookie("UserNameCookie", "", 1, '/');
-			setcookie("UserHashCookie", "", 1, '/');
-			return 0;
-		}
-	}
-	else {
-		return 0;
 	}
 }
 ?>

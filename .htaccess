@@ -12,3 +12,5 @@ RewriteRule ^assetserver/ TwoDotSeven/admin/assets/index.php
 RewriteRule ^assetserver TwoDotSeven/admin/assets/index.php
 RewriteRule ^test test.php
 RewriteRule ^test/ test.php
+RewriteRule ^admin TwoDotSeven/admin/index.php
+RewriteRule ^admin/ TwoDotSeven/admin/index.php
