@@ -132,6 +132,7 @@ class Session {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::UserStatus");
 		}
 	}
+	
 	/**
 	 * This function Adds Token, Rolling over to a Max Size MAXIMUM_CONCURRENT_LOGINS in Config file.
 	 * @param	$Data -array- JSON initial string and Token to be added.
@@ -164,6 +165,7 @@ class Session {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::AddToken");
 		}
 	}
+
 	/**
 	 * This function Removes a token from the JSON string.
 	 * @param	$Data -array- JSON initial string and Token to be removed.
@@ -188,6 +190,7 @@ class Session {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::RemoveToken");
 		}
 	}
+
 	/**
 	 * This function Checks if a Key exists in the JSON string.
 	 * @param	$Data -array- JSON initial string and Token to be checked.
