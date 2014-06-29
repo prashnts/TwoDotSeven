@@ -51,7 +51,7 @@ function _Import($Name) {
 		\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
 			'Call' => 'Error',
 			'ErrorMessageHead' => 'Sorry, there was a Server Error',
-			'ErrorMessageFoot' => 'Couldn\'t load some of the require_onced files.',
+			'ErrorMessageFoot' => 'Couldn\'t load some or all the required files.',
 			'ErrorCode' => 'ImportError: '.$Name,
 			'Code' => 500,
 			'Mood' => ''));
