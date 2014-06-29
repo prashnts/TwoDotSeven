@@ -23,35 +23,35 @@
  */
 function _Import($Name) {
 	if (file_exists("TwoDotSeven/$Name")) {
-		require "TwoDotSeven/$Name";
+		require_once "TwoDotSeven/$Name";
 		return 1;
 	}
 	elseif (file_exists("TwoDotSeven/inc/$Name")) {
-		require "TwoDotSeven/inc/$Name";
+		require_once "TwoDotSeven/inc/$Name";
 		return 2;
 	}
 	elseif (file_exists("../$Name")) {
-		require "../$Name";
+		require_once "../$Name";
 		return 3;
 	}
 	elseif (file_exists("../inc/$Name")) {
-		require "../inc/$Name";
+		require_once "../inc/$Name";
 		return 4;
 	}
 	elseif (file_exists("../../inc/$Name")) {
-		require "../../inc/$Name";
+		require_once "../../inc/$Name";
 		return 5;
 	}
 	elseif (file_exists("$Name")) {
-		require "$Name";
+		require_once "$Name";
 		return 6;
 	}
 	else {
-		require $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/login.signup.errors.php';
+		require_once $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/login.signup.errors.php';
 		\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
 			'Call' => 'Error',
 			'ErrorMessageHead' => 'Sorry, there was a Server Error',
-			'ErrorMessageFoot' => 'Couldn\'t load some of the required files.',
+			'ErrorMessageFoot' => 'Couldn\'t load some of the require_onced files.',
 			'ErrorCode' => 'ImportError: '.$Name,
 			'Code' => 500,
 			'Mood' => ''));

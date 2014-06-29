@@ -2,6 +2,20 @@
 namespace TwoDot7\Admin\Template\Login_SignUp_Error;
 use TwoDot7\Admin\Template\Login_SignUp_Error as Node;
 
+#  _____                      _____ 
+# /__   \__      _____       |___  |
+#   / /\/\ \ /\ / / _ \         / / 
+#  / /    \ V  V / (_) |  _    / /  
+#  \/      \_/\_/ \___/  (_)  /_/   
+
+/**
+ * _init throws the actual Markup.
+ * @param	$Data -array- Override Dataset.
+ * @return	null
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 28072014
+ * @version	0.0
+ */
 function _init($Data = False) {
 	?>
 	<!DOCTYPE html>
@@ -16,8 +30,8 @@ function _init($Data = False) {
 		<div class="BG-Secondary-Blue-Tint"></div>
 		<div class="BG-Secondary-Green-Tint"></div>
 		<div class="BG-Secondary-No-Tint"></div>
-		<?php Node\Mood($Data); ?>
 		<?php
+			Node\Mood($Data);
 			if(method_exists("TwoDot7\Admin\Template\Login_SignUp_Error\Render", isset($Data['Call']) ? $Data['Call'] : False)) {
 				Node\Render::$Data['Call']($Data);
 			}
@@ -293,6 +307,137 @@ class Render {
 						Already got an Account?
 					</p>
 					<a href="login.php" class="btn btn-sm btn-primary btn-block">Login</a>
+				</section>
+			</div>
+		</section>
+		<footer id="footer">
+			<div class="text-center padder clearfix">
+				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+			</div>
+		</footer>
+		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<?php
+	}
+
+	static function OK($Data) {
+		?>
+		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
+			<div class="container aside-xl"> 
+				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+				<hr style="margin:9px 0 0 0; padding:0">
+				<section class="m-b-lg">
+					<header class="text-center litetxt">
+						<h3 class="set-font-Open-Sans">
+							<?php echo isset($Data['Brand']) ? $Data['Brand'] : ""; ?>
+						</h3>
+					</header>
+					<h5 class="text-center litetxt Login-Message-Persistant">
+						<?php echo isset($Data['Trailer']) ? $Data['Trailer'] : ""; ?>
+					</h5>
+						<div class="text-center litetxt">
+							<img src="/TwoDotSeven/admin/assets/images/Okay.png" class="Img-Make-Responsive"><br>
+							<a href="login.php" class="btn btn-md btn-block btn-primary">Login</a>
+						</div>
+				</section>
+			</div>
+		</section>
+		<footer id="footer">
+			<div class="text-center padder clearfix">
+				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+			</div>
+		</footer>
+		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<?php
+	}
+
+	static function PasswordRecovery($Data) {
+		?>
+		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
+			<div class="container aside-xl"> 
+				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+				<hr style="margin:9px 0 0 0; padding:0">
+				<section class="m-b-lg">
+					<header class="text-center litetxt">
+						<h3 class="set-font-Open-Sans">
+							<?php echo isset($Data['Brand']) ? $Data['Brand'] : ""; ?>
+						</h3>
+					</header>
+					<h5 class="text-center litetxt Login-Message-Persistant">
+						<?php echo isset($Data['Trailer']) ? $Data['Trailer'] : ""; ?>
+					</h5>
+					<div class="messages">
+						<?php Node\Messages($Data); ?>
+					</div>
+					<div class="list-group">
+						<div class="list-group-item Field-Override-Hack">
+							<div class="form-group input-group Field-Margin-Override">
+								<input type="text" required  class="form-control Input-Field-Override-Hack" name="RecoveryEMail" placeholder="EMail ID" id="Mode4F1">
+								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode4F1fa" class="fa fa-ellipsis-h"></i></span>
+							</div>
+						</div>
+						<div class="list-group-item go-right">
+							<button type="submit" class="btn btn-danger" id="Mode4Btn">
+								Send Recovery Link
+							</button>
+						</div>
+					</div>
+					<div class="text-center m-t m-b">
+						<small><a href="#" class="litetxt" id="MoodBlur">Need Help? Click Here</a></small>
+					</div>
+				</section>
+			</div>
+		</section>
+		<footer id="footer">
+			<div class="text-center padder clearfix">
+				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+			</div>
+		</footer>
+		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<?php
+	}
+
+	static function NewPassword($Data) {
+		?>
+		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
+			<div class="container aside-xl"> 
+				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+				<hr style="margin:9px 0 0 0; padding:0">
+				<section class="m-b-lg">
+					<header class="text-center litetxt">
+						<h3 class="set-font-Open-Sans">
+							<?php echo isset($Data['Brand']) ? $Data['Brand'] : ""; ?>
+						</h3>
+					</header>
+					<h5 class="text-center litetxt Login-Message-Persistant">
+						<?php echo isset($Data['Trailer']) ? $Data['Trailer'] : ""; ?>
+					</h5>
+					<div class="messages">
+						<?php Node\Messages($Data); ?>
+					</div>
+					<div class="list-group">
+						<div class="list-group-item Field-Override-Hack">
+							<div style="display: none">
+								<input type="text" id="Auth" value="<?php echo $Data['Hidden']; ?>">
+							</div>
+							<div class="form-group input-group Field-Margin-Override">
+								<input type="password" required class="form-control Input-Field-Override-Hack" name="Password" placeholder="Create a new Password." id="Mode5F1">
+								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode5F1fa" class="fa fa-ellipsis-h"></i> </span>
+							</div>
+							<hr class="No-Margin-Padding-Override-Hack">
+							<div class="form-group input-group Field-Margin-Override">
+								<input type="password" required class="form-control Input-Field-Override-Hack" name="ConfPass" placeholder="Confirm Password." id="Mode5F2">
+								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode5F2fa" class="fa fa-ellipsis-h"></i></span>
+							</div>
+						</div>
+						<div class="list-group-item go-right">
+							<button type="submit" class="btn btn-success" id="Mode5Btn">
+								Change &amp; Proceed
+							</button>
+						</div>
+					</div>
+					<div class="text-center m-t m-b">
+						<small><a href="#" class="litetxt">Need Help? Click Here</a></small>
+					</div>
 				</section>
 			</div>
 		</section>
