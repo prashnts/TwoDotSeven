@@ -17,9 +17,7 @@ namespace TwoDot7\Admin\Logout;
  * @version	0.0
  */
 function init() {
-	if(!\TwoDot7\User\Session::Status(array(
-		'UserName' => isset($_COOKIE['Two_7User']) ? $_COOKIE['Two_7User'] : False,
-		'Hash' => isset($_COOKIE['Two_7Hash']) ? $_COOKIE['Two_7Hash'] : False))['LoggedIn']) {
+	if(!\TwoDot7\User\Session::Exists()) {
 		\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
 			'Call' => 'Error',
 			'ErrorMessageHead' => 'You need to Login First.',

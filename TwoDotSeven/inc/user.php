@@ -28,6 +28,7 @@ class Handler {
 }
 /**
  * Wrapper for the User Session Related functions.
+ * Implemets Methods for Login, Logout, & Session Status.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
  * @since	v0.0 23072014
  * @version	0.0
@@ -63,7 +64,7 @@ class Session {
 				 * @internal	Valid User. Execute Login.
 				 */
 				$HashGen = Util\Crypt::RandHash();
-				$Hash = self::AddToken(array(
+				$Hash = Util\Token::Add(array(
 					'JSON' => $DBResponse['Hash'],
 					'Token' => $HashGen));
 				$DatabaseHandle->Query("UPDATE _user SET Hash=:Hash WHERE UserName=:UserName;", array(
@@ -94,17 +95,26 @@ class Session {
 		}
 	}
 
+	/**
+	 * This function Checks Session and Destroys it.
+	 * @param	$Data -array- UserName and Hash are sent to it.
+	 * @return	-array- Contains Success status.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 30072014
+	 * @version	0.0
+	 */
 	public static function Logout($Data) {
 		if( isset($Data['UserName']) &&
 			isset($Data['Hash'])) {
 			$DatabaseHandle = new \TwoDot7\Database\Handler;
 			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
 				'UserName' => $Data['UserName']))->fetch();
-			if(self::IsToken(array(
+			if(Util\Token::Exists(array(
 				'JSON' => isset($DBResponse['Hash']) ? $DBResponse['Hash'] : False,
 				'Token' => $Data['Hash']))) {
 				$DatabaseHandle->Query("UPDATE _user SET Hash=:Hash WHERE UserName=:UserName;", array(
-					'Hash' => self::RemoveToken(array(
+					'Hash' => Util\Token::Remove(array(
 						'JSON' => $DBResponse['Hash'],
 						'Token' => $Data['Hash'])),
 					'UserName' => $Data['UserName']));
@@ -138,7 +148,7 @@ class Session {
 			//
 			$Query = "SELECT * FROM _user WHERE UserName=:UserName";
 			$DBResponse = \TwoDot7\Database\Handler::Exec($Query, array('UserName' => $Data['UserName']))->fetch();
-			if(self::IsToken(array(
+			if(Util\Token::Exists(array(
 				'JSON' => isset($DBResponse['Hash']) ? $DBResponse['Hash'] : False,
 				'Token' => $Data['Hash']))) {
 
@@ -164,86 +174,18 @@ class Session {
 	}
 
 	/**
-	 * This function Adds Token, Rolling over to a Max Size MAXIMUM_CONCURRENT_LOGINS in Config file.
-	 * @param	$Data -array- JSON initial string and Token to be added.
-	 * @return	-string- JSON string containing Tokens.
+	 * This function Provides an interface to Session::Status() function because cookies needs
+	 * to be checked quite a lot of times.
+	 * @return	-bool- True if a Valid session exists.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
+	 * @since	v0.0 30072014
 	 * @version	0.0
 	 */
-	private static function AddToken($Data) {
-		if( isset($Data['JSON']) &&
-			isset($Data['Token'])) {
-			$Tokens = json_decode($Data['JSON']);
-			if(is_array($Tokens)) {
-				if(count($Tokens) >= \TwoDot7\Config\MAXIMUM_CONCURRENT_LOGINS) {
-					$Tokens = array_diff($Tokens, array($Tokens[0]));
-					$Tokens = array_merge($Tokens, array($Data['Token']));
-					return json_encode($Tokens);
-				}
-				else {
-					return json_encode(array_merge($Tokens, array($Data['Token'])));
-				}
-			}
-			else {
-				return json_encode(array(
-					$Data['Token']));
-			}
-		}
-		else {
-			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::AddToken");
-		}
-	}
-
-	/**
-	 * This function Removes a token from the JSON string.
-	 * @param	$Data -array- JSON initial string and Token to be removed.
-	 * @return	-string- JSON string containing Tokens.
-	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
-	 * @version	0.0
-	 */
-	private static function RemoveToken($Data) {
-		if( isset($Data['JSON']) &&
-			isset($Data['Token'])) {
-			$Tokens = json_decode($Data['JSON']);
-			if(is_array($Tokens)) {
-				return json_encode(array_merge(array_diff($Tokens, array($Data['Token']))));
-			}
-			else {
-				return json_encode(array());
-			}
-		}
-		else {
-			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::RemoveToken");
-		}
-	}
-
-	/**
-	 * This function Checks if a Key exists in the JSON string.
-	 * @param	$Data -array- JSON initial string and Token to be checked.
-	 * @return	-boolean- Self Explanatory.
-	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
-	 * @version	0.0
-	 */
-	private static function IsToken($Data) {
-		if( isset($Data['JSON']) &&
-			isset($Data['Token'])) {
-			$Tokens = json_decode($Data['JSON']);
-			if(is_array($Tokens)) {
-				return in_array($Data['Token'], $Tokens);
-			}
-			else {
-				return False;
-			}
-		}
-		else {
-			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::IsToken");
-		}
+	public static function Exists() {
+		return self::Status(array(
+		'UserName' => isset($_COOKIE['Two_7User']) ? $_COOKIE['Two_7User'] : False,
+		'Hash' => isset($_COOKIE['Two_7Hash']) ? $_COOKIE['Two_7Hash'] : False))['LoggedIn'];
 	}
 }
 

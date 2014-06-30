@@ -215,6 +215,98 @@ class Redundant {
 }
 
 /**
+ * Class wrapper for JSON-fy-able Data Structure manipulation.
+ * @internal Moved From \User\Session
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 30072014
+ * @version	0.0
+ */
+class Token {
+	/**
+	 * This function Adds Token, Rolling over to a Max Size MAXIMUM_CONCURRENT_LOGINS in Config file.
+	 * @param	$Data -array- JSON initial string and Token to be added.
+	 * @return	-string- JSON string containing Tokens.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	public static function Add($Data) {
+		if( isset($Data['JSON']) &&
+			isset($Data['Token'])) {
+			$Tokens = json_decode($Data['JSON']);
+			if(is_array($Tokens)) {
+				if(count($Tokens) >= \TwoDot7\Config\MAXIMUM_CONCURRENT_LOGINS) {
+					$Tokens = array_diff($Tokens, array($Tokens[0]));
+					$Tokens = array_merge($Tokens, array($Data['Token']));
+					return json_encode($Tokens);
+				}
+				else {
+					return json_encode(array_merge($Tokens, array($Data['Token'])));
+				}
+			}
+			else {
+				return json_encode(array(
+					$Data['Token']));
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::AddToken");
+		}
+	}
+
+	/**
+	 * This function Removes a token from the JSON string.
+	 * @param	$Data -array- JSON initial string and Token to be removed.
+	 * @return	-string- JSON string containing Tokens.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	public static function Remove($Data) {
+		if( isset($Data['JSON']) &&
+			isset($Data['Token'])) {
+			$Tokens = json_decode($Data['JSON']);
+			if(is_array($Tokens)) {
+				return json_encode(array_merge(array_diff($Tokens, array($Data['Token']))));
+			}
+			else {
+				return json_encode(array());
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::RemoveToken");
+		}
+	}
+
+	/**
+	 * This function Checks if a Key exists in the JSON string.
+	 * @param	$Data -array- JSON initial string and Token to be checked.
+	 * @return	-boolean- Self Explanatory.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	public static function Exists($Data) {
+		if( isset($Data['JSON']) &&
+			isset($Data['Token'])) {
+			$Tokens = json_decode($Data['JSON']);
+			if(is_array($Tokens)) {
+				return in_array($Data['Token'], $Tokens);
+			}
+			else {
+				return False;
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::IsToken");
+		}
+	}
+}
+
+/**
  * Puts a Log entry in logs folder. Creates a new log file if log file size gets larger than 512 KB.
  * @param	$Message - Logging message.
  * @param	$__Arg - Target Log file.
