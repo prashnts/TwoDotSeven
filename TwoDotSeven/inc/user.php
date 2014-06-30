@@ -9,188 +9,8 @@ use \TwoDot7\Util as Util;
 #  \/      \_/\_/ \___/  (_)  /_/   
 
 /**
- * Builds a User Handler object. Requires Configuration NameSpace, Database Namespace to Work.
- * Handler is Dynamic and can add Any Attibute dynamically.
- * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 20072014
- * @version	0.0
- */
-class Handler {
-	private $UserCredentials;
-	private $UserData;
-
-	function __construct() {
-		$DatabaseHandle = new TwoDot7\Database\Handler;
-		$UserQuery = "SELECT * FROM 'TwoDot_User'";
-		$DatabaseHandle->Query($UserQuery);
-		$UserData = pass;
-	}
-}
-/**
- * Wrapper for the User Session Related functions.
- * Implemets Methods for Login, Logout, & Session Status.
- * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 23072014
- * @version	0.0
- */
-class Session {
-	/**
-	 * This function Authenticates and Handles Sign In process.
-	 * @param	$Data -array- UserName and Password are sent to it.
-	 * @return	-array- Contains Success status, Tokens and Status on successful authentication.
-	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
-	 * @version	0.0
-	 */
-	public static function Login($Data) {
-		if(!Validate\UserName($Data['UserName'], False)) {
-			return array(
-				'Success' => False,
-				'Messages' => array(
-					array(
-						'Message' => 'Invalid UserName or Password.',
-						'Class' => 'ERROR')));
-		}
-		$DatabaseHandle = new \TwoDot7\Database\Handler;
-		$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
-			'UserName' => $Data['UserName']))->fetch();
-		if($DBResponse) {
-			/**
-			 * @internal	This Block means that the UserName is valid and Existing.
-			 */
-			if(\TwoDot7\Util\PBKDF2::ValidatePassword($Data['Password'], $DBResponse['Password'])) {
-				/**
-				 * @internal	Valid User. Execute Login.
-				 */
-				$HashGen = Util\Crypt::RandHash();
-				$Hash = Util\Token::Add(array(
-					'JSON' => $DBResponse['Hash'],
-					'Token' => $HashGen));
-				$DatabaseHandle->Query("UPDATE _user SET Hash=:Hash WHERE UserName=:UserName;", array(
-					'Hash' => $Hash,
-					'UserName' => $Data['UserName']));
-				$Expire=time()+(300*24*60*60);
-				return array(
-					'Success' => True,
-					'Hash' => $HashGen,
-					'UserName' => $Data['UserName']);
-			}
-			else {
-				return array(
-					'Success' => False,
-					'Messages' => array(
-						array(
-							'Message' => 'Invalid UserName or Password.',
-							'Class' => 'ERROR')));
-			}
-		}
-		else {
-			return array(
-				'Success' => False,
-				'Messages' => array(
-					array(
-						'Message' => 'Invalid UserName or Password.',
-						'Class' => 'ERROR')));
-		}
-	}
-
-	/**
-	 * This function Checks Session and Destroys it.
-	 * @param	$Data -array- UserName and Hash are sent to it.
-	 * @return	-array- Contains Success status.
-	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 30072014
-	 * @version	0.0
-	 */
-	public static function Logout($Data) {
-		if( isset($Data['UserName']) &&
-			isset($Data['Hash'])) {
-			$DatabaseHandle = new \TwoDot7\Database\Handler;
-			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
-				'UserName' => $Data['UserName']))->fetch();
-			if(Util\Token::Exists(array(
-				'JSON' => isset($DBResponse['Hash']) ? $DBResponse['Hash'] : False,
-				'Token' => $Data['Hash']))) {
-				$DatabaseHandle->Query("UPDATE _user SET Hash=:Hash WHERE UserName=:UserName;", array(
-					'Hash' => Util\Token::Remove(array(
-						'JSON' => $DBResponse['Hash'],
-						'Token' => $Data['Hash'])),
-					'UserName' => $Data['UserName']));
-				return array (
-					'Success' => True,
-					'UserName' => $Data['UserName']);
-			}
-			else {
-				Util\Log("Failed to Logout User Session. Data: ".json_encode($Data), "TRACK");
-				return array(
-					'Success' => False);
-			}
-		}
-		else {
-			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::UserStatus");
-		}
-	}
-
-	/**
-	 * This function Authenticates and Check the session status of user.
-	 * @param	$Data -array- UserName and Hash are sent to it.
-	 * @return	-array- Contains Success status, Tokens and Status on successful authentication.
-	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
-	 * @version	0.0
-	 */
-	public static function Status($Data) {
-		if( isset($Data['UserName']) &&
-			isset($Data['Hash'])) {
-			//
-			$Query = "SELECT * FROM _user WHERE UserName=:UserName";
-			$DBResponse = \TwoDot7\Database\Handler::Exec($Query, array('UserName' => $Data['UserName']))->fetch();
-			if(Util\Token::Exists(array(
-				'JSON' => isset($DBResponse['Hash']) ? $DBResponse['Hash'] : False,
-				'Token' => $Data['Hash']))) {
-
-				return array (
-					'Success' => True,
-					'LoggedIn' => True,
-					'UserName' => $Data['UserName'],
-					'Hash' => $DBResponse['Hash'],
-					'Tokens' => $DBResponse['Tokens'],
-					'Status' => $DBResponse['Status']);
-			}
-			else {
-				Util\Log("Failed to Verify Session. Data: ".json_encode($Data), "TRACK");
-				return array(
-					'Success' => False,
-					'LoggedIn' => False,
-					'UserName' => False);
-			}
-		}
-		else {
-			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::UserStatus");
-		}
-	}
-
-	/**
-	 * This function Provides an interface to Session::Status() function because cookies needs
-	 * to be checked quite a lot of times.
-	 * @return	-bool- True if a Valid session exists.
-	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 30072014
-	 * @version	0.0
-	 */
-	public static function Exists() {
-		return self::Status(array(
-		'UserName' => isset($_COOKIE['Two_7User']) ? $_COOKIE['Two_7User'] : False,
-		'Hash' => isset($_COOKIE['Two_7Hash']) ? $_COOKIE['Two_7Hash'] : False))['LoggedIn'];
-	}
-}
-
-/**
  * Class wrapper for Account Management functions.
+ * Implements Add, RecoverPassword, Escalate.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
  * @since	v0.0 26072014
  * @version	0.0
@@ -338,6 +158,303 @@ class Account {
 	}
 
 	public static function RecoverPassword($Data) {
+	}
+}
+
+/**
+ * TODO
+ */
+class Activity {
+	// TODO!
+	public static function Add() {
+		// TODO.
+	}
+	public static function DetectUnusualActivity() {
+		// Todo. Will Ask for CAPTCHA validation. Will Inform the User.
+	}
+	public static function Find() {
+		// TODO.
+	}
+	public static function Modify() {
+		// TODO.
+	}
+	public static function Remove() {
+		// TODO.
+	}
+}
+
+class Access {
+	public static function Add($Data) {
+		if( isset($Data['UserName']) &&
+			isset($Data['Domain'])) {
+			$DatabaseHandle = new \TwoDot7\Database\Handler;
+			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
+				'UserName' => $Data['UserName']))->fetch();
+			if($DBResponse) {
+				/**
+				 * @internal	This Block means that the UserName is valid and Existing.
+				 */
+				if(Util\Token::Exists(array(
+					'JSON' => $DBResponse['Tokens'] ? $DBResponse['Tokens'] : False,
+					'Token' => $Data['Domain']))) {
+					/**
+					 * @internal	Key Already exists. Saves additional DB Query.
+					 */
+					return True;
+				}
+				// Else
+				if($DatabaseHandle->Query("UPDATE _user SET Tokens=:Tokens WHERE UserName=:UserName;", array(
+					'Tokens' => Util\Token::Add(array(
+						'JSON' => $DBResponse['Tokens'] ? $DBResponse['Tokens'] : False,
+						'Token' => $Data['Domain'])),
+					'UserName' => $Data['UserName']))) {
+					return True;
+				}
+				else {
+					return False;
+				}
+			}
+			else {
+				return False;
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Add");
+		}
+	}
+	public static function Check($Data) {
+		if( isset($Data['UserName']) &&
+			isset($Data['Domain'])) {
+			$TokensJSON = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
+				'UserName' => $Data['UserName']))->fetch()['Tokens'];
+			return Util\Token::Exists(array(
+				'JSON' => $TokensJSON ? $TokensJSON : False,
+				'Token' => $Data['Domain']));
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Check");
+		}
+	}
+	public static function Get($Data) {
+		if( isset($Data['UserName'])) {
+			$TokensJSON = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
+				'UserName' => $Data['UserName']))->fetch()['Tokens'];
+			return Util\Token::Get(array(
+				'JSON' => $TokensJSON ? $TokensJSON : False));
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Get");
+		}
+	}
+	public static function Revoke($Data) {
+		if( isset($Data['UserName']) &&
+			isset($Data['Domain'])) {
+			$DatabaseHandle = new \TwoDot7\Database\Handler;
+			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
+				'UserName' => $Data['UserName']))->fetch();
+			if($DBResponse) {
+				/**
+				 * @internal	This Block means that the UserName is valid and Existing.
+				 */
+				if(!Util\Token::Exists(array(
+					'JSON' => $DBResponse['Tokens'] ? $DBResponse['Tokens'] : False,
+					'Token' => $Data['Domain']))) {
+					/**
+					 * @internal	Key Doesnt Exists. Saves additional DB Query.
+					 */
+					return True;
+				}
+				// Else
+				if($DatabaseHandle->Query("UPDATE _user SET Tokens=:Tokens WHERE UserName=:UserName;", array(
+					'Tokens' => Util\Token::Remove(array(
+						'JSON' => $DBResponse['Tokens'] ? $DBResponse['Tokens'] : False,
+						'Token' => $Data['Domain'])),
+					'UserName' => $Data['UserName']))) {
+					return True;
+				}
+				else {
+					return False;
+				}
+			}
+			else {
+				return False;
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Revoke");
+		}
+	}
+}
+
+class Meta {
+	//Todo
+	//
+}
+
+class Preferences {
+	// Todo
+}
+
+/**
+ * Wrapper for the User Session Related functions.
+ * Implemets Methods for Login, Logout, & Session Status.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 23072014
+ * @version	0.0
+ */
+class Session {
+	/**
+	 * This function Authenticates and Handles Sign In process.
+	 * @param	$Data -array- UserName and Password are sent to it.
+	 * @return	-array- Contains Success status, Tokens and Status on successful authentication.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	public static function Login($Data) {
+		if(!Validate\UserName($Data['UserName'], False)) {
+			return array(
+				'Success' => False,
+				'Messages' => array(
+					array(
+						'Message' => 'Invalid UserName or Password.',
+						'Class' => 'ERROR')));
+		}
+		$DatabaseHandle = new \TwoDot7\Database\Handler;
+		$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
+			'UserName' => $Data['UserName']))->fetch();
+		if($DBResponse) {
+			/**
+			 * @internal	This Block means that the UserName is valid and Existing.
+			 */
+			if(\TwoDot7\Util\PBKDF2::ValidatePassword($Data['Password'], $DBResponse['Password'])) {
+				/**
+				 * @internal	Valid User. Execute Login.
+				 */
+				$HashGen = Util\Crypt::RandHash();
+				$Hash = Util\Token::Add(array(
+					'JSON' => $DBResponse['Hash'],
+					'Token' => $HashGen), True);
+				$DatabaseHandle->Query("UPDATE _user SET Hash=:Hash WHERE UserName=:UserName;", array(
+					'Hash' => $Hash,
+					'UserName' => $Data['UserName']));
+				$Expire=time()+(300*24*60*60);
+				return array(
+					'Success' => True,
+					'Hash' => $HashGen,
+					'UserName' => $Data['UserName']);
+			}
+			else {
+				return array(
+					'Success' => False,
+					'Messages' => array(
+						array(
+							'Message' => 'Invalid UserName or Password.',
+							'Class' => 'ERROR')));
+			}
+		}
+		else {
+			return array(
+				'Success' => False,
+				'Messages' => array(
+					array(
+						'Message' => 'Invalid UserName or Password.',
+						'Class' => 'ERROR')));
+		}
+	}
+
+	/**
+	 * This function Checks Session and Destroys it.
+	 * @param	$Data -array- UserName and Hash are sent to it.
+	 * @return	-array- Contains Success status.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 30072014
+	 * @version	0.0
+	 */
+	public static function Logout($Data) {
+		if( isset($Data['UserName']) &&
+			isset($Data['Hash'])) {
+			$DatabaseHandle = new \TwoDot7\Database\Handler;
+			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
+				'UserName' => $Data['UserName']))->fetch();
+			if(Util\Token::Exists(array(
+				'JSON' => isset($DBResponse['Hash']) ? $DBResponse['Hash'] : False,
+				'Token' => $Data['Hash']))) {
+				$DatabaseHandle->Query("UPDATE _user SET Hash=:Hash WHERE UserName=:UserName;", array(
+					'Hash' => Util\Token::Remove(array(
+						'JSON' => $DBResponse['Hash'],
+						'Token' => $Data['Hash'])),
+					'UserName' => $Data['UserName']));
+				return array (
+					'Success' => True,
+					'UserName' => $Data['UserName']);
+			}
+			else {
+				Util\Log("Failed to Logout User Session. Data: ".json_encode($Data), "TRACK");
+				return array(
+					'Success' => False);
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::UserStatus");
+		}
+	}
+
+	/**
+	 * This function Authenticates and Check the session status of user.
+	 * @param	$Data -array- UserName and Hash are sent to it.
+	 * @return	-array- Contains Success status, Tokens and Status on successful authentication.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	public static function Status($Data) {
+		if( isset($Data['UserName']) &&
+			isset($Data['Hash'])) {
+			//
+			$Query = "SELECT * FROM _user WHERE UserName=:UserName";
+			$DBResponse = \TwoDot7\Database\Handler::Exec($Query, array('UserName' => $Data['UserName']))->fetch();
+			if(Util\Token::Exists(array(
+				'JSON' => isset($DBResponse['Hash']) ? $DBResponse['Hash'] : False,
+				'Token' => $Data['Hash']))) {
+
+				return array (
+					'Success' => True,
+					'LoggedIn' => True,
+					'UserName' => $Data['UserName'],
+					'Hash' => $DBResponse['Hash'],
+					'Tokens' => $DBResponse['Tokens'],
+					'Status' => $DBResponse['Status']);
+			}
+			else {
+				Util\Log("Failed to Verify Session. Data: ".json_encode($Data), "TRACK");
+				return array(
+					'Success' => False,
+					'LoggedIn' => False,
+					'UserName' => False);
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::UserStatus");
+		}
+	}
+
+	/**
+	 * This function Provides an interface to Session::Status() function because cookies needs
+	 * to be checked quite a lot of times.
+	 * @return	-bool- True if a Valid session exists.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 30072014
+	 * @version	0.0
+	 */
+	public static function Exists() {
+		return self::Status(array(
+		'UserName' => isset($_COOKIE['Two_7User']) ? $_COOKIE['Two_7User'] : False,
+		'Hash' => isset($_COOKIE['Two_7Hash']) ? $_COOKIE['Two_7Hash'] : False))['LoggedIn'];
 	}
 }
 ?>

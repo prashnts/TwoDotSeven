@@ -223,7 +223,9 @@ class Redundant {
  */
 class Token {
 	/**
-	 * This function Adds Token, Rolling over to a Max Size MAXIMUM_CONCURRENT_LOGINS in Config file.
+	 * This function Adds Token, Rolling over to a Max Size MAXIMUM_CONCURRENT_LOGINS in Config 
+	 * file, if parameter $Rollover is set.
+	 * @param	$Data -array- JSON initial string and Token to be added.
 	 * @param	$Data -array- JSON initial string and Token to be added.
 	 * @return	-string- JSON string containing Tokens.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
@@ -231,12 +233,12 @@ class Token {
 	 * @since	v0.0 29072014
 	 * @version	0.0
 	 */
-	public static function Add($Data) {
+	public static function Add($Data, $RollOver = False) {
 		if( isset($Data['JSON']) &&
 			isset($Data['Token'])) {
 			$Tokens = json_decode($Data['JSON']);
 			if(is_array($Tokens)) {
-				if(count($Tokens) >= \TwoDot7\Config\MAXIMUM_CONCURRENT_LOGINS) {
+				if($RollOver && (count($Tokens) >= \TwoDot7\Config\MAXIMUM_CONCURRENT_LOGINS)) {
 					$Tokens = array_diff($Tokens, array($Tokens[0]));
 					$Tokens = array_merge($Tokens, array($Data['Token']));
 					return json_encode($Tokens);
@@ -251,32 +253,7 @@ class Token {
 			}
 		}
 		else {
-			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::AddToken");
-		}
-	}
-
-	/**
-	 * This function Removes a token from the JSON string.
-	 * @param	$Data -array- JSON initial string and Token to be removed.
-	 * @return	-string- JSON string containing Tokens.
-	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
-	 * @version	0.0
-	 */
-	public static function Remove($Data) {
-		if( isset($Data['JSON']) &&
-			isset($Data['Token'])) {
-			$Tokens = json_decode($Data['JSON']);
-			if(is_array($Tokens)) {
-				return json_encode(array_merge(array_diff($Tokens, array($Data['Token']))));
-			}
-			else {
-				return json_encode(array());
-			}
-		}
-		else {
-			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::RemoveToken");
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\Util\\Token::Add");
 		}
 	}
 
@@ -301,7 +278,56 @@ class Token {
 			}
 		}
 		else {
-			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::IsToken");
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\Util\\Token::Exists");
+		}
+	}
+
+	/**
+	 * This function Returns all the Elements of Token.
+	 * @param	$Data -array- JSON initial string and Token to be checked.
+	 * @return	-boolean- Self Explanatory.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	public static function Get($Data) {
+		if( isset($Data['JSON'])) {
+			$Tokens = json_decode($Data['JSON']);
+			if(is_array($Tokens)) {
+				return $Tokens;
+			}
+			else {
+				return False;
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\Util\\Token::Get");
+		}
+	}
+
+	/**
+	 * This function Removes a token from the JSON string.
+	 * @param	$Data -array- JSON initial string and Token to be removed.
+	 * @return	-string- JSON string containing Tokens.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 29072014
+	 * @version	0.0
+	 */
+	public static function Remove($Data) {
+		if( isset($Data['JSON']) &&
+			isset($Data['Token'])) {
+			$Tokens = json_decode($Data['JSON']);
+			if(is_array($Tokens)) {
+				return json_encode(array_merge(array_diff($Tokens, array($Data['Token']))));
+			}
+			else {
+				return json_encode(array());
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\Util\\Token::Remove");
 		}
 	}
 }
