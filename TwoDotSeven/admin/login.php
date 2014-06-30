@@ -7,8 +7,6 @@ namespace TwoDot7\Admin\Login;
 #  / /    \ V  V / (_) |  _    / /      / __ / _  /  ' \/ / _ \
 #  \/      \_/\_/ \___/  (_)  /_/      /_/ |_\_,_/_/_/_/_/_//_/
 
-require "views/login.signup.errors.php";
-
 /**
  * init throws the actual Markup.
  * @param	$Data -array- Override Dataset.
@@ -28,6 +26,7 @@ function init() {
 			'ErrorMessageFoot' => 'You cannot access this page when logged in.',
 			'ErrorCode' => 'UserError: Relogin Attempt',
 			'Code' => 403,
+			'Title' => '403 Unauthorized',
 			'Mood' => 'RED'));
 		die();
 	}

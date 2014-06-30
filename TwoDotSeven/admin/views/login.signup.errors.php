@@ -246,7 +246,7 @@ class Render {
 					<p class="text-muted text-center litetxt">
 						<small id="MoodBlur">No Account?</small>
 					</p>
-					<a href="register.php" class="btn btn-sm btn-primary btn-block">Create an account</a>
+					<a href="/admin/signup" class="btn btn-sm btn-primary btn-block">Create an account</a>
 				</section>
 			</div>
 		</section>
@@ -311,7 +311,7 @@ class Render {
 					<p class="text-center litetxt">
 						Already got an Account?
 					</p>
-					<a href="login.php" class="btn btn-sm btn-primary btn-block">Login</a>
+					<a href="/admin/login" class="btn btn-sm btn-primary btn-block">Login</a>
 				</section>
 			</div>
 		</section>
@@ -341,7 +341,7 @@ class Render {
 					</h5>
 						<div class="text-center litetxt">
 							<img src="/TwoDotSeven/admin/assets/images/Okay.png" class="Img-Make-Responsive"><br>
-							<a href="login.php" class="btn btn-md btn-block btn-primary">Login</a>
+							<a href="/admin/login" class="btn btn-md btn-block btn-primary">Login</a>
 						</div>
 				</section>
 			</div>

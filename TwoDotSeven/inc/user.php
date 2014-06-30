@@ -93,6 +93,36 @@ class Session {
 						'Class' => 'ERROR')));
 		}
 	}
+
+	public static function Logout($Data) {
+		if( isset($Data['UserName']) &&
+			isset($Data['Hash'])) {
+			$DatabaseHandle = new \TwoDot7\Database\Handler;
+			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
+				'UserName' => $Data['UserName']))->fetch();
+			if(self::IsToken(array(
+				'JSON' => isset($DBResponse['Hash']) ? $DBResponse['Hash'] : False,
+				'Token' => $Data['Hash']))) {
+				$DatabaseHandle->Query("UPDATE _user SET Hash=:Hash WHERE UserName=:UserName;", array(
+					'Hash' => self::RemoveToken(array(
+						'JSON' => $DBResponse['Hash'],
+						'Token' => $Data['Hash'])),
+					'UserName' => $Data['UserName']));
+				return array (
+					'Success' => True,
+					'UserName' => $Data['UserName']);
+			}
+			else {
+				Util\Log("Failed to Logout User Session. Data: ".json_encode($Data), "TRACK");
+				return array(
+					'Success' => False);
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::UserStatus");
+		}
+	}
+
 	/**
 	 * This function Authenticates and Check the session status of user.
 	 * @param	$Data -array- UserName and Hash are sent to it.
@@ -132,7 +162,7 @@ class Session {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Login::UserStatus");
 		}
 	}
-	
+
 	/**
 	 * This function Adds Token, Rolling over to a Max Size MAXIMUM_CONCURRENT_LOGINS in Config file.
 	 * @param	$Data -array- JSON initial string and Token to be added.
@@ -180,7 +210,7 @@ class Session {
 			isset($Data['Token'])) {
 			$Tokens = json_decode($Data['JSON']);
 			if(is_array($Tokens)) {
-				return json_encode(array_diff($Tokens, array($Data['Token'])));
+				return json_encode(array_merge(array_diff($Tokens, array($Data['Token']))));
 			}
 			else {
 				return json_encode(array());

@@ -21,6 +21,9 @@ _Import('install.php');
 _Import('user.php');
 _Import('cron.php');
 require "login.php";
+require "logout.php";
+
+require "views/login.signup.errors.php";
 
 # Parse incoming URI and then process it.
 $URI = explode('/', preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']));
@@ -30,5 +33,8 @@ const BASE = 2;
 switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 	case 'login':
 		Login\init();
+		break;
+	case 'logout':
+		Logout\init();
 		break;
 }
