@@ -9,7 +9,7 @@ namespace TwoDot7\CRON;
 /**
  * Class wrapper for CRON Housekeeping functions.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 25072014
+ * @since	v0.0 25062014
  * @version	0.0
  */
 class Housekeeping {
@@ -21,7 +21,7 @@ class Housekeeping {
 	 * @param	$FileName -string- Generic name of the Log file.
 	 * @return	Boolean.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 23072014
+	 * @since	v0.0 23062014
 	 * @version	0.0
 	 */
 	public static function Log($AbsPath, $FileName) {

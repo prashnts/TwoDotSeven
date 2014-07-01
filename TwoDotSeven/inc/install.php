@@ -9,7 +9,7 @@ namespace TwoDot7\Install;
 /**
  * Sets Up the Environment for Setting up the Website.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 20072014
+ * @since	v0.0 20062014
  * @version	0.0
  */
 class Installer {

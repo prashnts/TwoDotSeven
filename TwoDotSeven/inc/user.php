@@ -12,7 +12,7 @@ use \TwoDot7\Util as Util;
  * Class wrapper for Account Management functions.
  * Implements Add, RecoverPassword, Escalate.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 26072014
+ * @since	v0.0 26062014
  * @version	0.0
  */
 class Account {
@@ -24,7 +24,7 @@ class Account {
 	 * @return	-array- Contains Success status, and Corresponding messages.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 26072014
+	 * @since	v0.0 26062014
 	 * @version	0.0
 	 */
 	public static function Add($SignupData, $Method=False) {
@@ -183,7 +183,23 @@ class Activity {
 	}
 }
 
+/**
+ * Class wrapper for User Acess controls.
+ * Implements Add, Check, Get, Revoke.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 01072014
+ * @version	0.0
+ */
 class Access {
+	/**
+	 * This function Adds Access Token.
+	 * @param	$Data -array- UserName and Domain token are sent to it.
+	 * @return	-bool- Indicates success or failure.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 01072014
+	 * @version	0.0
+	 */
 	public static function Add($Data) {
 		if( isset($Data['UserName']) &&
 			isset($Data['Domain'])) {
@@ -222,6 +238,16 @@ class Access {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Add");
 		}
 	}
+
+	/**
+	 * This function Checks for existence of Access Token.
+	 * @param	$Data -array- UserName and Domain token are sent to it.
+	 * @return	-bool- Indicates success or failure.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 01072014
+	 * @version	0.0
+	 */
 	public static function Check($Data) {
 		if( isset($Data['UserName']) &&
 			isset($Data['Domain'])) {
@@ -235,6 +261,16 @@ class Access {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Check");
 		}
 	}
+
+	/**
+	 * This function returns the full token array.
+	 * @param	$Data -array- UserName is sent to it.
+	 * @return	-array- Token Array.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 01072014
+	 * @version	0.0
+	 */
 	public static function Get($Data) {
 		if( isset($Data['UserName'])) {
 			$TokensJSON = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
@@ -246,6 +282,16 @@ class Access {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Get");
 		}
 	}
+
+	/**
+	 * This function Removes Access Token.
+	 * @param	$Data -array- UserName and Domain token are sent to it.
+	 * @return	-bool- Indicates success or failure.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 01072014
+	 * @version	0.0
+	 */
 	public static function Revoke($Data) {
 		if( isset($Data['UserName']) &&
 			isset($Data['Domain'])) {
@@ -299,7 +345,7 @@ class Preferences {
  * Wrapper for the User Session Related functions.
  * Implemets Methods for Login, Logout, & Session Status.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 23072014
+ * @since	v0.0 23062014
  * @version	0.0
  */
 class Session {
@@ -309,7 +355,7 @@ class Session {
 	 * @return	-array- Contains Success status, Tokens and Status on successful authentication.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
+	 * @since	v0.0 29062014
 	 * @version	0.0
 	 */
 	public static function Login($Data) {
@@ -370,7 +416,7 @@ class Session {
 	 * @return	-array- Contains Success status.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 30072014
+	 * @since	v0.0 30062014
 	 * @version	0.0
 	 */
 	public static function Logout($Data) {
@@ -408,7 +454,7 @@ class Session {
 	 * @return	-array- Contains Success status, Tokens and Status on successful authentication.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
+	 * @since	v0.0 29062014
 	 * @version	0.0
 	 */
 	public static function Status($Data) {
@@ -448,7 +494,7 @@ class Session {
 	 * @return	-bool- True if a Valid session exists.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 30072014
+	 * @since	v0.0 30062014
 	 * @version	0.0
 	 */
 	public static function Exists() {

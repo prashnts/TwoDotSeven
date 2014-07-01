@@ -13,7 +13,7 @@ namespace TwoDot7\Validate;
  * @return	$_Override -true- Default. Returns the EMail ID if found valid, else returns False.
  * @return	$_Override -false- -bool- True if Valid.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 25072014
+ * @since	v0.0 25062014
  * @version	0.0
  */
 function EMail($Candidate, $_Override = True) {
@@ -56,7 +56,7 @@ function EMail($Candidate, $_Override = True) {
  * @return	$_Override -true- Returns the Password if found valid, else returns False.
  * @return	$_Override -false- -bool- Default. True if Valid.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 25072014
+ * @since	v0.0 25062014
  * @version	0.0
  */
 function Password($Candidate, $_Override = False) {
@@ -74,7 +74,7 @@ function Password($Candidate, $_Override = False) {
  * @return	$_Override -false- -bool- True if Valid.
  * @example	Valid Usernames are between 5-32 characters long. May contain A-Z, 0-9, _(Underscore), ~(Tilde). Usernames are case insensetive. System will support 3.44e50 unique lowercase Usernames in total.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 25072014
+ * @since	v0.0 25062014
  * @version	0.0
  */
 function UserName($Candidate, $_Override = True) {
@@ -92,7 +92,7 @@ function UserName($Candidate, $_Override = True) {
  * @return	-bool- True if User is on a Mobile Device.
  * @author	Chad Smith, https://twitter.com/chadsmith
  * @link	http://detectmobilebrowsers.com/
- * @since	v0.0 25072014
+ * @since	v0.0 25062014
  * @version	0.0
  */
 function isUserOnMobile() {

@@ -9,7 +9,7 @@ namespace TwoDot7\Exception;
 /**
  * Exception Classes.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 20072014
+ * @since	v0.0 20062014
  * @version	0.0
  */
 

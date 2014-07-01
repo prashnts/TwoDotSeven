@@ -9,7 +9,7 @@ namespace TwoDot7\Template;
 /**
  * 
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 23072014
+ * @since	v0.0 23062014
  * @version	0.0
  */
 

@@ -14,7 +14,7 @@ use TwoDot7\Admin\Template\Login_SignUp_Error as Node;
  * @param	$Data['Call'] -string- REQUIRED. Specifies function call.
  * @return	null
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 28072014
+ * @since	v0.0 28062014
  * @version	0.0
  */
 function _init($Data = False) {

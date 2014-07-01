@@ -18,7 +18,7 @@
  * @return	-int- Level where the file was found.
  * @throws	-recovers- Shows the Fatal Error page instead.
  * @author	Prashant Sinha <prashantsinha@outlook.com>
- * @since	v0.0 27072014
+ * @since	v0.0 27062014
  * @version	0.0
  */
 function _Import($Name) {

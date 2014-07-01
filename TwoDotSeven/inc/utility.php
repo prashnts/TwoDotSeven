@@ -9,7 +9,7 @@ namespace TwoDot7\Util;
 /**
  * Class wrapper for Cryptic functions.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 20072014
+ * @since	v0.0 20062014
  * @version	0.0
  */
 class Crypt {
@@ -18,7 +18,7 @@ class Crypt {
 	 * @param	$Str1, $Str2: String, Comparison strings.
 	 * @return	Boolean.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 23072014
+	 * @since	v0.0 23062014
 	 * @version	0.0
 	 */
 	public static function EagerCompare($Str1, $Str2) {
@@ -35,7 +35,7 @@ class Crypt {
 	 * @param	$KeyOverride: Array, Overrides Keys set in Configuration.
 	 * @return	String, Encrypted String.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 23072014
+	 * @since	v0.0 23062014
 	 * @version	0.0
 	 */
 	public static function Encrypt($Candidate, $KeyOverride=False) {
@@ -52,7 +52,7 @@ class Crypt {
 	 * @param	$KeyOverride: Array, Overrides Keys set in Configuration.
 	 * @return	String, Decrypted String.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 23072014
+	 * @since	v0.0 23062014
 	 * @version	0.0
 	 */
 	public static function Decrypt($Candidate, $KeyOverride=False) {
@@ -76,7 +76,7 @@ class Crypt {
  * Copyright (c) 2013, Taylor Hornby
  * All rights reserved.
  * @author	Taylor Hornby
- * @since	v0.0 20072014
+ * @since	v0.0 20062014
  * @version	0.0
  */ 
 class PBKDF2 {
@@ -183,7 +183,7 @@ class PBKDF2 {
 /**
  * Class wrapper for Redundancy check functions.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 25072014
+ * @since	v0.0 25062014
  * @version	0.0
  */
 class Redundant {
@@ -192,7 +192,7 @@ class Redundant {
 	 * @param	$Candidate -string- The EMail.
 	 * @return	bool
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 25072014
+	 * @since	v0.0 25062014
 	 * @version	0.0
 	 */
 	public static function EMail($Candidate) {
@@ -205,7 +205,7 @@ class Redundant {
 	 * @param	$Candidate -string- The UserName.
 	 * @return	bool
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 25072014
+	 * @since	v0.0 25062014
 	 * @version	0.0
 	 */
 	public static function UserName($Candidate) {
@@ -218,7 +218,7 @@ class Redundant {
  * Class wrapper for JSON-fy-able Data Structure manipulation.
  * @internal Moved From \User\Session
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 30072014
+ * @since	v0.0 30062014
  * @version	0.0
  */
 class Token {
@@ -230,7 +230,7 @@ class Token {
 	 * @return	-string- JSON string containing Tokens.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
+	 * @since	v0.0 29062014
 	 * @version	0.0
 	 */
 	public static function Add($Data, $RollOver = False) {
@@ -263,7 +263,7 @@ class Token {
 	 * @return	-boolean- Self Explanatory.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
+	 * @since	v0.0 29062014
 	 * @version	0.0
 	 */
 	public static function Exists($Data) {
@@ -288,7 +288,7 @@ class Token {
 	 * @return	-boolean- Self Explanatory.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
+	 * @since	v0.0 29062014
 	 * @version	0.0
 	 */
 	public static function Get($Data) {
@@ -312,7 +312,7 @@ class Token {
 	 * @return	-string- JSON string containing Tokens.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29072014
+	 * @since	v0.0 29062014
 	 * @version	0.0
 	 */
 	public static function Remove($Data) {
@@ -338,7 +338,7 @@ class Token {
  * @param	$__Arg - Target Log file.
  * @return	null
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 25072014
+ * @since	v0.0 25062014
  * @version	0.0
  */
 function Log($Message, $__Arg = "SILENT") {
