@@ -151,7 +151,8 @@ class Account {
 		}
 	}
 
-	public static function Meta($Username, $Mode) {
+	public static function ChangePassword($Data) {
+		//
 	}
 
 	public static function Escalate($UserName) {
