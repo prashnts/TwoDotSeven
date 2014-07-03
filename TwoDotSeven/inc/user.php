@@ -42,13 +42,13 @@ class Account {
 				$Validate['Success'] = False;
 				array_push($Validate['Messages'], array(
 					'Message' => 'The entry for UserName field is not correct. Please try again.', 
-					'MessageMode' => 'Error'));
+					'Class' => 'ERROR'));
 			}
 			if(!Validate\EMail($SignupData['EMail'], False)) {
 				$Validate['Success'] = False;
 				array_push($Validate['Messages'], array(
 					'Message' => 'The entry for EMail field is not correct. Please try again.', 
-					'MessageMode' => 'Error'));
+					'Class' => 'ERROR'));
 			}
 			if (!Validate\Password($SignupData['Password']) ||
 				!Validate\Password($SignupData['ConfPass']) ||
@@ -56,7 +56,7 @@ class Account {
 				$Validate['Success'] = False;
 				array_push($Validate['Messages'], array(
 					'Message' => 'The entry for Password fields are not correct. Please try again.', 
-					'MessageMode' => 'Error'));
+					'Class' => 'ERROR'));
 			}
 
 			/**
@@ -66,13 +66,13 @@ class Account {
 				$Validate['Success']=FALSE;
 				array_push($Validate['Messages'], array(
 					'Message' => 'The EMail ID is already there in the DataBase, please enter a different one.', 
-					'MessageMode' => 'Error'));
+					'Class' => 'ERROR'));
 			}
 			if (Util\Redundant::UserName($SignupData['UserName'])) {
 				$Validate['Success']=FALSE;
 				array_push($Validate['Messages'], array(
 					'Message' => 'The UserName you supplied is taken, please choose a different one.', 
-					'MessageMode' => 'Error'));
+					'Class' => 'ERROR'));
 			}
 
 			if (!$Validate['Success']){
@@ -142,7 +142,7 @@ class Account {
 						'Messages' => array(
 							array(
 								'Message' => 'Internal Error 500.', 
-								'MessageMode' => 'Error')));
+								'Class' => 'ERROR')));
 				}
 			}
 		}
@@ -152,7 +152,54 @@ class Account {
 	}
 
 	public static function ChangePassword($Data) {
-		//
+		if( isset($Data['UserName']) &&
+			isset($Data['Old_Password']) &&
+			isset($Data['New_Password']) &&
+			isset($Data['Conf_Password'])) {
+
+			if (!Validate\Password($SignupData['New_Password']) ||
+				!Validate\Password($SignupData['Conf_Password']) ||
+				!($Data['New_Password'] === $Data['Conf_Password'])) {
+				return array(
+					'Success' => False,
+					'Messages' => array(
+						'Message' => 'The entry for Password fields are not correct. Please try again.', 
+						'Class' => 'ERROR'));
+			}
+
+			$DatabaseHandle = new \TwoDot7\Database\Handler;
+			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
+				'UserName' => $Data['UserName']))->fetch();
+
+			if($DBResponse) {
+				/**
+				 * @internal	This Block means that the UserName is valid and Existing. We'll check for Password now.
+				 */
+				if(\TwoDot7\Util\PBKDF2::ValidatePassword($Data['Old_Password'], $DBResponse['Password'])) {
+					$DatabaseHandle->Query("UPDATE _user SET Password=:Password, Hash:Hash WHERE UserName=:UserName", array(
+						'Password' => \TwoDot7\Util\PBKDF2::CreateHash($Data['New_Password']),
+						'UserName' => $Data['UserName'],
+						'Hash' => (isset($Data['Deauthorize']) && $Data['Deauthorize']) ? '[]' : $DBResponse['Hash']));
+					return array(
+						'Success' => True);
+				}
+				else {
+					return array(
+						'Success' => False,
+						'Messages' => array(
+							array(
+								'Message' => 'Invalid UserName or Password.',
+								'Class' => 'ERROR')));
+				}
+			}
+			else {
+				return array(
+					'Success' => False);
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Add");
+		}
 	}
 
 	public static function Escalate($UserName) {
