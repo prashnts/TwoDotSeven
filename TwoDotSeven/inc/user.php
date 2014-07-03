@@ -10,14 +10,14 @@ use \TwoDot7\Util as Util;
 
 /**
  * Class wrapper for Account Management functions.
- * Implements Add, RecoverPassword, Escalate.
+ * Implements Add, Escalate.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
  * @since	v0.0 26062014
  * @version	0.0
  */
 class Account {
 	/**
-	 * This function Validates and adds the User.
+	 * Creates a User Account, in the _user Table. Fires up the Mailer class to send out verification email.
 	 * @internal Requires Validation/.
 	 * @param	$SignupData -array- Self Explanatory
 	 * @param	$Method -bool- Not Implemented. From __future__
@@ -151,20 +151,30 @@ class Account {
 		}
 	}
 
+	/**
+	 * Changes the User's Password.
+	 * @param	$Data -array- Old Password, New Password, Confirm New Password.
+	 * @return	-array- Contains Success status, and Corresponding messages.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 03072014
+	 * @version	0.0
+	 */
 	public static function ChangePassword($Data) {
 		if( isset($Data['UserName']) &&
 			isset($Data['Old_Password']) &&
 			isset($Data['New_Password']) &&
 			isset($Data['Conf_Password'])) {
 
-			if (!Validate\Password($SignupData['New_Password']) ||
-				!Validate\Password($SignupData['Conf_Password']) ||
+			if (!Validate\Password($Data['New_Password']) ||
+				!Validate\Password($Data['Conf_Password']) ||
 				!($Data['New_Password'] === $Data['Conf_Password'])) {
 				return array(
 					'Success' => False,
 					'Messages' => array(
-						'Message' => 'The entry for Password fields are not correct. Please try again.', 
-						'Class' => 'ERROR'));
+						array(
+							'Message' => 'The entry for Password fields are not correct. Please try again.', 
+							'Class' => 'ERROR')));
 			}
 
 			$DatabaseHandle = new \TwoDot7\Database\Handler;
@@ -176,10 +186,9 @@ class Account {
 				 * @internal	This Block means that the UserName is valid and Existing. We'll check for Password now.
 				 */
 				if(\TwoDot7\Util\PBKDF2::ValidatePassword($Data['Old_Password'], $DBResponse['Password'])) {
-					$DatabaseHandle->Query("UPDATE _user SET Password=:Password, Hash:Hash WHERE UserName=:UserName", array(
+					$DatabaseHandle->Query("UPDATE _user SET Password=:Password WHERE UserName=:UserName", array(
 						'Password' => \TwoDot7\Util\PBKDF2::CreateHash($Data['New_Password']),
-						'UserName' => $Data['UserName'],
-						'Hash' => (isset($Data['Deauthorize']) && $Data['Deauthorize']) ? '[]' : $DBResponse['Hash']));
+						'UserName' => $Data['UserName']));
 					return array(
 						'Success' => True);
 				}
@@ -203,9 +212,6 @@ class Account {
 	}
 
 	public static function Escalate($UserName) {
-	}
-
-	public static function RecoverPassword($Data) {
 	}
 }
 
@@ -387,6 +393,78 @@ class Meta {
 
 class Preferences {
 	// Todo
+}
+
+/**
+ * Wrapper for the User Account Recovery Related functions.
+ * Implemets Methods for Password, EMail.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 23062014
+ * @version	0.0
+ */
+class Recover {
+	private $AUTH;
+
+	function __construct() {
+		$this->AUTH = True;
+	}
+
+	public function Password($Data) {
+
+		if(!$this->AUTH) {
+			/**
+			 * @internal This block means this object didn't recieve correct Authentication.
+			 */
+			Util\Log("Recovery AUTH failed. Function Called: Recover::Password. Trace: ".json_encode($Data), 'TRACK');
+			return array(
+				'Success' => False,
+				'Messages' => array(
+					array(
+						'Message' => 'AUTH Failure.',
+						'Class' => 'ERROR')));
+		}
+
+		if( isset($Data['UserName']) &&
+			isset($Data['Deauthorize']) &&
+			isset($Data['New_Password']) &&
+			isset($Data['Conf_Password'])) {
+
+			if (!Validate\Password($Data['New_Password']) ||
+				!Validate\Password($Data['Conf_Password']) ||
+				!($Data['New_Password'] === $Data['Conf_Password'])) {
+				return array(
+					'Success' => False,
+					'Messages' => array(
+						array(
+							'Message' => 'The entry for Password fields are not correct. Please try again.', 
+							'Class' => 'ERROR')));
+			}
+
+			$DatabaseHandle = new \TwoDot7\Database\Handler;
+			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
+				'UserName' => $Data['UserName']))->fetch();
+
+			if($DBResponse) {
+				/**
+				 * @internal	This Block means that the UserName is valid and Existing. We'll update the Password now.
+				 */
+				$DatabaseHandle->Query("UPDATE _user SET Password=:Password, Hash=:Hash WHERE UserName=:UserName", array(
+					'Password' => \TwoDot7\Util\PBKDF2::CreateHash($Data['New_Password']),
+					'Hash' => $Data['Deauthorize'] ? '[]' : $DBResponse['Hash'],
+					'UserName' => $Data['UserName']));
+				return array(
+					'Success' => True);
+			}
+			else {
+				return array(
+					'Success' => False);
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Add");
+		}
+	}
+
 }
 
 /**
