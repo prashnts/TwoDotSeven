@@ -41,7 +41,7 @@ $(function() {
 	$("#Mode2F1").change(function() {
 		$.ajax({
 			type: 'POST',
-			url: 'dev/redundant/username',
+			url: '/dev/redundant/username',
 			data: {
 				  UserName: $("#Mode2F1").val()
 			},
@@ -86,7 +86,7 @@ $(function() {
 	$("#Mode2F2").change(function() {
 		$.ajax({
 			type: 'POST',
-			url: 'dev/redundant/email',
+			url: '/dev/redundant/email',
 			data: {
 				  EMail: $("#Mode2F2").val()
 			},
@@ -192,7 +192,7 @@ $(function() {
 	$("#Mode4F1").change(function() {
 		$.ajax({
 			type: 'POST',
-			url: 'dev/redundant/email',
+			url: '/dev/redundant/email',
 			data: {
 				  EMail: $("#Mode4F1").val()
 			},

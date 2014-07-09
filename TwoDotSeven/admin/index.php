@@ -22,6 +22,7 @@ _Import('user.php');
 _Import('cron.php');
 require "login.php";
 require "logout.php";
+require "register.php";
 
 require "views/login.signup.errors.php";
 
@@ -37,4 +38,10 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 	case 'logout':
 		Logout\init();
 		break;
+	case 'register':
+		$_GET = array(
+			'Action' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+			'Target' => isset($URI[BASE+2]) ? $URI[BASE+2] : False,
+			'Data' => isset($URI[BASE+3]) ? $URI[BASE+3] : False);
+		Register\init();
 }

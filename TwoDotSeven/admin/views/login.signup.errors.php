@@ -401,6 +401,52 @@ class Render {
 		<?php
 	}
 
+	static function ResendEmail($Data) {
+		?>
+		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
+			<div class="container aside-xl"> 
+				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+				<hr style="margin:9px 0 0 0; padding:0">
+				<section class="m-b-lg">
+					<header class="text-center litetxt">
+						<h3 class="set-font-Open-Sans">
+							<?php echo isset($Data['Brand']) ? $Data['Brand'] : ""; ?>
+						</h3>
+					</header>
+					<h5 class="text-center litetxt Login-Message-Persistant">
+						<?php echo isset($Data['Trailer']) ? $Data['Trailer'] : ""; ?>
+					</h5>
+					<div class="messages">
+						<?php Node\Messages($Data); ?>
+					</div>
+					<div class="list-group">
+						<div class="list-group-item Field-Override-Hack">
+							<div class="form-group input-group Field-Margin-Override">
+								<input type="text" required  class="form-control Input-Field-Override-Hack" name="RecoveryEMail" placeholder="EMail ID" id="Mode4F1">
+								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode4F1fa" class="fa fa-ellipsis-h"></i></span>
+							</div>
+						</div>
+						<div class="list-group-item go-right">
+							<button type="submit" class="btn btn-danger" id="Mode4Btn">
+								Send Recovery Link
+							</button>
+						</div>
+					</div>
+					<div class="text-center m-t m-b">
+						<small><a href="#" class="litetxt" id="MoodBlur">Need Help? Click Here</a></small>
+					</div>
+				</section>
+			</div>
+		</section>
+		<footer id="footer">
+			<div class="text-center padder clearfix">
+				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+			</div>
+		</footer>
+		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<?php
+	}
+
 	static function NewPassword($Data) {
 		?>
 		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
@@ -437,6 +483,52 @@ class Render {
 						<div class="list-group-item go-right">
 							<button type="submit" class="btn btn-success" id="Mode5Btn">
 								Change &amp; Proceed
+							</button>
+						</div>
+					</div>
+					<div class="text-center m-t m-b">
+						<small><a href="#" class="litetxt">Need Help? Click Here</a></small>
+					</div>
+				</section>
+			</div>
+		</section>
+		<footer id="footer">
+			<div class="text-center padder clearfix">
+				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+			</div>
+		</footer>
+		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<?php
+	}
+
+	static function EmailVerifyCode($Data) {
+		?>
+		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
+			<div class="container aside-xl"> 
+				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+				<hr style="margin:9px 0 0 0; padding:0">
+				<section class="m-b-lg">
+					<header class="text-center litetxt">
+						<h3 class="set-font-Open-Sans">
+							<?php echo isset($Data['Brand']) ? $Data['Brand'] : ""; ?>
+						</h3>
+					</header>
+					<h5 class="text-center litetxt Login-Message-Persistant">
+						<?php echo isset($Data['Trailer']) ? $Data['Trailer'] : ""; ?>
+					</h5>
+					<div class="messages">
+						<?php Node\Messages($Data); ?>
+					</div>
+					<div class="list-group">
+						<div class="list-group-item Field-Override-Hack">
+							<div class="form-group input-group Field-Margin-Override">
+								<input type="text" required  class="form-control Input-Field-Override-Hack" name="VerificationCode" placeholder="Verification Code" id="Mode3F1">
+								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode3F1fa" class="fa fa-ellipsis-h"></i></span>
+							</div>
+						</div>
+						<div class="list-group-item go-right">
+							<button type="submit" class="btn btn-success" id="Mode3Btn">
+								Verify &amp; Proceed
 							</button>
 						</div>
 					</div>
