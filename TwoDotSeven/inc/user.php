@@ -250,8 +250,6 @@ class Account {
 					'Action' => 'SET',
 					'Status' => 1)); // Confirms the Email ID.
 
-
-
 				$Hook = $Response['Success'];
 
 				if ($Hook)
@@ -263,10 +261,10 @@ class Account {
 								'Class' => 'INFO')));
 				else
 					return array(
-						'Success' => True,
+						'Success' => False,
 						'Message' => array(
 							array(
-								'Message' => 'Action Completed Succesfully.',
+								'Message' => 'Couldn\'t Complete the action.',
 								'Class' => 'INFO')));
 			}
 			else {
@@ -274,7 +272,7 @@ class Account {
 					'Success' => False,
 					'Messages' => array(
 						array(
-							'Message' => 'Invalid Confirmation Code.',
+							'Message' => 'Invalid Confirmation Code. Please try again.',
 							'Class' => 'ERROR')));
 			}
 		}
@@ -538,6 +536,54 @@ class Recover {
 		}
 	}
 
+	public function EMailConfirmationCode($Data) {
+
+		if( isset($Data['UserName'])) {
+
+			if (!Validate\UserName($Data['UserName'])) {
+				return array(
+					'Success' => False,
+					'Messages' => array(
+						array(
+							'Message' => 'The entry for UserName field is not correct. Please try again.', 
+							'Class' => 'ERROR')));
+			}
+
+			$DBResponse = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
+				'UserName' => $Data['UserName']))->fetch();
+
+			if($DBResponse) {
+				/**
+				 * @internal	This Block means that the UserName is valid and Existing. We'll update the Password now.
+				 */
+				# Generate a new Confirmation Code, and EMail it to the User.
+
+				$ConfirmationCode = Util\Crypt::CodeGen($DBResponse['UserName']);
+				$EMailURI = BASEURI.'/twodot7/register/ConfirmEmail/'.$DBResponse['UserName'].'/'.Util\Crypt::Encrypt(json_encode(array(
+					'UserName' => $DBResponse['UserName'],
+					'ConfirmationCode' => $ConfirmationCode)));
+
+				Mailer\Send(array(
+					'To' => $DBResponse['EMail'],
+					'From' => 'Recovery',
+					'TemplateID' => 'ResendConfirmEmail',
+					'Data' => array(
+						'UserName' => $DBResponse['UserName'],
+						'ConfirmationCode' => $ConfirmationCode,
+						'EMailURI' => $EMailURI)));
+
+				return array(
+					'Success' => True);
+			}
+			else {
+				return array(
+					'Success' => False);
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Add");
+		}
+	}
 }
 
 /**
@@ -982,8 +1028,13 @@ class Status {
 						}
 
 						# Fine. Push it on the Unit's place.
-						$TempStatus = $Status;
-						$NewStatus = (int)($Status/100)*100+($Override['Status']*10+$TempStatus%10);
+						$NewStatus = (int)($Status/100)*100+($Override['Status']*10+$Status%10);
+
+						if ($NewStatus === (int)$Status) {
+							return array(
+								'Success' => True,
+								'SuccessText' => 'No changes has been made.');
+						}
 
 						$NewEMailStatus = $NewStatus%10;
 
@@ -1001,14 +1052,14 @@ class Status {
 
 						return array(
 							'Success' => True,
-							'SuccessText' => 'Updated the Profile Status',
+							'SuccessText' => 'Updated the EMail Status',
 							'Response' => $NewEMailStatus,
 							'ResponseText' => $PrettyStatus($NewEMailStatus),
 							'OldEMailStatus' => $PrettyStatus($OldEMailStatus));
 					}
 					else {
 						Util\Log("Invalid Data stored in DB. UserMeta = \"".json_encode($DBResponse)."\" Function User/Status/Profile", "TRACK");
-						Util\Log("Invalid Data Error Fired. \User\Status\Profile. Check Track Log.");
+						Util\Log("Invalid Data Error Fired. \User\Status\EMail. Check Track Log.");
 						# Stop Execution.
 						if (file_exists($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php')) {
 							require_once $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php';
@@ -1040,7 +1091,7 @@ class Status {
 				}
 				break;
 			default:
-				throw new \TwoDot7\Exception\InvalidArgument("Invalid Override in function User\Status\Profile.");
+				throw new \TwoDot7\Exception\InvalidArgument("Invalid Override in function User\Status\EMail.");
 			
 		}
 	}

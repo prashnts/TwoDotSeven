@@ -87,7 +87,7 @@ class Crypt {
 	 * @version	0.0
 	 */
 	public static function CodeGen($Candidate, $Override = array(
-		'Valid' => 120,
+		'Valid' => 115200,
 		'Length' => 6,
 		'ChangeCase' => True)) {
 		# Validate Override.

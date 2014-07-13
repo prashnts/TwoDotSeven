@@ -27,6 +27,43 @@ function init() {
 				echo json_encode($Response);
 			}
 			break;
+		case 'confirmEmail':
+			$Data = array(
+				'UserName' => isset($_POST['UserName']) ? $_POST['UserName'] : False,
+				'ConfirmationCode' => isset($_POST['ConfirmationCode']) ? $_POST['ConfirmationCode'] : False);
+
+			$Response = \TwoDot7\User\Account::ConfirmEmail($Data);
+
+			if($Response['Success']) {
+				header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+				header('Content-Type: application/json');
+				echo json_encode($Response);
+			}
+			else {
+				header('HTTP/1.0 261 Bad Request. Operation cannot be completed.', true, 261);
+				header('Content-Type: application/json');
+				echo json_encode($Response);
+			}
+			break;
+		case 'generateConfirmationCode':
+			$Data = array(
+				'UserName' => isset($_POST['UserName']) ? $_POST['UserName'] : False);
+
+			$RecoveryHandle = new \TwoDot7\User\Recover;
+
+			$Response = $RecoveryHandle->EMailConfirmationCode($Data);
+
+			if($Response['Success']) {
+				header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+				header('Content-Type: application/json');
+				echo json_encode($Response);
+			}
+			else {
+				header('HTTP/1.0 261 Bad Request. Operation cannot be completed.', true, 261);
+				header('Content-Type: application/json');
+				echo json_encode($Response);
+			}
+			break;
 		default:
 			header('HTTP/1.0 450 Invalid Request.', true, 450);
 			header('Generator: TwoDot7 REST Engine.');
