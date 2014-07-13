@@ -21,6 +21,7 @@ _Import('utility.php');
 _Import('install.php');
 _Import('user.php');
 _Import('cron.php');
+_Import('mailer.php');
 require "apiconfig.php";
 require "__initAccount.php";
 require "__initRedundant.php";

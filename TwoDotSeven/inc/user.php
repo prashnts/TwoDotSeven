@@ -2,6 +2,7 @@
 namespace TwoDot7\User;
 use \TwoDot7\Validate as Validate;
 use \TwoDot7\Util as Util;
+use \TwoDot7\Mailer as Mailer;
 #  _____                      _____ 
 # /__   \__      _____       |___  |
 #   / /\/\ \ /\ / / _ \         / / 
@@ -83,17 +84,6 @@ class Account {
 				return $Validate;
 			}
 			else {
-				/**
-				 * @internal	Status Cheat: {
-				 * 					(-2, Banned Permanently),
-				 * 					(-1, Banned Temporarily and Flagged),
-				 * 					(0, Never Reviewed),
-				 * 					(1, Currently Flagged for Review),
-				 * 					(2, Verified But some crutial changes have been made),
-				 * 					(4, Verified),
-				 * 					(9, Verified + All area access)}
-				 * @internal	This adds the User in the Database.
-				 */
 
 				$DatabaseHandle = new \TwoDot7\Database\Handler;
 
@@ -128,12 +118,31 @@ class Account {
 					Util\Log("User Account: ".$SignupData['UserName']." added.");
 					// Adding temporary sign-up tracking in Encrypted Log.
 					Util\Log("User Account: ".json_encode($SignupData)." added", "TRACK");
+
+					// Generate the Next Step URI, and Send an EMail.
+					$ConfirmationCode = Util\Crypt::CodeGen($SignupData['UserName']);
+					$EMailURI = BASEURI.'/twodot7/register/ConfirmEmail/'.$SignupData['UserName'].'/'.Util\Crypt::Encrypt(json_encode(array(
+						'UserName' => $SignupData['UserName'],
+						'ConfirmationCode' => $ConfirmationCode)));
+
+					$NextURI = '/twodot7/register/ConfirmEmail/'.$SignupData['UserName'];
+
+					Mailer\Send(array(
+						'To' => $SignupData['EMail'],
+						'From' => 'Account',
+						'TemplateID' => 'ConfirmEmail',
+						'Data' => array(
+							'UserName' => $SignupData['UserName'],
+							'ConfirmationCode' => $ConfirmationCode,
+							'EMailURI' => $EMailURI)));
+
 					return array(
 						'Success' => True, 
 						'Messages' => array(
 							array(
 								'Message' => 'Successfully Completed Sign Up. Please Check your EMail to proceed.',
-								'MessageMode' => 'Success')));
+								'MessageMode' => 'Success')),
+						'Next' => $NextURI);
 				}
 				else {
 					Util\Log("Failed to Add the Account. 500. POST data: ".json_encode($SignupData), "TRACK");
@@ -210,6 +219,70 @@ class Account {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Add");
 		}
 	}
+
+	/**
+	 * Changes the User's EMail ID.
+	 * @param	$Data -array- Username, and ConfirmationCode.
+	 * @return	-array- Contains Success status, and Corresponding messages.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 03072014
+	 * @version	0.0
+	 */
+	public static function ConfirmEmail($Data) {
+		if( isset($Data['UserName']) &&
+			isset($Data['ConfirmationCode'])) {
+
+			if (!Validate\UserName($Data['UserName'])) {
+				return array(
+					'Success' => False,
+					'Messages' => array(
+						array(
+							'Message' => 'The entry for UserName field is not correct. Please try again.', 
+							'Class' => 'ERROR')));
+			}
+
+			if (Util\Crypt::EagerCompare(
+				$Data['ConfirmationCode'],
+				Util\Crypt::CodeGen($Data['UserName']))) {
+
+				$Response = Status::EMail($Data['UserName'], array(
+					'Action' => 'SET',
+					'Status' => 1)); // Confirms the Email ID.
+
+
+
+				$Hook = $Response['Success'];
+
+				if ($Hook)
+					return array(
+						'Success' => True,
+						'Message' => array(
+							array(
+								'Message' => 'Action Completed Succesfully.',
+								'Class' => 'INFO')));
+				else
+					return array(
+						'Success' => True,
+						'Message' => array(
+							array(
+								'Message' => 'Action Completed Succesfully.',
+								'Class' => 'INFO')));
+			}
+			else {
+				return array(
+					'Success' => False,
+					'Messages' => array(
+						array(
+							'Message' => 'Invalid Confirmation Code.',
+							'Class' => 'ERROR')));
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::ConfirmEmail");
+		}	
+	}
+
 
 	public static function Escalate($UserName) {
 	}
@@ -627,6 +700,349 @@ class Session {
 		return self::Status(array(
 		'UserName' => isset($_COOKIE['Two_7User']) ? $_COOKIE['Two_7User'] : False,
 		'Hash' => isset($_COOKIE['Two_7Hash']) ? $_COOKIE['Two_7Hash'] : False))['LoggedIn'];
+	}
+}
+
+/**
+ * Wrapper for the Account Status Management functions.
+ * Implements Get, Set, Escalade, Revoke
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 23062014
+ * @version	0.0
+ */
+class Status {
+	/**
+	 * @internal 1. Profile Status.
+	 * @internal 1.1 0: Unverified Profile
+	 * @internal 1.2 1: Regular Profile
+	 * @internal 1.3 2: Verified Profile
+	 * @internal 2. EMail Status.
+	 * @internal 2.1 0: Unconfirmed EMail ID
+	 * @internal 2.2 1: Confirmed EMail ID
+	 * @internal 2.3 2: EMail ID Updated - but unconfirmed.
+	 * @internal 3. Free Space. -todo-
+	 */
+
+	/**
+	 * Gets or Sets the Profile Status Number.
+	 * @param	$UserName -string- UserName.
+	 * @param	$Override -array- Action and New Status.
+	 * @return	-array- Contains response.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @throws	InvalidArgument Exception.
+	 * @since	v0.0 12072014
+	 * @version	0.0
+	 */
+	public static function Profile($UserName, $Override = array(
+		'Action' => 'GET')) {
+
+		switch ($Override['Action']) {
+			case 'GET':
+				$DBResponse = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
+					'UserName' => $UserName))->fetch();
+				if ($DBResponse) {
+					$Status = $DBResponse['Status'];
+					if (is_numeric($Status)) {
+						# Proceed. In all normal cases, this block should be the one executing.
+						$ProfileStatus = $Status%10;
+						$PrettyStatus = function() use (&$ProfileStatus) {
+							switch ($ProfileStatus) {
+								case 0:
+									return 'Unverified Profile';
+								case 1:
+									return 'Regular User';
+								case 2:
+									return 'Verified User';
+								default:
+									return 'Huh';
+							}
+						};
+						return array(
+							'Success' => True,
+							'Response' => $ProfileStatus,
+							'ResponseText' => $PrettyStatus());
+					}
+					else {
+						Util\Log("Invalid Data stored in DB. UserMeta = \"".json_encode($DBResponse)."\" Function User/Status/Profile", "TRACK");
+						Util\Log("Invalid Data Error Fired. \User\Status\Profile. Check Track Log.");
+						# Stop Execution.
+						if (file_exists($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php')) {
+							require_once $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php';
+							\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+								'Call' => 'Error',
+								'ErrorMessageHead' => 'Sorry, there was a Server Error',
+								'ErrorMessageFoot' => 'Invalid User Status Code.',
+								'ErrorCode' => 'DataBase Error. Invalid Data. Fatal.',
+								'Code' => 503,
+								'Mood' => 'RED'));
+							die();
+						}
+						else {
+							echo "<pre><h1>Two Dot 7 Database Error.</h1>";
+							echo "<h2>Invalid Status Code in DB.</h2>";
+							echo "<h3>If you are a User, apologies. Please Contact the support. If you're a developer, please check the Info/Tracking Logs.</h3>";
+							echo "<h4>Additionally, a 404 error occured, while trying to find the Error interface.";
+							die();
+						}
+					}
+				}
+				else {
+					return array(
+						'Success' => False,
+						'Messages' => array(
+							array(
+								'Message' => 'Specified User Doesnt exists.',
+								'Class' => 'ERROR')));
+				}
+				break;
+			case 'SET':
+				$DatabaseHandle = new \TwoDot7\Database\Handler;
+				$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
+					'UserName' => $UserName))->fetch();
+				if ($DBResponse) {
+					$Status = $DBResponse['Status'];
+					if (is_numeric($Status)) {
+						# Proceed. In all normal cases, this block should be the one executing.
+						$OldProfileStatus = $Status%10;
+						$PrettyStatus = function($Status) {
+							switch ($Status) {
+								case 0:
+									return 'Unverified Profile';
+								case 1:
+									return 'Regular User';
+								case 2:
+									return 'Verified User';
+								default:
+									return 'Huh';
+							}
+						};
+
+						# Validate the new Status:
+						if (!in_array($Override['Status'], array(0, 1 , 2))) {
+							# Error. 
+							throw new \TwoDot7\Exception\InvalidArgument("Invalid Override 'Status' in function User\Status\Profile.");
+						}
+
+						# Fine. Push it on the Unit's place.
+						$NewStatus = (int)($Status/10)*10+$Override['Status'];
+
+						$NewProfileStatus = $NewStatus%10;
+
+						# Push status in the DB.
+						$DatabaseHandle->Query("UPDATE _user SET Status=:Status WHERE UserName=:UserName;", array(
+							'UserName' => $UserName,
+							'Status' => $NewStatus));
+
+						return array(
+							'Success' => True,
+							'SuccessText' => 'Updated the Profile Status',
+							'Response' => $NewProfileStatus,
+							'ResponseText' => $PrettyStatus($NewProfileStatus),
+							'OldProfileStatus' => $PrettyStatus($OldProfileStatus));
+					}
+					else {
+						Util\Log("Invalid Data stored in DB. UserMeta = \"".json_encode($DBResponse)."\" Function User/Status/Profile", "TRACK");
+						Util\Log("Invalid Data Error Fired. \User\Status\Profile. Check Track Log.");
+						# Stop Execution.
+						if (file_exists($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php')) {
+							require_once $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php';
+							\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+								'Call' => 'Error',
+								'ErrorMessageHead' => 'Sorry, there was a Server Error',
+								'ErrorMessageFoot' => 'Invalid User Status Code.',
+								'ErrorCode' => 'DataBase Error. Invalid Data. Fatal.',
+								'Code' => 503,
+								'Mood' => 'RED'));
+							die();
+						}
+						else {
+							echo "<pre><h1>Two Dot 7 Database Error.</h1>";
+							echo "<h2>Invalid Status Code in DB.</h2>";
+							echo "<h3>If you are a User, apologies. Please Contact the support. If you're a developer, please check the Info/Tracking Logs.</h3>";
+							echo "<h4>Additionally, a 404 error occured, while trying to find the Error interface.";
+							die();
+						}
+					}
+				}
+				else {
+					return array(
+						'Success' => False,
+						'Messages' => array(
+							array(
+								'Message' => 'Specified User Doesnt exists.',
+								'Class' => 'ERROR')));
+				}
+				break;
+			default:
+				throw new \TwoDot7\Exception\InvalidArgument("Invalid Override in function User\Status\Profile.");
+			
+		}
+	}
+
+	/**
+	 * Gets or Sets the EMail Status Number.
+	 * @param	$UserName -string- UserName.
+	 * @param	$Override -array- Action and New Status.
+	 * @return	-array- Contains response.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @throws	InvalidArgument Exception.
+	 * @since	v0.0 12072014
+	 * @version	0.0
+	 */
+	public static function EMail($UserName, $Override = array(
+		'Action' => 'GET')) {
+
+		switch ($Override['Action']) {
+			case 'GET':
+				$DBResponse = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
+					'UserName' => $UserName))->fetch();
+				if ($DBResponse) {
+					$Status = $DBResponse['Status'];
+					if (is_numeric($Status)) {
+						# Proceed. In all normal cases, this block should be the one executing.
+						$EMailStatus = (int)(($Status%100)/10);
+						$PrettyStatus = function() use (&$EMailStatus) {
+							switch ($EMailStatus) {
+								case 0:
+									return 'Unconfirmed EMail ID';
+								case 1:
+									return 'Confirmed EMail ID';
+								case 2:
+									return 'EMail ID Updated - but unconfirmed.';
+								default:
+									return 'Huh';
+							}
+						};
+						return array(
+							'Success' => True,
+							'Response' => $EMailStatus,
+							'ResponseText' => $PrettyStatus());
+					}
+					else {
+						Util\Log("Invalid Data stored in DB. UserMeta = \"".json_encode($DBResponse)."\" Function User/Status/EMail", "TRACK");
+						Util\Log("Invalid Data Error Fired. \User\Status\EMail. Check Track Log.");
+						# Stop Execution.
+						if (file_exists($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php')) {
+							require_once $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php';
+							\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+								'Call' => 'Error',
+								'ErrorMessageHead' => 'Sorry, there was a Server Error',
+								'ErrorMessageFoot' => 'Invalid User Status Code.',
+								'ErrorCode' => 'DataBase Error. Invalid Data. Fatal.',
+								'Code' => 503,
+								'Mood' => 'RED'));
+							die();
+						}
+						else {
+							echo "<pre><h1>Two Dot 7 Database Error.</h1>";
+							echo "<h2>Invalid Status Code in DB.</h2>";
+							echo "<h3>If you are a User, apologies. Please Contact the support. If you're a developer, please check the Info/Tracking Logs.</h3>";
+							echo "<h4>Additionally, a 404 error occured, while trying to find the Error interface.";
+							die();
+						}
+					}
+				}
+				else {
+					return array(
+						'Success' => False,
+						'Messages' => array(
+							array(
+								'Message' => 'Specified User Doesnt exists.',
+								'Class' => 'ERROR')));
+				}
+				break;
+			case 'SET':
+				$DatabaseHandle = new \TwoDot7\Database\Handler;
+				$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
+					'UserName' => $UserName))->fetch();
+				if ($DBResponse) {
+					$Status = $DBResponse['Status'];
+					if (is_numeric($Status)) {
+						# Proceed. In all normal cases, this block should be the one executing.
+						$OldEMailStatus = $Status%10;
+						$PrettyStatus = function($Status) {
+							switch ($Status) {
+								case 0:
+									return 'Unconfirmed EMail ID';
+								case 1:
+									return 'Confirmed EMail ID';
+								case 2:
+									return 'EMail ID Updated - but unconfirmed.';
+								default:
+									return 'Huh';
+							}
+						};
+
+						# Validate the new Status:
+						if (!in_array($Override['Status'], array(0, 1 , 2))) {
+							# Error. 
+							throw new \TwoDot7\Exception\InvalidArgument("Invalid Override 'Status' in function User\Status\Profile.");
+						}
+
+						# Fine. Push it on the Unit's place.
+						$TempStatus = $Status;
+						$NewStatus = (int)($Status/100)*100+($Override['Status']*10+$TempStatus%10);
+
+						$NewEMailStatus = $NewStatus%10;
+
+						# Push status in the DB.
+						$DatabaseHandle->Query("UPDATE _user SET Status=:Status WHERE UserName=:UserName;", array(
+							'UserName' => $UserName,
+							'Status' => $NewStatus));
+
+						Mailer\Send(array(
+							'To' => $DBResponse['EMail'],
+							'From' => 'Account',
+							'TemplateID' => 'ConfirmEmailSuccess',
+							'Data' => array(
+								'UserName' => $UserName)));
+
+						return array(
+							'Success' => True,
+							'SuccessText' => 'Updated the Profile Status',
+							'Response' => $NewEMailStatus,
+							'ResponseText' => $PrettyStatus($NewEMailStatus),
+							'OldEMailStatus' => $PrettyStatus($OldEMailStatus));
+					}
+					else {
+						Util\Log("Invalid Data stored in DB. UserMeta = \"".json_encode($DBResponse)."\" Function User/Status/Profile", "TRACK");
+						Util\Log("Invalid Data Error Fired. \User\Status\Profile. Check Track Log.");
+						# Stop Execution.
+						if (file_exists($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php')) {
+							require_once $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php';
+							\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+								'Call' => 'Error',
+								'ErrorMessageHead' => 'Sorry, there was a Server Error',
+								'ErrorMessageFoot' => 'Invalid User Status Code.',
+								'ErrorCode' => 'DataBase Error. Invalid Data. Fatal.',
+								'Code' => 503,
+								'Mood' => 'RED'));
+							die();
+						}
+						else {
+							echo "<pre><h1>Two Dot 7 Database Error.</h1>";
+							echo "<h2>Invalid Status Code in DB.</h2>";
+							echo "<h3>If you are a User, apologies. Please Contact the support. If you're a developer, please check the Info/Tracking Logs.</h3>";
+							echo "<h4>Additionally, a 404 error occured, while trying to find the Error interface.";
+							die();
+						}
+					}
+				}
+				else {
+					return array(
+						'Success' => False,
+						'Messages' => array(
+							array(
+								'Message' => 'Specified User Doesnt exists.',
+								'Class' => 'ERROR')));
+				}
+				break;
+			default:
+				throw new \TwoDot7\Exception\InvalidArgument("Invalid Override in function User\Status\Profile.");
+			
+		}
 	}
 }
 ?>

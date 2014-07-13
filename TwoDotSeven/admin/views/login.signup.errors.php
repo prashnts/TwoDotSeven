@@ -277,7 +277,7 @@ class Render {
 					<div class="messages">
 						<?php Node\Messages($Data); ?>
 					</div>
-					<div class="list-group">
+					<div class="list-group" id="SignUpForm">
 						<div class="list-group-item Field-Override-Hack">
 							<div class="form-group input-group Field-Margin-Override">
 								<input type="text" required  class="form-control Input-Field-Override-Hack" name="UserName" placeholder="UserName" id="Mode2F1">
@@ -287,18 +287,18 @@ class Render {
 						<div class="list-group-item Field-Override-Hack">
 							<div id="EM" class="form-group input-group Field-Margin-Override">
 								<input type="email" required class="form-control Input-Field-Override-Hack" name="EMail" placeholder="EMail ID" id="Mode2F2">
-								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode2F2fa" id="EM-fa" class="fa fa-ellipsis-h"></i></span>
+								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode2F2fa" class="fa fa-ellipsis-h"></i></span>
 							</div>
 						</div>
 						<div class="list-group-item Field-Override-Hack">
 							<div class="form-group input-group Field-Margin-Override">
 								<input type="password" required class="form-control Input-Field-Override-Hack" name="Password" placeholder="Create a Password." id="Mode2F3">
-								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode2F3fa" id="PWD-fa" class="fa fa-ellipsis-h"></i> </span>
+								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode2F3fa" class="fa fa-ellipsis-h"></i> </span>
 							</div>
 							<hr class="No-Margin-Padding-Override-Hack">
 							<div class="form-group input-group Field-Margin-Override">
 								<input type="password" required class="form-control Input-Field-Override-Hack" name="ConfPass" placeholder="Confirm Password." id="Mode2F4">
-								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode2F4fa" id="PWD-C-fa" class="fa fa-ellipsis-h"></i></span>
+								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode2F4fa" class="fa fa-ellipsis-h"></i></span>
 							</div>
 						</div>
 					</div>
@@ -312,6 +312,28 @@ class Render {
 						Already got an Account?
 					</p>
 					<a href="/admin/login" class="btn btn-sm btn-primary btn-block">Login</a>
+				</section>
+				<section class="m-b-lg" id="SignUpLoader" style="display:none">
+					<div class="loader text-center m-t-lg">
+						<img src="/TwoDotSeven/admin/assets/images/loader.gif" alt="TwoDotSeven Admin">
+					</div>
+					<h3 class="text-center litetxt m-t">
+						Please Wait
+					</h3>	
+					<p class="text-center litetxt m-t-lg">
+						Having Trouble?
+					</p>
+				</section>
+				<section class="m-b-lg" id="SignUpOK" style="display:none">
+					<div class="loader text-center m-t-lg">
+						<img src="/TwoDotSeven/admin/assets/images/tick.png" alt="TwoDotSeven Admin">
+					</div>
+					<h3 class="text-center litetxt m-t">
+						You're In! Redirecting.
+					</h3>	
+					<p class="text-center litetxt m-t-lg">
+						<a href="#">Please click here if you're not redirected automatically.</a>
+					</p>
 				</section>
 			</div>
 		</section>

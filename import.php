@@ -47,7 +47,7 @@ function _Import($Name) {
 		return 6;
 	}
 	else {
-		require_once $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/login.signup.errors.php';
+		require_once $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php';
 		\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
 			'Call' => 'Error',
 			'ErrorMessageHead' => 'Sorry, there was a Server Error',

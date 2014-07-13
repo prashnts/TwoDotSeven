@@ -63,15 +63,56 @@ class Crypt {
 		return openssl_decrypt(base64_decode($Candidate), $Method, $Key, 0, $Vector);
 	}
 
+	/**
+	 * Generates a pseudo-random 16 byte string.
+	 * @return	String, Pseudo-Random.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 09072014
+	 * @version	0.0
+	 */
 	public static function RandHash() {
 		$Var=str_shuffle(time());
 		$Var.=substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 15);
 		return md5($Var);
 	}
+
+	/**
+	 * Generates a Unique, 6 letter string. Could be used as a Confirmation Code.
+	 * @param	$Candidate -string- The initializer string. Eg. UserName.
+	 * @param	$Override -array- ('Valid': Overrides the default 32 hours of Code Validity., 
+	 * 				'Length': Between 1 and 32, Overrides the default 6 letter string output.
+	 * @return	String, the 6 letter code.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 09072014
+	 * @version	0.0
+	 */
+	public static function CodeGen($Candidate, $Override = array(
+		'Valid' => 120,
+		'Length' => 6,
+		'ChangeCase' => True)) {
+		# Validate Override.
+		if ($Override['Length'] > 32 || 
+			$Override['Length'] < 1 || 
+			$Override['Valid'] < 0 || 
+			$Override['Valid'] > 432000) {
+			throw new \TwoDot7\Exception\InvalidArgument("Invalid \$Override");
+		}
+
+		$Candidate = $Override['ChangeCase'] ? strtolower($Candidate) : $Candidate;
+
+		# 1. Find the UTC floor.
+		$TimeNow = floor(time()/$Override['Valid']);
+
+		# 2. Add salt, according to taste.
+		$Candidate = $TimeNow.$Candidate.$TimeNow;
+		$Var = strtoupper(substr(hash('sha256', $Candidate), 0, $Override['Length']));
+		return $Var;
+	}
 }
 
 /**
- * Class wrapper for PBKDF2
+ * Class wrapper for PBKDF2.
+ * This implementaion has been ported over to Class - Structure.
  * Password Hashing With PBKDF2 (http://crackstation.net/hashing-security.htm).
  * Copyright (c) 2013, Taylor Hornby
  * All rights reserved.

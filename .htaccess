@@ -14,3 +14,5 @@ RewriteRule ^test test.php
 RewriteRule ^test/ test.php
 RewriteRule ^admin TwoDotSeven/admin/index.php
 RewriteRule ^admin/ TwoDotSeven/admin/index.php
+RewriteRule ^twodot7 TwoDotSeven/admin/index.php
+RewriteRule ^twodot7/ TwoDotSeven/admin/index.php
