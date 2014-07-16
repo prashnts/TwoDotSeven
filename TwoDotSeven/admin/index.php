@@ -20,6 +20,7 @@ _Import('utility.php');
 _Import('install.php');
 _Import('user.php');
 _Import('cron.php');
+_Import('mailer.php');
 require "login.php";
 require "logout.php";
 require "register.php";

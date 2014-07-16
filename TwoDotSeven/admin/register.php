@@ -33,20 +33,67 @@ function init() {
 		case 'ConfirmEmail':
 			if ($_GET['Target'] && $_GET['Data']) {
 				# Do the Auto confirm.
-				\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
-					'Call' => 'OK',
-					'Brand' => 'EMail ID successfully verified.',
-					'Trailer' => 'You can proceed to login now.',
-					'Title' => 'Logged Out',
-					'Mood' => 'GREEN'));
+				$Data = json_decode(\TwoDot7\Util\Crypt::Decrypt($_GET['Data']), true);
+
+				$UserName = $Data ? \TwoDot7\Validate\UserName($Data['UserName']) : False;
+				$StatusTest = \TwoDot7\User\Status::EMail($UserName);
+
+				if ($StatusTest['Success'] && ($StatusTest['Response'] == 1)) {
+					# EMail Already confirmed.
+					\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+						'Call' => 'OK',
+						'Brand' => $Data['UserName'].', Your EMail ID was already verified successfully.',
+						'Trailer' => 'You can proceed to login.',
+						'Title' => 'Verification Already Complete',
+						'Mood' => 'GREEN'));
+					die();
 				}
+
+				$Response = $Data ? \TwoDot7\User\Account::ConfirmEmail($Data) : array(
+					'Success' => False);
+
+				if ($Response['Success']) {
+					\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+						'Call' => 'OK',
+						'Brand' => $Data['UserName'].', Your EMail ID was verified successfully.',
+						'Trailer' => 'You can proceed to login now.',
+						'Title' => 'Verification Complete',
+						'Mood' => 'GREEN'));
+				}
+				else {
+					\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+						'Call' => 'Error',
+						'ErrorMessageHead' => 'This Auto Action URL is Invalid.',
+						'ErrorMessageFoot' => 'Which means that either you clicked a mal-formed URL, or this URL is expired. You can get more info in <kbd>Recovery</kbd> section. Please contact us if you think this is an error.',
+						'ErrorCode' => 'UserError: ExpiredURL/AutoConfirmation',
+						'Code' => 403,
+						'Title' => '403 Expired URL',
+						'Mood' => 'RED'));
+				}
+			}
 			elseif ($_GET['Target']) {
 				# Enter the Code.
 				$UserName = \TwoDot7\Validate\UserName($_GET['Target']);
+				$StatusTest = \TwoDot7\User\Status::EMail($UserName);
+
+				if ($StatusTest['Success']) {
+					if ($StatusTest['Response'] == 1) {
+						# EMail Already confirmed.
+						\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+							'Call' => 'OK',
+							'Brand' => $UserName.', Your EMail ID is already verified.',
+							'Trailer' => 'You can proceed to login.',
+							'Title' => 'Verification Already Complete',
+							'Mood' => 'BLUE'));
+						die();
+					}
+				}
+
 				if (\TwoDot7\Util\Redundant::UserName($UserName)) {
 					\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
 						'Call' => 'EmailVerifyCode',
-						'Title' => 'Confirm your Email ID',
+						'Title' => 'Please Confirm your Email ID',
+						'UserName' => $UserName,
 						'Brand' => '<span style="text-transform:capitalize">'.$UserName.'</span>, Please confirm your Email ID.',
 						'Trailer' => 'Please enter the confirmation code you\'ve recieved in your registered Email. Alternatively, you can click on the Link in Email.'));
 				}
@@ -62,10 +109,15 @@ function init() {
 				}
 			}
 			else {
-				echo "LOL";
+				\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+					'Call' => 'EmailVerify',
+					'Title' => 'Confirm your Email ID',
+					'Brand' => 'Please confirm your Email ID.',
+					'Trailer' => 'Please enter your UserName and the Confirmation code you\'ve recieved in your registered Email. Alternatively, you can click on the Link in Email.'));
 			}
+			die();
 			break;
-		case 'Proceed':
+		case 'Next':
 			echo "Completed LOL?";
 			break;
 		default:

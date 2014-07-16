@@ -55,7 +55,10 @@ function Head($Data) {
 	<title><?php echo (isset($Data['Title']) ? $Data['Title'].' | ' : '').('TwoDotSeven'); ?></title>
 
 	<link rel="shortcut icon" href="/TwoDotSeven/admin/assets/images/favicon.ico" type="image/x-icon" />
-	<link rel="apple-touch-icon-precomposed" href="/TwoDotSeven/admin/assets/images/apple-touch-icon.png" type="image/png" />
+	<link rel="apple-touch-icon-precomposed" href="/TwoDotSeven/admin/assets/images/2.7/apple-touch-icon-precomposed.png" type="image/png" />
+
+	<meta name="msapplication-TileImage" content="/TwoDotSeven/admin/assets/images/2.7/icon-Windows8-tile.png"/>
+	<meta name="msapplication-TileColor" content="#343434"/>
 
 	<meta name="description" content="<?php echo (isset($Data['MetaDescription']) ? $Data['MetaDescription'] : 'TwoDotSeven'); ?>" />
 	<meta name="robots" content="index, follow" />
@@ -163,13 +166,12 @@ class Render {
 					height: 150px;
 					background-color: transparent;
 
-					position: absolute;
 					top:0;
 					bottom: 0;
 					left: 0;
 					right: 0;
 					
-					margin: auto 0 auto 0;
+					margin: 30% 0 auto 0;
 
 					text-align: center;
 					color: #FFFFFF;
@@ -182,7 +184,7 @@ class Render {
 				}
 			}
 		</style>
-		<div class="row error-autogen">
+		<div class="row error-autogen animated fadeIn">
 			<div class="col-sm-4">
 				<a href="/" title="TwoDotSeven Home"><img src="/TwoDotSeven/admin/assets/images/2.7/<?php echo $ImageDir(@$Data['Code']); ?>" alt="TwoDotSeven Admin" class="error-img-autogen"></a>
 			</div>
@@ -202,8 +204,12 @@ class Render {
 	static function Login($Data) {
 		?>
 		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
-			<div class="container aside-xl"> 
-				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+			<div class="container aside-xl">
+				<div class="logo-container-35px">
+					<a href="/" title="Home">
+						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+					</a>
+				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
 				<section class="m-b-lg">
 					<header class="text-center litetxt">
@@ -246,7 +252,7 @@ class Render {
 					<p class="text-muted text-center litetxt">
 						<small id="MoodBlur">No Account?</small>
 					</p>
-					<a href="/admin/signup" class="btn btn-sm btn-primary btn-block">Create an account</a>
+					<a href="/twodot7/register" class="btn btn-sm btn-primary btn-block">Create an account</a>
 				</section>
 			</div>
 		</section>
@@ -263,7 +269,11 @@ class Render {
 		?>
 		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
 			<div class="container aside-xl"> 
-				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+				<div class="logo-container-35px">
+					<a href="/" title="Home">
+						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+					</a>
+				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
 				<section class="m-b-lg">
 					<header class="text-center litetxt">
@@ -350,7 +360,11 @@ class Render {
 		?>
 		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
 			<div class="container aside-xl"> 
-				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+				<div class="logo-container-35px">
+					<a href="/" title="Home">
+						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+					</a>
+				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
 				<section class="m-b-lg">
 					<header class="text-center litetxt">
@@ -381,7 +395,11 @@ class Render {
 		?>
 		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
 			<div class="container aside-xl"> 
-				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+				<div class="logo-container-35px">
+					<a href="/" title="Home">
+						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+					</a>
+				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
 				<section class="m-b-lg">
 					<header class="text-center litetxt">
@@ -427,7 +445,11 @@ class Render {
 		?>
 		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
 			<div class="container aside-xl"> 
-				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+				<div class="logo-container-35px">
+					<a href="/" title="Home">
+						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+					</a>
+				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
 				<section class="m-b-lg">
 					<header class="text-center litetxt">
@@ -473,7 +495,11 @@ class Render {
 		?>
 		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
 			<div class="container aside-xl"> 
-				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+				<div class="logo-container-35px">
+					<a href="/" title="Home">
+						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+					</a>
+				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
 				<section class="m-b-lg">
 					<header class="text-center litetxt">
@@ -527,7 +553,11 @@ class Render {
 		?>
 		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
 			<div class="container aside-xl"> 
-				<a class="navbar-brand block" href="/" title="Home"><img src="/TwoDotSeven/admin/assets/images/2.7-light.png" alt="TwoDotSeven Admin"></a>
+				<div class="logo-container-35px">
+					<a href="/" title="Home">
+						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+					</a>
+				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
 				<section class="m-b-lg">
 					<header class="text-center litetxt">
@@ -543,9 +573,10 @@ class Render {
 					</div>
 					<div class="list-group">
 						<div class="list-group-item Field-Override-Hack">
+							<input type="text" required name="UserName" id="Mode3F1" value="<?php echo isset($Data['UserName']) ? $Data['UserName'] : ""; ?>" style="display:none">
 							<div class="form-group input-group Field-Margin-Override">
-								<input type="text" required  class="form-control Input-Field-Override-Hack" name="VerificationCode" placeholder="Verification Code" id="Mode3F1">
-								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode3F1fa" class="fa fa-ellipsis-h"></i></span>
+								<input type="text" required class="form-control Input-Field-Override-Hack" name="VerificationCode" placeholder="Verification Code" id="Mode3F2">
+								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode3F2fa" class="fa fa-ellipsis-h"></i></span>
 							</div>
 						</div>
 						<div class="list-group-item go-right">
@@ -568,6 +599,64 @@ class Render {
 		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
 		<?php
 	}
+
+	static function EmailVerify($Data) {
+		?>
+		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
+			<div class="container aside-xl"> 
+				<div class="logo-container-35px">
+					<a href="/" title="Home">
+						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+					</a>
+				</div>
+				<hr style="margin:9px 0 0 0; padding:0">
+				<section class="m-b-lg">
+					<header class="text-center litetxt">
+						<h3 class="set-font-Open-Sans">
+							<?php echo isset($Data['Brand']) ? $Data['Brand'] : ""; ?>
+						</h3>
+					</header>
+					<h5 class="text-center litetxt Login-Message-Persistant">
+						<?php echo isset($Data['Trailer']) ? $Data['Trailer'] : ""; ?>
+					</h5>
+					<div class="messages">
+						<?php Node\Messages($Data); ?>
+					</div>
+					<div class="list-group">
+						<div class="list-group-item Field-Override-Hack">
+							<div class="form-group input-group Field-Margin-Override">
+								<input type="text" required  class="form-control Input-Field-Override-Hack" name="UserName" placeholder="UserName" id="Mode4F1">
+								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode4F1fa" class="fa fa-ellipsis-h"></i></span>
+							</div>
+						</div>
+
+						<div class="list-group-item Field-Override-Hack">
+							<div class="form-group input-group Field-Margin-Override">
+								<input type="text" required  class="form-control Input-Field-Override-Hack" name="VerificationCode" placeholder="Verification Code" id="Mode4F2">
+								<span class="input-group-addon Input-Field-Override-Hack" ><i id="Mode4F2fa" class="fa fa-ellipsis-h"></i></span>
+							</div>
+						</div>
+						<div class="list-group-item go-right">
+							<button type="submit" class="btn btn-success" id="Mode4Btn">
+								Verify &amp; Proceed
+							</button>
+						</div>
+					</div>
+					<div class="text-center m-t m-b">
+						<small><a href="#" class="litetxt">Need Help? Click Here</a></small>
+					</div>
+				</section>
+			</div>
+		</section>
+		<footer id="footer">
+			<div class="text-center padder clearfix">
+				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+			</div>
+		</footer>
+		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<?php
+	}
+
 }
 
 ?>

@@ -16,6 +16,29 @@
     color:    #999;
 }
 
+/* Hover on Logo Effect */
+
+.logo-container-35px {
+	height: 35px;
+	width: 100%;
+	text-align: center;
+	overflow: hidden;
+}
+
+.logo-container-35px img {
+	position: relative;
+	text-align: center;
+	top: 0px;
+	/*transition*/
+	-webkit-transition:top .2s ease-in-out;
+	-moz-transition:top .2s ease-in-out;
+	-o-transition:top .2s ease-in-out;
+	transition:top .2s ease-in-out;
+}
+.logo-container-35px img:hover {
+    top: -35px;
+}
+
 
 .darktxt {
 	color: #000;

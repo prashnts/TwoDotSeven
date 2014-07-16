@@ -32,6 +32,17 @@ function init() {
 				'UserName' => isset($_POST['UserName']) ? $_POST['UserName'] : False,
 				'ConfirmationCode' => isset($_POST['ConfirmationCode']) ? $_POST['ConfirmationCode'] : False);
 
+			$StatusTest = \TwoDot7\User\Status::EMail($Data['UserName']);
+
+			if ($StatusTest['Success'] && ($StatusTest['Response'] == 1)) {
+				# EMail Already confirmed.
+				header('HTTP/1.0 250 Repeated Operation Not Executed.', true, 250);
+				header('Content-Type: application/json');
+				echo json_encode(array(
+					'Success' => True));
+				die();
+			}
+
 			$Response = \TwoDot7\User\Account::ConfirmEmail($Data);
 
 			if($Response['Success']) {

@@ -17,7 +17,7 @@ namespace TwoDot7\Admin\Login;
  * @version	0.0
  */
 function init() {
-	if(\TwoDot7\User\Session::Exists()) {
+	if( \TwoDot7\User\Session::Exists()) {
 		\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
 			'Call' => 'Error',
 			'ErrorMessageHead' => 'Wait. You\'re already logged In.',
@@ -28,11 +28,11 @@ function init() {
 			'Mood' => 'RED'));
 		die();
 	}
-	elseif (isset($_POST["UserName"]) && isset($_POST["Password"])) {
+	elseif( isset($_POST["UserName"]) && isset($_POST["Password"])) {
 		$Response = \TwoDot7\User\Session::Login(array(
 			'UserName' => $_POST['UserName'],
 			'Password' => $_POST['Password']));
-		if($Response['Success']) {
+		if( $Response['Success']) {
 			// Set Cookie
 			setcookie(
 				'Two_7User',
