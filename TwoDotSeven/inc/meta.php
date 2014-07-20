@@ -138,7 +138,7 @@ class Navigation {
 	/**
 	 * Removes Entry/Entries in the Navigation menu. The removal should be of a Registered Token.
 	 * @param	String $Node The location from where the '$Hook' is to be removed.
-	 * @param	String $Hook The token of the registered Navigation Item.
+	 * @param	String $Hook The token of the registered Navigation Item, which is to be removed.
 	 * @param	Array $Options Overrides. Turn on Recursive parameter to remove all instances of the Token.
 	 * @return	Bool Contains success status.
 	 * @throws	InvalidArgument Exception.
@@ -174,6 +174,10 @@ class Navigation {
 
 			foreach ($NavigationNode_OLD as $Menu => $Meta) {
 				unset($NavigationNode_OLD[$Menu]['Children'][$Hook]);
+				if (is_array($NavigationNode_OLD[$Menu]['Children']) &&
+					count($NavigationNode_OLD[$Menu]['Children']) == 0) {
+					$NavigationNode_OLD[$Menu]['Children'] = False;
+				}
 			}
 
 			# Finally, exit the Block.
@@ -183,7 +187,11 @@ class Navigation {
 				unset($NavigationNode_OLD[$Hook]);
 			}
 			else {
-				unset($NavigationNode_OLD[$Menu]['Children'][$Hook]);
+				unset($NavigationNode_OLD[$Node]['Children'][$Hook]);
+				if (is_array($NavigationNode_OLD[$Node]['Children']) &&
+					count($NavigationNode_OLD[$Node]['Children']) == 0) {
+					$NavigationNode_OLD[$Node]['Children'] = False;
+				}
 			}
 		}
 
