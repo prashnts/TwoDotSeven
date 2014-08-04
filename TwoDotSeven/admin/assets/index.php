@@ -26,4 +26,25 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 			'File' => isset($URI[BASE+1]) ? $URI[BASE+1] : False);
 		CSS\init();
 		break;
+	case 'usernameicon':
+		$Icon = isset($URI[BASE+1]) ? strtolower($URI[BASE+1]) : False;
+		if (file_exists($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/assets/images/generic/alphabet/'.$Icon.'.png')) {
+			header('HTTP/1.0 200 OK', true, 200);
+			header('Content-Type: Image/PNG');
+			echo file_get_contents($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/assets/images/generic/alphabet/'.$Icon.'.png');
+			die();
+		}
+		else {
+			header('HTTP/1.0 200 OK', true, 200);
+			header('Content-Type: Image/PNG');
+			echo file_get_contents($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/assets/images/generic/alphabet/!.png');
+			die();
+		}
+
+	case 'blursvg':
+		$Value = isset($URI[BASE+1]) && is_numeric($URI[BASE+1]) ? strtolower($URI[BASE+1]) : 3;
+		header('Content-Type: image/svg+xml');
+		echo "<svg xmlns='w3.org/2000/svg'><filter id='blur' x='0' y='0'><feGaussianBlur stdDeviation='{$Value}'/></filter></svg>";
+		die();
+		break;
 }

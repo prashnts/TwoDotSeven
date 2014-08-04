@@ -87,17 +87,22 @@ class Account {
 
 				$DatabaseHandle = new \TwoDot7\Database\Handler;
 
-				$Query1 = "INSERT INTO _user (UserName, Password, EMail, Hash, Tokens, Status) VALUES (:UserName, :Password, :EMail, :Hash, :Tokens, :Status)";
-				$Query2 = "INSERT INTO _usermeta (UserName, Name, Clearance, Meta, MetaAlerts, MetaInfo) VALUES (:UserName, :Name, :Clearance, :Meta, :MetaAlerts, :MetaInfo)";
+				$Query1 = "INSERT INTO _user (UserName, Password, EMail, Hash, Tokens, Status, Preferences) VALUES (:UserName, :Password, :EMail, :Hash, :Tokens, :Status, :Preferences)";
 
 				$Response = $DatabaseHandle->Query($Query1, array(
 					'UserName' => $SignupData['UserName'],
 					'Password' => \TwoDot7\Util\PBKDF2::CreateHash($SignupData['Password']),
 					'EMail' => $SignupData['EMail'],
-					'Hash' => 'NULL',
+					'Hash' => json_encode(array()),
 					'Tokens' => json_encode(array()),
-					'Status' => 0))->rowCount();
-
+					'Status' => 0,
+					'Preferences' => json_encode(array())
+					)
+				)->rowCount();
+				
+				/*
+				// Being Disabled Because of a Change in Model, Paradigm.
+				#$Query2 = "INSERT INTO _usermeta (UserName, Name, Clearance, Meta, MetaAlerts, MetaInfo) VALUES (:UserName, :Name, :Clearance, :Meta, :MetaAlerts, :MetaInfo)";
 				$Response += $DatabaseHandle->Query($Query2, array(
 					'UserName' => $SignupData['UserName'],
 					'Name' => '#',
@@ -113,6 +118,7 @@ class Account {
 					'MetaInfo' => json_encode(array(
 						'Hubs' => array(),
 						'Groups' => array()))))->rowCount();
+				*/
 
 				if ($Response) {
 					Util\Log("User Account: ".$SignupData['UserName']." added.");
@@ -121,11 +127,11 @@ class Account {
 
 					// Generate the Next Step URI, and Send an EMail.
 					$ConfirmationCode = Util\Crypt::CodeGen($SignupData['UserName']);
-					$EMailURI = BASEURI.'/twodot7/register/ConfirmEmail/'.$SignupData['UserName'].'/'.Util\Crypt::Encrypt(json_encode(array(
+					$EMailURI = BASEURI.'/twodot7/register/confirmEmail/'.$SignupData['UserName'].'/'.Util\Crypt::Encrypt(json_encode(array(
 						'UserName' => $SignupData['UserName'],
 						'ConfirmationCode' => $ConfirmationCode)));
 
-					$NextURI = '/twodot7/register/ConfirmEmail/'.$SignupData['UserName'];
+					$NextURI = '/twodot7/register/confirmEmail/'.$SignupData['UserName'];
 
 					Mailer\Send(array(
 						'To' => $SignupData['EMail'],
@@ -221,7 +227,7 @@ class Account {
 	}
 
 	/**
-	 * Changes the User's EMail ID.
+	 * Confirms the User's EMail ID.
 	 * @param	$Data -array- Username, and ConfirmationCode.
 	 * @return	-array- Contains Success status, and Corresponding messages.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
@@ -280,10 +286,6 @@ class Account {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::ConfirmEmail");
 		}	
 	}
-
-
-	public static function Escalate($UserName) {
-	}
 }
 
 /**
@@ -317,6 +319,11 @@ class Activity {
  */
 class Access {
 	/**
+	 * Caches the Token data, upon first call of any function.
+	 */
+	private static $TokenCache = False;
+
+	/**
 	 * This function Adds Access Token.
 	 * @param	$Data -array- UserName and Domain token are sent to it.
 	 * @return	-bool- Indicates success or failure.
@@ -328,6 +335,14 @@ class Access {
 	public static function Add($Data) {
 		if( isset($Data['UserName']) &&
 			isset($Data['Domain'])) {
+
+			/**
+			 * @internal	This deletes the Cache. Cache is re-generated when the ::Check() is called.
+			 */ 
+			self::$TokenCache = False;
+
+			$Data['Domain'] = strtoupper(preg_replace('/[^A-Za-z0-9_\-\+]/', "", $Data['Domain']));
+
 			$DatabaseHandle = new \TwoDot7\Database\Handler;
 			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
 				'UserName' => $Data['UserName']))->fetch();
@@ -376,11 +391,21 @@ class Access {
 	public static function Check($Data) {
 		if( isset($Data['UserName']) &&
 			isset($Data['Domain'])) {
-			$TokensJSON = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
-				'UserName' => $Data['UserName']))->fetch()['Tokens'];
-			return Util\Token::Exists(array(
-				'JSON' => $TokensJSON ? $TokensJSON : False,
-				'Token' => $Data['Domain']));
+			if( self::$TokenCache) {
+				return Util\Token::Exists(array(
+					'JSON' => self::$TokenCache ? self::$TokenCache : False,
+					'Token' => $Data['Domain']));
+			}
+			else {
+				$TokensJSON = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
+					'UserName' => $Data['UserName']))->fetch()['Tokens'];
+				
+				self::$TokenCache = $TokensJSON;
+
+				return Util\Token::Exists(array(
+					'JSON' => $TokensJSON ? $TokensJSON : False,
+					'Token' => $Data['Domain']));
+			}
 		}
 		else {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Check");
@@ -420,6 +445,12 @@ class Access {
 	public static function Revoke($Data) {
 		if( isset($Data['UserName']) &&
 			isset($Data['Domain'])) {
+
+			/**
+			 * @internal	This deletes the Cache. Cache is re-generated when the ::Check() is called.
+			 */ 
+			self::$TokenCache = False;
+
 			$DatabaseHandle = new \TwoDot7\Database\Handler;
 			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
 				'UserName' => $Data['UserName']))->fetch();
@@ -458,8 +489,18 @@ class Access {
 }
 
 class Meta {
-	//Todo
-	//
+
+	function __construct($UserName = False) {
+		// Pseudo 
+	}
+
+	public static function User() {
+		return array('');
+	}
+
+	public static function Get () {
+
+	}
 }
 
 class Preferences {
@@ -476,8 +517,30 @@ class Preferences {
 class Recover {
 	private $AUTH;
 
-	function __construct() {
-		$this->AUTH = True;
+	function __construct($Options = array()) {
+		$Options = array_merge(array(
+			'Token' => False,
+			'Abort' => True
+			), $Options);
+
+		$this->AUTH = False;
+
+		/**
+		 * @internal Checks the Cookie, against the Database.
+		 */
+		if (Session::Exists()) {
+			if ($Options['Token']) {
+				$this->AUTH = Access::Check(array(
+					'UserName' => Session::Data()['UserName'],
+					'Domain' => $Options['Token']));
+			}
+			else {
+				$this->AUTH = True;
+			}
+		}
+		else {
+			$this->AUTH = False;
+		}
 	}
 
 	public function Password($Data) {
@@ -523,6 +586,19 @@ class Recover {
 					'Password' => \TwoDot7\Util\PBKDF2::CreateHash($Data['New_Password']),
 					'Hash' => $Data['Deauthorize'] ? '[]' : $DBResponse['Hash'],
 					'UserName' => $Data['UserName']));
+				
+				Util\Log("Administrator ".Session::Data()['UserName']." Accessed: ".json_encode($Data), 'TRACK');
+
+				Mailer\Send(array(
+					'To' => $DBResponse['EMail'],
+					'From' => 'Account',
+					'TemplateID' => 'PasswordOverriden',
+					'Data' => array(
+						'UserName' => $DBResponse['UserName'],
+						'NewPassword' => $Data['New_Password']
+						)
+					));
+
 				return array(
 					'Success' => True);
 			}
@@ -532,7 +608,7 @@ class Recover {
 			}
 		}
 		else {
-			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Add");
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Recovery::Password");
 		}
 	}
 
@@ -543,10 +619,8 @@ class Recover {
 			if (!Validate\UserName($Data['UserName'])) {
 				return array(
 					'Success' => False,
-					'Messages' => array(
-						array(
-							'Message' => 'The entry for UserName field is not correct. Please try again.', 
-							'Class' => 'ERROR')));
+					'Error' => 'The entry for UserName field is not correct. Please try again.'
+					);
 			}
 
 			$DBResponse = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
@@ -559,7 +633,7 @@ class Recover {
 				# Generate a new Confirmation Code, and EMail it to the User.
 
 				$ConfirmationCode = Util\Crypt::CodeGen($DBResponse['UserName']);
-				$EMailURI = BASEURI.'/twodot7/register/ConfirmEmail/'.$DBResponse['UserName'].'/'.Util\Crypt::Encrypt(json_encode(array(
+				$EMailURI = BASEURI.'/twodot7/register/confirmEmail/'.$DBResponse['UserName'].'/'.Util\Crypt::Encrypt(json_encode(array(
 					'UserName' => $DBResponse['UserName'],
 					'ConfirmationCode' => $ConfirmationCode)));
 
@@ -584,6 +658,146 @@ class Recover {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Add");
 		}
 	}
+
+	public function EMail($Data) {
+
+		if(!$this->AUTH) {
+			/**
+			 * @internal This block means this object didn't recieve correct Authentication.
+			 */
+			Util\Log("Recovery AUTH failed. Function Called: Recover::EMail. Trace: ".json_encode($Data), 'TRACK');
+			return array(
+				'Success' => False,
+				'Error' => 'AUTH Failure.'
+				);
+		}
+
+		if( isset($Data['UserName']) &&
+			isset($Data['New_EMail'])) {
+
+			if (!Validate\EMail($Data['New_EMail']) ||
+				Util\Redundant::EMail($Data['New_EMail'])) {
+				return array(
+					'Success' => False,
+					'Error' => 'The entry for Password fields are not correct. Please try again.');
+			}
+
+			$DatabaseHandle = new \TwoDot7\Database\Handler;
+			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
+				'UserName' => $Data['UserName']))->fetch();
+
+			if($DBResponse) {
+				/**
+				 * @internal	This Block means that the UserName is valid and Existing. We'll update the Email now.
+				 */
+				$DatabaseHandle->Query("UPDATE _user SET EMail=:EMail WHERE UserName=:UserName", array(
+					'EMail' => $Data['New_EMail'],
+					'UserName' => $Data['UserName']));
+				
+				Util\Log("Administrator ".Session::Data()['UserName']." Accessed: ".json_encode($Data), 'TRACK');
+				
+				Status::EMail($DBResponse['UserName'], array(
+					'Action' => 'SET',
+					'Status' => 2
+					));
+
+				Mailer\Send(array(
+					'To' => "{$Data['New_EMail']}, {$DBResponse['EMail']}",
+					'From' => 'Recovery',
+					'TemplateID' => 'EMailOverriden',
+					'Data' => array(
+						'UserName' => $DBResponse['UserName'],
+						'NewEMail' => $Data['New_EMail'],
+						'OldEMailStatus' => $DBResponse['EMail']
+						)
+					));
+
+				return array(
+					'Success' => True);
+			}
+			else {
+				return array(
+					'Success' => False);
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Recovery::EMail");
+		}
+	}
+}
+
+/**
+ * Wrapper for the High Level - REST interface of User Namespace.
+ * Implemets Methods for AUTH.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 20140801
+ * @version	0.0
+ */
+class REST {
+
+	/**
+	 * Returns AUTH status.
+	 * @param	-array- $Options Optional Parameters and Overrides
+	 * @Options string Token Specify if the particular token must be present.
+	 * @return	-array- Contains UserName and their session Hash.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 18072014
+	 * @version	0.0
+	 */
+	public static function AUTH($Options = False) {
+		$Options = array_merge(array(
+			'Token' => False,
+			'API_KEY_OVERRIDE' => (isset($_POST['API_KEY']) && isset($_POST['API_KEY_ID'])),
+			'Abort' => True
+			), $Options);
+
+		$Success = False;
+		$ErrorMessage = False;
+
+		if ($Options['API_KEY_OVERRIDE']) {
+			// Not Implemented.
+			$Success = False;
+		}
+		else {
+			/**
+			 * @internal Checks the Cookie, against the Database.
+			 */
+			if (Session::Exists()) {
+				if ($Options['Token']) {
+					$Success = Access::Check(array(
+						'UserName' => Session::Data()['UserName'],
+						'Domain' => $Options['Token']));
+					$ErrorMessage = "User Privilege Insufficient.";
+				}
+				else {
+					$Success = True;
+				}
+			}
+			else {
+				$ErrorMessage = "User Authentication Required.";
+				$Success = False;
+			}
+		}
+
+		if (!$Success && $Options['Abort']) {
+			header('HTTP/1.0 401 Unauthorized.', true, 401);
+			print "<pre>";
+			print "{$ErrorMessage}\n";
+			print "Requires [UserName, Hash] or [API_KEY_ID, API_KEY].\n";
+			print "Request Aborted.\n";
+			print "REQUEST DATA:\n";
+			print "==BEGIN==\n";
+			print "Post: ".json_encode($_POST, JSON_PRETTY_PRINT)."\n";
+			print "Get: ".json_encode($_GET, JSON_PRETTY_PRINT)."\n";
+			print "Cookie: ".json_encode($_COOKIE, JSON_PRETTY_PRINT)."\n";
+			print "Header: ".json_encode(Util\RequestHeaders(), JSON_PRETTY_PRINT)."\n";
+			print "===END===\n";
+			die();
+		}
+		else {
+			return $Success;
+		}
+	}
 }
 
 /**
@@ -594,6 +808,27 @@ class Recover {
  * @version	0.0
  */
 class Session {
+	/**
+	 * Caches the Session status in the current runtime,
+	 * when checking the session existence by ::Exists() Method.
+	 * Prevents multiple database calls in case of multiple calls.
+	 */
+	public static $Status = False;
+
+	/**
+	 * Returns current session data.
+	 * @return	-array- Contains UserName and their session Hash.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 18072014
+	 * @version	0.0
+	 */
+	public static function Data() {
+		return array(
+			'UserName' => isset($_COOKIE['Two_7User']) ? $_COOKIE['Two_7User'] : False,
+			'Hash' => isset($_COOKIE['Two_7Hash']) ? $_COOKIE['Two_7Hash'] : False
+			);
+	}
+
 	/**
 	 * This function Authenticates and Handles Sign In process.
 	 * @param	$Data -array- UserName and Password are sent to it.
@@ -711,7 +946,7 @@ class Session {
 			if(Util\Token::Exists(array(
 				'JSON' => isset($DBResponse['Hash']) ? $DBResponse['Hash'] : False,
 				'Token' => $Data['Hash']))) {
-
+				self::$Status = True;
 				return array (
 					'Success' => True,
 					'LoggedIn' => True,
@@ -743,9 +978,24 @@ class Session {
 	 * @version	0.0
 	 */
 	public static function Exists() {
-		return self::Status(array(
-		'UserName' => isset($_COOKIE['Two_7User']) ? $_COOKIE['Two_7User'] : False,
-		'Hash' => isset($_COOKIE['Two_7Hash']) ? $_COOKIE['Two_7Hash'] : False))['LoggedIn'];
+		if (self::$Status) {
+			return True;
+		}
+		return self::Status(self::Data())['LoggedIn'];
+	}
+}
+
+class Shortcut {
+	public static function IsAdmin() {
+		if (Session::Exists() &&
+			Access::Check(array(
+				'UserName' => Session::Data()['UserName'],
+				'Domain' => 'ADMIN'))) {
+			return True;
+		}
+		else {
+			return False;
+		}
 	}
 }
 
@@ -885,7 +1135,8 @@ class Status {
 							'SuccessText' => 'Updated the Profile Status',
 							'Response' => $NewProfileStatus,
 							'ResponseText' => $PrettyStatus($NewProfileStatus),
-							'OldProfileStatus' => $PrettyStatus($OldProfileStatus));
+							'OldProfileStatus' => $PrettyStatus($OldProfileStatus)
+							);
 					}
 					else {
 						Util\Log("Invalid Data stored in DB. UserMeta = \"".json_encode($DBResponse)."\" Function User/Status/Profile", "TRACK");
@@ -899,14 +1150,15 @@ class Status {
 								'ErrorMessageFoot' => 'Invalid User Status Code.',
 								'ErrorCode' => 'DataBase Error. Invalid Data. Fatal.',
 								'Code' => 503,
-								'Mood' => 'RED'));
+								'Mood' => 'RED')
+							);
 							die();
 						}
 						else {
 							echo "<pre><h1>Two Dot 7 Database Error.</h1>";
 							echo "<h2>Invalid Status Code in DB.</h2>";
 							echo "<h3>If you are a User, apologies. Please Contact the support. If you're a developer, please check the Info/Tracking Logs.</h3>";
-							echo "<h4>Additionally, a 404 error occured, while trying to find the Error interface.";
+							echo "<h4>Additionally, a 404 - not found error occured, while trying to find the Error interface.";
 							die();
 						}
 					}

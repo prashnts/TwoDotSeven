@@ -44,4 +44,155 @@ class Installer {
 	}
 
 }
+
+class Setup {
+	private $DatabaseHandle;
+	function __construct() {
+		$this->DatabaseHandle = new \TwoDot7\Database\Handler;
+	}
+	public function Navigation() {
+		$BaseNavigation = array(
+			'PRE_BROADCAST' => array(
+				'Name' => 'Broadcast',
+				'Icon' => 'fa fa-rss-square',
+				'Badge' => array(
+					'Class' => 'bg-info'),
+				'Visible' => array(
+					'LOGGEDIN' => True,
+					'NOTLOGGEDIN' => True
+					),
+				'Tokens' => False,					# If this True, it overrides the 
+				'Children' => False,
+				'Target' => '/twodot7/broadcast'
+				),
+			'PRE_DASHBOARD' => array(
+				'Name' => 'Dash',
+				'Icon' => 'fa fa-flash',
+				'Badge' => array(
+					'Class' => 'bg-success'),
+				'Visible' => array(
+					'LOGGEDIN' => True,
+					'NOTLOGGEDIN' => False
+					),
+				'Tokens' => False,
+				'Children' => False,
+				'Target' => '/twodot7/dash'
+				),
+			'PRE_LOGIN' => array(
+				'Name' => 'Sign In',
+				'Icon' => 'fa fa-sign-in',
+				'Badge' => False,
+				'Visible' => array(
+					'LOGGEDIN' => False,
+					'NOTLOGGEDIN' => True
+					),
+				'Tokens' => False,
+				'Children' => False,
+				'Target' => '/twodot7/login'
+				),
+			'PRE_REGISTER' => array(
+				'Name' => 'Sign Up',
+				'Icon' => 'fa fa-edit',
+				'Badge' => False,
+				'Visible' => array(
+					'LOGGEDIN' => False,
+					'NOTLOGGEDIN' => True
+					),
+				'Tokens' => False,
+				'Children' => False,
+				'Target' => '/twodot7/register'
+				),
+			'PRE_BITS' => array(
+				'Name' => 'Two.7 Bits',
+				'Icon' => 'fa fa-cube',
+				'Badge' => False,
+				'Visible' => array(
+					'LOGGEDIN' => True,
+					'NOTLOGGEDIN' => False
+					),
+				'Tokens' => False,
+				'Children' => array(
+					'PRE_BIT_ADD' => array(
+						'Name' => 'Get New Bits',
+						'Icon' => 'fa fa-plus-square-o',
+						'Badge' => False,
+						'Visible' => array(
+							'LOGGEDIN' => True,
+							'NOTLOGGEDIN' => False
+							),
+						'Tokens' => False,
+						'Children' => False,
+						'Target' => '/twodot7/administration/user'
+						),
+					'PRE_BIT_ADMIN' => array(
+						'Name' => 'Manage Installed Bits',
+						'Icon' => 'fa fa-circle-o',
+						'Badge' => False,
+						'Visible' => array(
+							'LOGGEDIN' => True,
+							'NOTLOGGEDIN' => False
+							),
+						'Tokens' => False,
+						'Children' => False,
+						'Target' => '/twodot7/administration/user'
+						)
+
+					),
+				'Target' => '/twodot7/register'
+				),
+			'PRE_ADMIN' => array(
+				'Name' => 'Administration',
+				'Icon' => 'fa fa-gear',
+				'Badge' => array(
+					'Class' => 'bg-danger'),
+				'Visible' => array(
+					'LOGGEDIN' => True,
+					'NOTLOGGEDIN' => False
+					),
+				'Tokens' => array(
+					'ADMIN'),
+				'Children' => array(
+					'PRE_ADMIN_USERMGMT' => array(
+						'Name' => 'User Management',
+						'Icon' => 'fa fa-users',
+						'Badge' => array(
+							'Class' => 'bg-info'
+							),
+						'Visible' => array(
+							'LOGGEDIN' => True,
+							'NOTLOGGEDIN' => False
+							),
+						'Tokens' => False,
+						'Children' => False,
+						'Target' => '/twodot7/administration/user'
+						),
+					'PRE_ADMIN_SYSSTATUS' => array(
+						'Name' => 'System Status',
+						'Icon' => 'fa fa-dashboard',
+						'Badge' => False,
+						'Visible' => array(
+							'LOGGEDIN' => True,
+							'NOTLOGGEDIN' => False
+							),
+						'Tokens' => array(
+							'ADMIN',
+							'SYSADMIN'),
+						'Children' => False,
+						'Target' => '/twodot7/administration/status'
+						)
+					),
+				'Target' => '#'
+				)
+			);
+
+		$NavigationQuery = "INSERT INTO _meta (Node, Value) VALUES (:Node, :Value) ON DUPLICATE KEY UPDATE Value=:Value";
+
+		$this->DatabaseHandle->Query($NavigationQuery, array(
+			'Node' => 'Navigation',
+			'Value' => json_encode($BaseNavigation)
+			));
+	}
+}
+
+
 ?>

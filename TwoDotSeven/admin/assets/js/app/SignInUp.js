@@ -59,14 +59,14 @@ $(function() {
 			beforeSend: function(){
 				TintPage("BLUE");
 				$("#Mode2F1fa").removeClass("fa-ellipsis-h");
-				$("#Mode2F1fa").addClass("fa-spinner fa-spin-faster");
+				$("#Mode2F1fa").addClass("fa-circle-o-notch fa-spin");
 				$("#Mode2F1fa").css("color", "teal");
 			},
 			statusCode: {
 				253: function() {
 					// Success. Available username.
 					TintPage("GREEN");
-					$("#Mode2F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster fa-exclamation-triangle");
+					$("#Mode2F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin fa-exclamation-triangle");
 					$("#Mode2F1fa").addClass("fa-check-circle");
 					$("#Mode2F1fa").css("color", "teal");
 					Toggle2F1 = 1;
@@ -75,7 +75,7 @@ $(function() {
 				252: function() {
 					// Nope. Not available.
 					TintPage("RED");
-					$("#Mode2F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster fa-exclamation-triangle");
+					$("#Mode2F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin fa-exclamation-triangle");
 					$("#Mode2F1fa").addClass("fa-times-circle");
 					$("#Mode2F1fa").css("color", "red");
 					Toggle2F1 = 0;
@@ -84,7 +84,7 @@ $(function() {
 				251: function() {
 					// Error in input.
 					TintPage("RED");
-					$("#Mode2F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster fa-exclamation-triangle");
+					$("#Mode2F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin fa-exclamation-triangle");
 					$("#Mode2F1fa").addClass("fa-times-circle");
 					$("#Mode2F1fa").css("color", "darkorange");
 					$("#Mode2F1fa").css("color", "red");
@@ -95,7 +95,7 @@ $(function() {
 			error: function() {
 				// Error in input.
 				TintPage("RED");
-				$("#Mode2F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster fa-exclamation-triangle");
+				$("#Mode2F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin fa-exclamation-triangle");
 				$("#Mode2F1fa").addClass("fa-exclamation-triangle");
 				$("#Mode2F1fa").css("color", "darkorange");
 				Toggle2F1 = 0;
@@ -114,14 +114,14 @@ $(function() {
 			beforeSend: function(){
 				TintPage("BLUE");
 				$("#Mode2F2fa").removeClass("fa-ellipsis-h");
-				$("#Mode2F2fa").addClass("fa-spinner fa-spin-faster");
+				$("#Mode2F2fa").addClass("fa-circle-o-notch fa-spin");
 				$("#Mode2F2fa").css("color", "teal");
 			},
 			statusCode: {
 				253: function() {
 					// Success. Available Email.
 					TintPage("GREEN");
-					$("#Mode2F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster");
+					$("#Mode2F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin");
 					$("#Mode2F2fa").addClass("fa-check-circle");
 					$("#Mode2F2fa").css("color", "teal");
 					Toggle2F2 = 1;
@@ -130,7 +130,7 @@ $(function() {
 				252: function() {
 					// Nope. Not available.
 					TintPage("RED");
-					$("#Mode2F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster");
+					$("#Mode2F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin");
 					$("#Mode2F2fa").addClass("fa-times-circle");
 					$("#Mode2F2fa").css("color", "red");
 					Toggle2F2 = 0;
@@ -139,7 +139,7 @@ $(function() {
 				251: function() {
 					// Error in input.
 					TintPage("RED");
-					$("#Mode2F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster");
+					$("#Mode2F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin");
 					$("#Mode2F2fa").addClass("fa-times-circle");
 					$("#Mode2F2fa").css("color", "darkorange");
 					$("#Mode2F2fa").css("color", "red");
@@ -150,7 +150,7 @@ $(function() {
 			error: function() {
 				// Error in input.
 				TintPage("RED");
-				$("#Mode2F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster fa-exclamation-triangle");
+				$("#Mode2F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin fa-exclamation-triangle");
 				$("#Mode2F2fa").addClass("fa-exclamation-triangle");
 				$("#Mode2F2fa").css("color", "darkorange");
 				Toggle2F1 = 0;
@@ -160,7 +160,7 @@ $(function() {
 		EnableSubmitMode2();
 	});
 	$("#Mode2F3").keyup(function() {
-		$("#Mode2F3fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster");
+		$("#Mode2F3fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin");
 		if($("#Mode2F3").val().length < 6) {
 			TintPage("RED");
 			$("#Mode2F3fa").addClass("fa-times-circle");
@@ -182,7 +182,7 @@ $(function() {
 		EnableSubmitMode2();
 	});
 	$("#Mode2F4").keyup(function() {
-		$("#Mode2F4fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster");
+		$("#Mode2F4fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin");
 		if($("#Mode2F4").val() != $("#Mode2F3").val()) {
 			TintPage("RED");
 			$("#Mode2F4fa").addClass("fa-times-circle");
@@ -196,6 +196,16 @@ $(function() {
 			$("#Mode2F4fa").css("color", "teal");
 			Toggle2F4 = 1;
 			EnableSubmitMode2();
+		}
+	});
+
+	// Handle Return Key Event:
+	$("#Mode2F3, #Mode2F4").on('keydown', function(eventData) {
+		if (eventData.which == 13) {
+			if (EnableSubmitMode2() >= 4) {
+				eventData.preventDefault();
+				$("#Mode2Btn").click();
+			}
 		}
 	});
 	// Main Event: 
@@ -220,7 +230,7 @@ $(function() {
 				TintPage("BLUE");
 
 				// Change the button
-				$("#Mode2Btn").html('<i class="fa fa-spinner fa-spin-faster"></i> Please Wait');
+				$("#Mode2Btn").html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
 				$("#Mode2Btn").removeClass('btn-success');
 				$("#Mode2Btn").addClass('btn-info');
 				
@@ -305,6 +315,7 @@ $(function() {
 		else {
 			$("#Mode2Btn").attr("disabled","disabled");
 		}
+		return Score;
 	}
 
 	// Init.
@@ -321,7 +332,7 @@ $(function() {
 
 	// Events handeled.
 	$("#Mode3F2").keyup(function() {
-		$("#Mode3F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-circle fa-times-circle fa-spinner fa-spin-faster");
+		$("#Mode3F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-circle fa-times-circle fa-circle-o-notch fa-spin");
 		if($("#Mode3F2").val().length!=6) {
 			TintPage("RED");
 			$("#Mode3F2fa").addClass("fa-times-circle");
@@ -337,6 +348,17 @@ $(function() {
 			EnableSubmitMode3();
 		}
 	});
+
+	// Handle Return Key Event:
+	$("#Mode3F2").on('keydown', function(eventData) {
+		if (eventData.which == 13) {
+			if (EnableSubmitMode3() >= 1) {
+				eventData.preventDefault();
+				$("#Mode3Btn").click();
+			}
+		}
+	});
+
 	// Main Event: 
 	$("#Mode3Btn").click(function() {
 		if (Process3)
@@ -357,7 +379,7 @@ $(function() {
 				TintPage("BLUE");
 
 				// Change the button
-				$("#Mode3Btn").html('<i class="fa fa-spinner fa-spin-faster"></i> Please Wait');
+				$("#Mode3Btn").html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
 				$("#Mode3Btn").removeClass('btn-success');
 				$("#Mode3Btn").addClass('btn-info');
 				
@@ -446,6 +468,7 @@ $(function() {
 		else {
 			$("#Mode3Btn").attr("disabled","disabled");
 		}
+		return Score;
 	}
 
 	// Init.
@@ -473,13 +496,13 @@ $(function() {
 			beforeSend: function(){
 				TintPage("BLUE");
 				$("#Mode4F1fa").removeClass("fa-ellipsis-h");
-				$("#Mode4F1fa").addClass("fa-spinner fa-spin-faster");
+				$("#Mode4F1fa").addClass("fa-circle-o-notch fa-spin");
 				$("#Mode4F1fa").css("color", "teal");
 			},
 			statusCode: {
 				252: function() {
 					TintPage("GREEN");
-					$("#Mode4F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster fa-exclamation-triangle");
+					$("#Mode4F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin fa-exclamation-triangle");
 					$("#Mode4F1fa").addClass("fa-check-circle");
 					$("#Mode4F1fa").css("color", "teal");
 					Toggle4F1 = 1;
@@ -487,7 +510,7 @@ $(function() {
 				},
 				253: function() {
 					TintPage("RED");
-					$("#Mode4F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster fa-exclamation-triangle");
+					$("#Mode4F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin fa-exclamation-triangle");
 					$("#Mode4F1fa").addClass("fa-times-circle");
 					$("#Mode4F1fa").css("color", "red");
 					Toggle4F1 = 0;
@@ -506,7 +529,7 @@ $(function() {
 				251: function() {
 					// Error in input.
 					TintPage("RED");
-					$("#Mode4F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster fa-exclamation-triangle");
+					$("#Mode4F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin fa-exclamation-triangle");
 					$("#Mode4F1fa").addClass("fa-times-circle");
 					$("#Mode4F1fa").css("color", "darkorange");
 					$("#Mode4F1fa").css("color", "red");
@@ -517,7 +540,7 @@ $(function() {
 			error: function() {
 				// Error in input.
 				TintPage("RED");
-				$("#Mode4F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-spinner fa-spin-faster fa-exclamation-triangle");
+				$("#Mode4F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin fa-exclamation-triangle");
 				$("#Mode4F1fa").addClass("fa-exclamation-triangle");
 				$("#Mode4F1fa").css("color", "darkorange");
 				Toggle4F1 = 0;
@@ -526,7 +549,7 @@ $(function() {
 		});
 	});
 	$("#Mode4F2").keyup(function() {
-		$("#Mode4F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-circle fa-times-circle fa-spinner fa-spin-faster");
+		$("#Mode4F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-circle fa-times-circle fa-circle-o-notch fa-spin");
 		if($("#Mode4F2").val().length!=6) {
 			TintPage("RED");
 			$("#Mode4F2fa").addClass("fa-times-circle");
@@ -542,6 +565,17 @@ $(function() {
 			EnableSubmitMode4();
 		}
 	});
+
+	// Handle Return Key Event:
+	$("#Mode4F2").on('keydown', function(eventData) {
+		if (eventData.which == 13) {
+			if (EnableSubmitMode4() >= 2) {
+				eventData.preventDefault();
+				$("#Mode4Btn").click();
+			}
+		}
+	});
+
 	// Main Event: 
 	$("#Mode4Btn").click(function() {
 		if (Process4)
@@ -562,7 +596,7 @@ $(function() {
 				TintPage("BLUE");
 
 				// Change the button
-				$("#Mode4Btn").html('<i class="fa fa-spinner fa-spin-faster"></i> Please Wait');
+				$("#Mode4Btn").html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
 				$("#Mode4Btn").removeClass('btn-success');
 				$("#Mode4Btn").addClass('btn-info');
 				
@@ -651,6 +685,7 @@ $(function() {
 		else {
 			$("#Mode4Btn").attr("disabled","disabled");
 		}
+		return Score;
 	}
 
 	// Init.

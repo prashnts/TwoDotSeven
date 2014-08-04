@@ -9,8 +9,6 @@ namespace TwoDot7\Admin\Login;
 
 /**
  * init throws the actual Markup.
- * @param	$Data -array- Override Dataset.
- * @param	$Data['Call'] -string- REQUIRED. Specifies function call.
  * @return	null
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
  * @since	v0.0 28062014

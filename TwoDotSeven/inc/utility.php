@@ -9,7 +9,7 @@ namespace TwoDot7\Util;
 /**
  * Class wrapper for Cryptic functions.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 20062014
+ * @since	v0.0 20140620
  * @version	0.0
  */
 class Crypt {
@@ -117,7 +117,7 @@ class Crypt {
  * Copyright (c) 2013, Taylor Hornby
  * All rights reserved.
  * @author	Taylor Hornby
- * @since	v0.0 20062014
+ * @since	v0.0 20140620
  * @version	0.0
  */ 
 class PBKDF2 {
@@ -301,7 +301,7 @@ class Token {
 	/**
 	 * This function Checks if a Key exists in the JSON string.
 	 * @param	$Data -array- JSON initial string and Token to be checked.
-	 * @return	-boolean- Self Explanatory.
+	 * @return	bool Self Explanatory.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
 	 * @since	v0.0 29062014
@@ -312,7 +312,18 @@ class Token {
 			isset($Data['Token'])) {
 			$Tokens = json_decode($Data['JSON']);
 			if(is_array($Tokens)) {
-				return in_array($Data['Token'], $Tokens);
+				if (is_array($Data['Token'])) {
+					$Success = True;
+					foreach ($Data['Token'] as $TokenVal) {
+						if (!in_array($TokenVal, $Tokens)) {
+							$Success = False;
+						}
+					}
+					return $Success;
+				}
+				else {
+					return in_array($Data['Token'], $Tokens);
+				}
 			}
 			else {
 				return False;
@@ -320,6 +331,30 @@ class Token {
 		}
 		else {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\Util\\Token::Exists");
+		}
+	}
+
+	/**
+	 * Returns the Count of Tokens in the Encoded String.
+	 * @param	array $Data JSON initial.
+	 * @return	boolean
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 20140728
+	 * @version	0.0
+	 */
+	public static function Count($Data) {
+		if( isset($Data['JSON'])) {
+			$Tokens = json_decode($Data['JSON']);
+			if(is_array($Tokens)) {
+				return count($Tokens);
+			}
+			else {
+				return False;
+			}
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\Util\\Token::Count");
 		}
 	}
 
@@ -371,6 +406,32 @@ class Token {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\Util\\Token::Remove");
 		}
 	}
+}
+
+/**
+ * Returns the HTTP Request Headers.
+ * @return array Contains all the Request Headers.
+ * @author limalopex.eisfux.de (From PHP.Net)
+ * @link http://php.net/manual/en/function.apache-request-headers.php#70810
+ * @since	v0.0 20140801
+ * @version	0.0
+ */
+function RequestHeaders() {
+	$arh = array();
+	$rx_http = '/\AHTTP_/';
+	foreach($_SERVER as $key => $val) {
+		if( preg_match($rx_http, $key) ) {
+			$arh_key = preg_replace($rx_http, '', $key);
+			$rx_matches = array();
+			$rx_matches = explode('_', $arh_key);
+			if( count($rx_matches) > 0 and strlen($arh_key) > 2 ) {
+				foreach($rx_matches as $ak_key => $ak_val) $rx_matches[$ak_key] = ucfirst($ak_val);
+				$arh_key = implode('-', $rx_matches);
+			}
+			$arh[$arh_key] = $val;
+		}
+	}
+	return( $arh );
 }
 
 /**

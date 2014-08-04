@@ -10,9 +10,9 @@ namespace TwoDot7\Database;
  * Builds a MySQL Database Handler object. Requires Configuration NameSpace to Work.
  * Handler Takes care of SQL Best Practices and Prevetion of Injection attacks by itself.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 20062014
- * @version	0.0 20062014
- * @version	1.0 25062014
+ * @since	v0.0 20140620
+ * @version	0.0 20140620
+ * @version	1.0 20140625
  */
 class Handler {
 	/**

@@ -13,6 +13,7 @@ namespace TwoDot7\REST;
  */
 
 require "../../import.php";
+_Import('direction.php');
 _Import('config.php');
 _Import('database.php');
 _Import('exceptions.php');
@@ -22,9 +23,10 @@ _Import('install.php');
 _Import('user.php');
 _Import('cron.php');
 _Import('mailer.php');
-require "apiconfig.php";
-require "__initAccount.php";
-require "__initRedundant.php";
+require "_REST_Config.php";
+require "_REST_Account.php";
+require "_REST_Direction.php";
+require "_REST_Redundant.php";
 
 # Parse incoming URI and then process it.
 $URI = preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']);
@@ -57,12 +59,32 @@ switch(strtolower(isset($URIparse[BASE]) ? $URIparse[BASE] : False)) {
 			__initUser();
 			break;
 	*/
+	case 'direction':
+		$_GET = array(
+			'Function' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False,
+			'Page' => isset($URIparse[BASE+2]) ? $URIparse[BASE+2] : 1
+			);
+		Direction\init();
+		break;
+	case 'echo':
+		$Response = array(
+			'_POST' => $_POST,
+			'_GET' => $_GET,
+			'_COOKIES' => $_COOKIE,
+			'_SERVER' => $_SERVER,
+			'_REQUEST' => $_REQUEST);
+			header('HTTP/1.0 200 OK', true, 200);
+			header('Content-Type: application/json');
+			echo json_encode($Response);
+			\TwoDot7\Util\Log(json_encode($Response));
+		break;
 	case 'redundant':
 		/**
 		 * @internal	Parse URI template: DOMAIN/dev/exists/[Email, Username]
 		 */
 		$_GET = array(
-			'Function' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False);
+			'Function' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False
+			);
 		Redundant\init();
 		break;
 

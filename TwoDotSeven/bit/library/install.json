@@ -1,0 +1,30 @@
+{
+	"meta" : {
+		"name" : "Library",
+		"description" : "A library management module. Handles the issuing and other library essentials.",
+		"icon" : "fa fa-",
+		"tileColor" : "#FFF"
+	},
+	"tokens" : {
+		"bit" : "BIT_LIBRARY",
+		"admin" : "BIT_LIBRARY_ADMIN",
+		"user" : "BIT_LIBRARY_USER",
+		"autoPriviledge" : {
+			"group" : ["Admin", "Library", "CIC"],
+			"token" : "BIT_LIBRARY_USER"
+		}
+	},
+	"paths" : {
+		"" : {
+			"handeler" : "",
+			"token" : ""
+		},
+		"" : {
+			"handeler" : "",
+			"token" : ""
+		}
+	},
+	"broadcast" : true,
+	"dashboard" : 
+
+}

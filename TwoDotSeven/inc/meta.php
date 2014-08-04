@@ -265,17 +265,17 @@ class Navigation {
 				}
 			}
 
-			$Navigation .= '<li>'."\n";
+			if (isset($Data['Page']) && $Data['Page'] == $Menu) {
+				$Navigation .= '<li class="active">'."\n";
+			}
+			else {
+				$Navigation .= '<li>'."\n";
+			}
 
 			$Navigation .= '<a href="'.$Meta['Target'].'" class="auto">'."\n";
 			$Navigation .= '<i class="'.$Meta['Icon'].'"></i>'."\n";
 
-			if (isset($Data['Page']) && $Data['Page'] == $Menu) {
-				$Navigation .= '<span class="font-bold">'.$Meta['Name'].'</span>'."\n";
-			}
-			else {
-				$Navigation .= '<span>'.$Meta['Name'].'</span>'."\n";
-			}
+			$Navigation .= '<span>'.$Meta['Name'].'</span>'."\n";
 
 			if ($Meta['Badge']) {
 				$Navigation .= '<b class="badge '.$Meta['Badge']['Class'].' pull-right">0</b>';
@@ -283,8 +283,8 @@ class Navigation {
 
 			if (is_array($Meta['Children'])) {
 				$Navigation .= '<span class="pull-right text-muted">'."\n";
-				$Navigation .= '<i class="i i-circle-sm-o text"></i>'."\n";
-				$Navigation .= '<i class="i i-circle-sm text-active"></i>'."\n";
+				$Navigation .= '<i class="fa fa-angle-down text"></i>'."\n";
+				$Navigation .= '<i class="fa fa-angle-up text-active"></i>'."\n";
 				$Navigation .= '</span>'."\n";
 			}
 
@@ -320,7 +320,13 @@ class Navigation {
 						}
 					}
 
-					$Navigation .= '<li>'."\n";
+					if (isset($Data['Page']) && $Data['Page'] == $Menu) {
+						$Navigation .= '<li class="active">'."\n";
+					}
+					else {
+						$Navigation .= '<li>'."\n";
+					}
+					
 					$Navigation .= '<a href="'.$Meta['Target'].'" class="auto">'."\n";
 
 					if ($Meta['Badge']) {
@@ -342,6 +348,48 @@ class Navigation {
 		$Navigation .= '</nav>'."\n";
 
 		return $Navigation;
+	}
+
+	public static function GetUserNavInfo() {
+		if (!\TwoDot7\User\Session::Exists()) {
+			return '';
+		}
+
+		$DBResponse = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
+			'UserName' => \TwoDot7\User\Session::Data()['UserName']
+			))->fetch();
+
+		$Badge = (\TwoDot7\User\Status::Profile($DBResponse['UserName'])['Response'] > 0) ? 'on' : 'off';
+
+		$NavInfo = '<div class="clearfix wrapper dker nav-user hidden-xs spl-user-info">';
+		$NavInfo .= '	<div class="dropdown">';
+		$NavInfo .= '		<a href="#" class="dropdown-toggle" data-toggle="dropdown">';
+		$NavInfo .= '			<span class="thumb avatar pull-left m-r">';
+		$NavInfo .= '				<img src="/assetserver/userNameIcon/'.$DBResponse['UserName'][0].'">';
+		$NavInfo .= '				<i class="'.$Badge.' md b-black"></i>';
+		$NavInfo .= '			</span>';
+		$NavInfo .= '			<span class="hidden-nav-xs clear">';
+		$NavInfo .= '				<span class="block m-t-xs">';
+		$NavInfo .= '					<strong class="font-bold text-lt">'.$DBResponse['UserName'].'</strong>';
+		$NavInfo .= '					<b class="caret"></b>';
+		$NavInfo .= '				</span> ';
+		$NavInfo .= '				<span class="text-muted text-xs block">'.$DBResponse['EMail'].'</span>';
+		$NavInfo .= '			</span>';
+		$NavInfo .= '		</a>';
+		$NavInfo .= '		<ul class="dropdown-menu">';
+		$NavInfo .= '			<li> <a href="#">Settings</a> ';
+		$NavInfo .= '			</li>';
+		$NavInfo .= '			<li> <a href="profile.php">Profile</a> ';
+		$NavInfo .= '			</li>';
+		$NavInfo .= '			<li> <a href="#">Help/Support</a> ';
+		$NavInfo .= '			</li>';
+		$NavInfo .= '			<li> <a href="/twodot7/logout">Logout</a> ';
+		$NavInfo .= '			</li>';
+		$NavInfo .= '		</ul>';
+		$NavInfo .= '	</div>';
+		$NavInfo .= '</div>';
+
+		return $NavInfo;
 	}
 
 	/**
@@ -428,3 +476,4 @@ class Navigation {
 		return $Valid;
 	}
 }
+?>

@@ -8,7 +8,7 @@ namespace TwoDot7\Admin\Register;
 #  \/      \_/\_/ \___/  (_)  /_/      /_/ |_\_,_/_/_/_/_/_//_/
 
 /**
- * init throws the actual Markup.
+ * init throws the Markup, and handels User Interaction.
  * @param	$Data -array- Override Dataset.
  * @param	$Data['Call'] -string- REQUIRED. Specifies function call.
  * @return	null
@@ -30,7 +30,10 @@ function init() {
 	}
 
 	switch ($_GET['Action']) {
+		case 'validateEmail':
+		case 'verifyEmail':
 		case 'ConfirmEmail':
+		case 'confirmEmail':
 			if ($_GET['Target'] && $_GET['Data']) {
 				# Do the Auto confirm.
 				$Data = json_decode(\TwoDot7\Util\Crypt::Decrypt($_GET['Data']), true);
@@ -117,9 +120,8 @@ function init() {
 			}
 			die();
 			break;
-		case 'Next':
-			echo "Completed LOL?";
-			break;
+		case 'account':
+		case 'user':
 		default:
 			\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
 				'Call' => 'SignUp',
