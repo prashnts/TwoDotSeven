@@ -15,8 +15,8 @@ namespace TwoDot7\Admin\Broadcast;
  * @version	0.0
  */
 function init() {
-	$installer = new \TwoDot7\Install\Setup;
-	$installer->Navigation();
+	//$installer = new \TwoDot7\Install\Setup;
+	//$installer->Navigation();
 	\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
 		'Page' => 'BROADCAST',
 		'Navigation' => \TwoDot7\Meta\Navigation::Get(array(

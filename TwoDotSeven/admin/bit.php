@@ -23,10 +23,14 @@ function init() {
 	# Check Priviledge (Token)
 	# Check Bit's target page. Require Bit's stuff.
 
-	\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
+	$BitID = $_GET['Bit'];
+	$Bit = new \TwoDot7\Bit\Init($BitID);
+
+	var_dump($Bit);
+	/*\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
 		'Page' => 'Bit',
 		'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
 			'Page' => 'Bit'
 			))
-		));
+		));*/
 }

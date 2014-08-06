@@ -71,7 +71,7 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 	case 'bits':
 		$_GET = array_merge($_GET, array(
 			'Bit' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
-			'BitAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : False
+			'BitAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : 'init'
 			));
 		Bit\init();
 		break;

@@ -324,6 +324,11 @@ class Access {
 	private static $TokenCache = False;
 
 	/**
+	 * Caches the UserName of Last call. Helps validate $TokenCache.
+	 */
+	private static $LastUser = False;
+
+	/**
 	 * This function Adds Access Token.
 	 * @param	$Data -array- UserName and Domain token are sent to it.
 	 * @return	-bool- Indicates success or failure.
@@ -340,8 +345,9 @@ class Access {
 			 * @internal	This deletes the Cache. Cache is re-generated when the ::Check() is called.
 			 */ 
 			self::$TokenCache = False;
+			self::$LastUser = False;
 
-			$Data['Domain'] = strtoupper(preg_replace('/[^A-Za-z0-9_\-\+]/', "", $Data['Domain']));
+			$Data['Domain'] = preg_replace('/[^A-Za-z0-9_\-\+.]/', "", $Data['Domain']);
 
 			$DatabaseHandle = new \TwoDot7\Database\Handler;
 			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
@@ -391,7 +397,7 @@ class Access {
 	public static function Check($Data) {
 		if( isset($Data['UserName']) &&
 			isset($Data['Domain'])) {
-			if( self::$TokenCache) {
+			if( self::$TokenCache && $Data['UserName'] === self::$LastUser) {
 				return Util\Token::Exists(array(
 					'JSON' => self::$TokenCache ? self::$TokenCache : False,
 					'Token' => $Data['Domain']));
@@ -401,6 +407,7 @@ class Access {
 					'UserName' => $Data['UserName']))->fetch()['Tokens'];
 				
 				self::$TokenCache = $TokensJSON;
+				self::$LastUser = $Data['UserName'];
 
 				return Util\Token::Exists(array(
 					'JSON' => $TokensJSON ? $TokensJSON : False,
@@ -450,6 +457,7 @@ class Access {
 			 * @internal	This deletes the Cache. Cache is re-generated when the ::Check() is called.
 			 */ 
 			self::$TokenCache = False;
+			self::$LastUser = False;
 
 			$DatabaseHandle = new \TwoDot7\Database\Handler;
 			$DBResponse = $DatabaseHandle->Query("SELECT * FROM _user WHERE UserName=:UserName", array(
@@ -484,6 +492,70 @@ class Access {
 		}
 		else {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::Revoke");
+		}
+	}
+
+	/**
+	 * This function Finds the SysAdmin. Best case: O(1), Worst Case: O(2n)
+	 * @return	mixed Contains Username, Email and User ID.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140806
+	 * @version	0.0
+	 */
+	public static function SysAdmin() {
+		# 1. UserID 1 should be the Super User.
+		# 2. Don't give up if 1 is not the Super User. Check ALL the users until Super User is found.
+
+		$SysAdminCandidate = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE ID=1 LIMIT 1")->fetch();
+
+		if (self::Check(array(
+			'UserName' => $SysAdminCandidate['UserName'],
+			'Domain' => 'SYSADMIN'))) {
+			return array(
+				'ID' => 1,
+				'UserName' => $SysAdminCandidate['UserName'],
+				'EMail' => $SysAdminCandidate['EMail'],
+				);
+		}
+		else {
+			$Hook = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user");
+			while (True) {
+				$SysAdminCandidate = $Hook->fetch();
+				if (!is_array($SysAdminCandidate)) break;
+				if (self::Check(array(
+					'UserName' => $SysAdminCandidate['UserName'],
+					'Domain' => 'SYSADMIN'))) {
+					return array(
+						'ID' => $SysAdminCandidate['ID'],
+						'UserName' => $SysAdminCandidate['UserName'],
+						'EMail' => $SysAdminCandidate['EMail'],
+						);
+				}
+			}
+			Util\Log('NO SUPER USER FOUND!', 'ALERT');
+			if (!function_exists('\TwoDot7\Admin\Template\Login_SignUp_Error\_init')) {
+				require_once $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php';
+				\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+					'Call' => 'Error',
+					'ErrorMessageHead' => 'Sorry, there was a Server Error',
+					'ErrorMessageFoot' => 'SysAdmin Account not found or DB error.',
+					'ErrorCode' => 'Fatal: SysAdmin not found.',
+					'Code' => 500,
+					'Mood' => 'RED'
+					));
+				die();
+			}
+			else {
+				\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+					'Call' => 'Error',
+					'ErrorMessageHead' => 'Sorry, there was a Server Error',
+					'ErrorMessageFoot' => 'SysAdmin Account not found or DB error.',
+					'ErrorCode' => 'ImportError: '.$Name,
+					'Code' => 500,
+					'Mood' => 'RED'
+					));
+				die();
+			}
 		}
 	}
 }

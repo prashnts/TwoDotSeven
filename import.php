@@ -54,7 +54,7 @@ function _Import($Name) {
 			'ErrorMessageFoot' => 'Couldn\'t load some or all the required files.',
 			'ErrorCode' => 'ImportError: '.$Name,
 			'Code' => 500,
-			'Mood' => ''));
+			'Mood' => 'RED'));
 		die();
 		return 0;
 	}

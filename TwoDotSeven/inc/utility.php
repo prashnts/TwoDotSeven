@@ -224,16 +224,29 @@ class PBKDF2 {
 /**
  * Class wrapper for Redundancy check functions.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 25062014
+ * @since	v0.0 20140625
  * @version	0.0
  */
 class Redundant {
+	/**
+	 * This function checks the Bit against the Database.
+	 * @param	string $Candidate The Bit ID.
+	 * @return	bool
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140805
+	 * @version	0.0
+	 */
+	public static function Bit($Candidate) {
+		$Query = "SELECT count(*) AS count FROM _bit WHERE ID=:ID";
+		return \TwoDot7\Database\Handler::Exec($Query, array( 'ID' => $Candidate ))->fetch()['count'] ? True : False;
+	}
+
 	/**
 	 * This function checks the EMail against the Database.
 	 * @param	$Candidate -string- The EMail.
 	 * @return	bool
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 25062014
+	 * @since	v0.0 20140625
 	 * @version	0.0
 	 */
 	public static function EMail($Candidate) {
@@ -246,7 +259,7 @@ class Redundant {
 	 * @param	$Candidate -string- The UserName.
 	 * @return	bool
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 25062014
+	 * @since	v0.0 20140625
 	 * @version	0.0
 	 */
 	public static function UserName($Candidate) {
@@ -440,7 +453,7 @@ function RequestHeaders() {
  * @param	$__Arg - Target Log file.
  * @return	null
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 25062014
+ * @since	v0.0 20140625
  * @version	0.0
  */
 function Log($Message, $__Arg = "SILENT") {

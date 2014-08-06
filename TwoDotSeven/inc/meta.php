@@ -93,7 +93,8 @@ class Navigation {
 			*/
 
 			if (!array_key_exists($Node, $NavigationNode_OLD)) {
-				$NavigationNode_NEW = array_slice($NavigationNode_OLD, 0, $Options['OFFSET'], true) +
+				$NavigationNode_NEW =
+					array_slice($NavigationNode_OLD, 0, $Options['OFFSET'], true) +
 					$NavigationAddition +
 					array_slice($NavigationNode_OLD, $Options['OFFSET'], count($NavigationNode_OLD)-$Options['OFFSET'], true);
 			}
@@ -468,7 +469,13 @@ class Navigation {
 						else{
 							$Valid = False;
 						}
+						if ($Meta['Tokens'] && !is_array($Meta['Tokens'])) {
+							$Valid = False;
+						}
 					}
+				}
+				if ($Meta['Tokens'] && !is_array($Meta['Tokens'])) {
+					$Valid = False;
 				}
 			}
 		}
