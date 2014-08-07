@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    GetUserListMarkup();
+    $("#REST_UserManagementTable").length ? GetUserListMarkup() : false;
 });
 
 function GetUserListMarkup(Page) {

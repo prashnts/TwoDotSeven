@@ -22,6 +22,7 @@ _Import('user.php');
 _Import('cron.php');
 _Import('mailer.php');
 _Import('meta.php');
+_Import('bits.php');
 require "login.php";
 require "logout.php";
 require "register.php";
@@ -33,7 +34,7 @@ require "views/login.signup.errors.php";
 require "views/dash.broadcast.bits.php";
 
 # Parse incoming URI and then process it.
-$URI = explode('/', preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']));
+$URI = preg_split('/[\/\?]/', preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']));
 
 const BASE = 2;
 

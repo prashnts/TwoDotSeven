@@ -12,11 +12,6 @@
 		"autoToken" : "in.ac.ducic.library.user",
 		"autoTokenUserLevel" : 11
 	},
-	"bitHandeler" : {
-		"REST" : "REST_init.php",
-		"View" : "VIEW_init.php",
-		"Controller" : "CONTROLLER_init.php"
-	},
 	"registerIntoBroadcast" : true,
 	"registerIntoDashboard" : true,
 	"navigation" : {

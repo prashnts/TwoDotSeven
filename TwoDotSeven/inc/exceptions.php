@@ -29,6 +29,10 @@ class IncompleteArgument extends \Exception {
 	// Empty class.
 }
 
+class InvalidBit extends \Exception {
+	// Empty class.
+}
+
 function RenderError($Exception) {
 	require_once $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/login.signup.errors.php';
 	\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(

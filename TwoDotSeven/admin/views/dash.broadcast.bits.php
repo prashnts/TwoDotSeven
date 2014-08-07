@@ -300,71 +300,74 @@ class Render {
 				-o-filter: blur(3px); 
 				-ms-filter: blur(3px);
 			}
-/* columns of same height styles */
-.container-xs-height {
-    display:table;
-    padding-left:0px;
-    padding-right:0px;
-}
-.row-xs-height {
-    display:table-row;
-}
-.col-xs-height {
-    display:table-cell;
-    float:none;
-}
-@media (min-width: 768px) {
-    .container-sm-height {
-        display:table;
-        padding-left:0px;
-        padding-right:0px;
-    }
-    .row-sm-height {
-        display:table-row;
-    }
-    .col-sm-height {
-        display:table-cell;
-        float:none;
-    }
-}
-@media (min-width: 992px) {
-    .container-md-height {
-        display:table;
-        padding-left:0px;
-        padding-right:0px;
-    }
-    .row-md-height {
-        display:table-row;
-    }
-    .col-md-height {
-        display:table-cell;
-        float:none;
-    }
-}
-@media (min-width: 1200px) {
-    .container-lg-height {
-        display:table;
-        padding-left:0px;
-        padding-right:0px;
-    }
-    .row-lg-height {
-        display:table-row;
-    }
-    .col-lg-height {
-        display:table-cell;
-        float:none;
-    }
-}
-.col-top {
-    vertical-align:top;
-}
-.col-middle {
-    vertical-align:middle;
-}
-.col-bottom {
-    vertical-align:bottom;
-}
+			/* columns of same height styles */
+			.container-xs-height {
+			    display:table;
+			    padding-left:0px;
+			    padding-right:0px;
+			}
+			.row-xs-height {
+			    display:table-row;
+			}
+			.col-xs-height {
+			    display:table-cell;
+			    float:none;
+			}
+			@media (min-width: 768px) {
+			    .container-sm-height {
+			        display:table;
+			        padding-left:0px;
+			        padding-right:0px;
+			    }
+			    .row-sm-height {
+			        display:table-row;
+			    }
+			    .col-sm-height {
+			        display:table-cell;
+			        float:none;
+			    }
+			}
+			@media (min-width: 992px) {
+			    .container-md-height {
+			        display:table;
+			        padding-left:0px;
+			        padding-right:0px;
+			    }
+			    .row-md-height {
+			        display:table-row;
+			    }
+			    .col-md-height {
+			        display:table-cell;
+			        float:none;
+			    }
+			}
+			@media (min-width: 1200px) {
+			    .container-lg-height {
+			        display:table;
+			        padding-left:0px;
+			        padding-right:0px;
+			    }
+			    .row-lg-height {
+			        display:table-row;
+			    }
+			    .col-lg-height {
+			        display:table-cell;
+			        float:none;
+			    }
+			}
+			.col-top {
+			    vertical-align:top;
+			}
+			.col-middle {
+			    vertical-align:middle;
+			}
+			.col-bottom {
+			    vertical-align:bottom;
+			}
 		</style>
 		<?php
+	}
+	public static function Bit($Data) {
+		$Data['Bit']->CreateView($Data['ControllerResponse']);
 	}
 }

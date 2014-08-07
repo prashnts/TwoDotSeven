@@ -112,33 +112,135 @@ class Register {
 }
 
 class Init {
-	private $Bit;
+	public $Bit;
 	private $AdminToken;
 	private $UserToken;
 	private $AutoToken;
+	private $AutoTokenUserLevel;
 
 	public function __construct($Bit, $ThrowOverride = False) {
-		if (self::isRegistered($Bit)) {
-			// Go on.
-		}
-		elseif ($ThrowOverride) {
-			Util\Log('Could not ');
-		}
+		$Response = self::GetMeta($Bit);
+		$this->Bit = $Bit;
+		$this->AdminToken = $Response['Tokens']['adminToken'];
+		$this->UserToken = $Response['Tokens']['userToken'];
+		$this->AutoToken = $Response['Tokens']['autoToken'];
+		$this->AutoTokenUserLevel = $Response['Tokens']['autoTokenUserLevel'];
 	}
 
 	/**
 	 * Checks if the Bit token is properly registered.
 	 */
-	private function isRegistered($Bit) {
+	private function GetMeta($Bit) {
 		# 1. Check if it is in the _bit
 		# 2. Check if the Registered Files are there.
-		# 3. Ok!
+		# 3. Ok! Return the Meta.
+		if (!Util\Redundant::Bit($Bit)) {
+			False;
+		}
+		$Meta = \TwoDot7\Database\Handler::Exec(
+			"SELECT * FROM _bit WHERE ID=:ID",
+			array(
+				'ID' => $Bit
+				))->fetch();
+		if (!is_array($Meta)) {
+			throw new \TwoDot7\Exception\InvalidBit("Bit $Bit doesnt exists");
+		}
+		return array(
+			'ID' => $Meta['ID'],
+			'Name' => $Meta['Tokens'],
+			'Tokens' => json_decode($Meta['Tokens'], True),
+			'Meta' => json_decode($Meta['Meta'], True)
+			);
 	}
 	public function Broadcast() {
 		// Todo
 	}
 	public function Dashboard() {
 		//
+	}
+	public function InterFaceController() {
+		# Check if file already imported. (Not Possible)
+		$BaseDir = \TwoDot7\Bit\ROOT_DIR().'/'.$this->Bit;
+		if (!file_exists($BaseDir.'/CONTROLLER_init.php')) {
+			\Util\Log("Bit files missing Bit: ".json_encode($this), "ALERT");
+
+			\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+				'Call' => 'Error',
+				'ErrorMessageHead' => 'Bit dependencies missing',
+				'ErrorMessageFoot' => 'The Bit <kbd>'.$this->Bit.'</kbd> is either corrupted, or requires Installation.',
+				'ErrorCode' => 'SystemError: Invalid Bit, Dependencies Missing: CONTROLLER_init.',
+				'Code' => 500,
+				'Title' => '500 Bit Dependencies Invalid',
+				'Mood' => 'RED'));
+			
+			die();
+		}
+		$functionString = "\TwoDot7\Bit\\".preg_replace('/\./', '_', $this->Bit)."\Controller\init";
+		if (function_exists($functionString)) {
+			$functionString();
+		}
+		else {
+			require $BaseDir.'/CONTROLLER_init.php';
+			if (function_exists($functionString)) {
+				return $functionString();
+			}
+			else {
+				\TwoDot7\Util\Log("Invalid Bit: ".json_encode($this), "ALERT");
+
+				\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+					'Call' => 'Error',
+					'ErrorMessageHead' => 'Invalid Bit',
+					'ErrorMessageFoot' => 'The Bit <kbd>'.$this->Bit.'</kbd> is either corrupted, or requires Installation.',
+					'ErrorCode' => 'SystemError: Invalid Bit Not Initialised.',
+					'Code' => 500,
+					'Title' => '500 Bit Dependencies Invalid',
+					'Mood' => 'RED'));
+
+				die();
+			}
+		}
+	}
+	public function CreateView($Data) {
+		# Check if file already imported. (Not Possible)
+		$BaseDir = \TwoDot7\Bit\ROOT_DIR().'/'.$this->Bit;
+		if (!file_exists($BaseDir.'/VIEW_init.php')) {
+			\Util\Log("Bit files missing Bit: ".json_encode($this), "ALERT");
+
+			\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+				'Call' => 'Error',
+				'ErrorMessageHead' => 'Bit dependencies missing',
+				'ErrorMessageFoot' => 'The Bit <kbd>'.$this->Bit.'</kbd> is either corrupted, or requires Installation.',
+				'ErrorCode' => 'SystemError: Invalid Bit, Dependencies Missing: VIEW_init.',
+				'Code' => 500,
+				'Title' => '500 Bit Dependencies Invalid',
+				'Mood' => 'RED'));
+			
+			die();
+		}
+		$functionString = "\TwoDot7\Bit\\".preg_replace('/\./', '_', $this->Bit)."\View\init";
+		if (function_exists($functionString)) {
+			$functionString($Data);
+		}
+		else {
+			require $BaseDir.'/VIEW_init.php';
+			if (function_exists($functionString)) {
+				return $functionString($Data);
+			}
+			else {
+				\TwoDot7\Util\Log("Invalid Bit: ".json_encode($this), "ALERT");
+
+				\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+					'Call' => 'Error',
+					'ErrorMessageHead' => 'Invalid Bit',
+					'ErrorMessageFoot' => 'The Bit <kbd>'.$this->Bit.'</kbd> is either corrupted, or requires Installation.',
+					'ErrorCode' => 'SystemError: Invalid Bit Not Initialised.',
+					'Code' => 500,
+					'Title' => '500 Bit Dependencies Invalid',
+					'Mood' => 'RED'));
+
+				die();
+			}
+		}
 	}
 	public function REST() {
 		//
