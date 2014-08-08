@@ -99,8 +99,8 @@ function Head(&$Data) {
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
 	<link rel="stylesheet" href="/TwoDotSeven/admin/assets/css/base.css" type="text/css" />
-	<link rel="stylesheet" href="/TwoDotSeven/admin/assets/css/style.css" type="text/css" />
 	<link rel="stylesheet" href="/assetserver/css/backgroundstyles" type="text/css" />
+	<link rel="stylesheet" href="/TwoDotSeven/admin/assets/css/style.css" type="text/css" />
 
 	<script src="/TwoDotSeven/admin/assets/js/jquery.js"></script>
 	<script src="/TwoDotSeven/admin/assets/js/app.js"></script>
@@ -236,134 +236,7 @@ class Render {
 			</section>
 		</section>
 		<style>
-			.tm-tag {
-				color: #555555;
-				background-color: #f5f5f5;
-				border: #bbbbbb 1px solid;
-				display: inline-block;
-				border-radius: 2px;
-				margin: 0 5px 5px 0;
-				padding: 4px;
-				text-decoration: none;
-				vertical-align: middle;
-			}
-			.tm-tag .tm-tag-remove {
-				color: #ffffff;
-				font-weight: bold;
-				margin-left: 4px;
-				opacity: 0.8;
-			}
-			.tm-tag .tm-tag-remove:hover {
-				color: #ffffff;
-				text-decoration: none;
-				opacity: 1;
-			}
-			.tm-tag.tm-tag-success {
-				color: #ffffff;
-				background-color: #3DCFAA;
-				border-color: transparent;
-			}
-			.table-responsive {
-				position: relative;
-			}
-			.AJAXLoader {
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				min-height: 200px;
-				top: 0;
-				left: 0;
-				background: #f2f4f8;
-				padding: 50px 10% 50px 10%;
-				opacity: 0.6;
-				text-align: center;
-				display: none;
-				z-index: 22;
-			}
-			.AJAXLoadError {
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				min-height: 200px;
-				top: 0;
-				left: 0;
-				background: #f2f4f8;
-				padding: 20px 10% 50px 10%;
-				opacity: 1;
-				text-align: center;
-				display: none;
-				z-index: 22;
-			}
-			.Blur {
-				-webkit-filter: blur(3px); 
-				-moz-filter: blur(3px);
-				-o-filter: blur(3px); 
-				-ms-filter: blur(3px);
-			}
-			/* columns of same height styles */
-			.container-xs-height {
-			    display:table;
-			    padding-left:0px;
-			    padding-right:0px;
-			}
-			.row-xs-height {
-			    display:table-row;
-			}
-			.col-xs-height {
-			    display:table-cell;
-			    float:none;
-			}
-			@media (min-width: 768px) {
-			    .container-sm-height {
-			        display:table;
-			        padding-left:0px;
-			        padding-right:0px;
-			    }
-			    .row-sm-height {
-			        display:table-row;
-			    }
-			    .col-sm-height {
-			        display:table-cell;
-			        float:none;
-			    }
-			}
-			@media (min-width: 992px) {
-			    .container-md-height {
-			        display:table;
-			        padding-left:0px;
-			        padding-right:0px;
-			    }
-			    .row-md-height {
-			        display:table-row;
-			    }
-			    .col-md-height {
-			        display:table-cell;
-			        float:none;
-			    }
-			}
-			@media (min-width: 1200px) {
-			    .container-lg-height {
-			        display:table;
-			        padding-left:0px;
-			        padding-right:0px;
-			    }
-			    .row-lg-height {
-			        display:table-row;
-			    }
-			    .col-lg-height {
-			        display:table-cell;
-			        float:none;
-			    }
-			}
-			.col-top {
-			    vertical-align:top;
-			}
-			.col-middle {
-			    vertical-align:middle;
-			}
-			.col-bottom {
-			    vertical-align:bottom;
-			}
+
 		</style>
 		<?php
 	}
