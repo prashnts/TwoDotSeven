@@ -195,7 +195,7 @@ class Render {
 					<small><?php echo isset($Data['ErrorMessageFoot']) ? $Data['ErrorMessageFoot'] : "Unexpected Error Occured"; ?></small>
 				</h2>
 				<h5>If you see a developer playing around, show them this: <kbd>/TwoDot7:<?php echo isset($Data['ErrorCode']) ? $Data['ErrorCode'] : "Unexpected"; ?>/</kbd></h5>
-				<h6><a href="/" title="TwoDotSeven Home">TwoDotSeven Home</a> | <a href="/contact">Contact</a></h6>
+				<?php echo isset($Data['HideBottomErrorNav']) ? '' : '<h6><a href="/" title="TwoDotSeven Home"><span class="text-white">TwoDotSeven Home</span></a> | <a href="/contact"><span class="text-white">Contact</span></a></h6>'; ?>
 			</div>
 		</div>
 		<?php

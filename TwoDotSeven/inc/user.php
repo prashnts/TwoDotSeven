@@ -100,26 +100,6 @@ class Account {
 					)
 				)->rowCount();
 				
-				/*
-				// Being Disabled Because of a Change in Model, Paradigm.
-				#$Query2 = "INSERT INTO _usermeta (UserName, Name, Clearance, Meta, MetaAlerts, MetaInfo) VALUES (:UserName, :Name, :Clearance, :Meta, :MetaAlerts, :MetaInfo)";
-				$Response += $DatabaseHandle->Query($Query2, array(
-					'UserName' => $SignupData['UserName'],
-					'Name' => '#',
-					'Clearance' => 0,
-					'Meta' => json_encode(array()),
-					'MetaAlerts' => json_encode(array(
-						array(
-							'AlertType'	=> 'Info',
-							'ID' => md5(strtolower('This is your Notification Panel. It contains everything important, that you need to know.')),
-							'Header' => 'Welcome',
-							'Content' => 'This is your Notification Panel. It contains everything important, that you need to know.',
-							'Dismissed' => False))),
-					'MetaInfo' => json_encode(array(
-						'Hubs' => array(),
-						'Groups' => array()))))->rowCount();
-				*/
-
 				if ($Response) {
 					Util\Log("User Account: ".$SignupData['UserName']." added.");
 					// Adding temporary sign-up tracking in Encrypted Log.
@@ -1075,7 +1055,7 @@ class Shortcut {
  * Wrapper for the Account Status Management functions.
  * Implements Get, Set, Escalade, Revoke
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 23062014
+ * @since	v0.0 20140623
  * @version	0.0
  */
 class Status {
@@ -1099,7 +1079,7 @@ class Status {
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
 	 * @throws	InvalidArgument Exception.
-	 * @since	v0.0 12072014
+	 * @since	v0.0 20140712
 	 * @version	0.0
 	 */
 	public static function Profile($UserName, $Override = array(
@@ -1258,7 +1238,7 @@ class Status {
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
 	 * @throws	InvalidArgument Exception.
-	 * @since	v0.0 12072014
+	 * @since	v0.0 20140712
 	 * @version	0.0
 	 */
 	public static function EMail($UserName, $Override = array(
@@ -1418,6 +1398,87 @@ class Status {
 				throw new \TwoDot7\Exception\InvalidArgument("Invalid Override in function User\Status\EMail.");
 			
 		}
+	}
+
+	/**
+	 * Get the Bare status code.
+	 * @param	string $UserName UserName.
+	 * @param	mixed $Override Action and New Status.
+	 * @return	boolean Contains response.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	InvalidArgument Exception.
+	 * @since	v0.0 20150808
+	 * @version	0.0
+	 */
+	public static function Get($UserName = False) {
+		$DBResponse = \TwoDot7\Database\Handler::Exec(
+			"SELECT * FROM _user WHERE UserName=:UserName", 
+			array(
+				'UserName' => $UserName ? $UserName : Session::Data()['UserName']
+				))->fetch();
+
+		if ($DBResponse) {
+			$Status = $DBResponse['Status'];
+			if (is_numeric($Status)) {
+				return (int)$Status;
+			}
+			else {
+				Util\Log("Invalid Data stored in DB. UserMeta = \"".json_encode($DBResponse)."\" Function User/Status/Profile", "TRACK");
+				Util\Log("Invalid Data Error Fired. \User\Status\Profile. Check Track Log.");
+				# Stop Execution.
+				if (file_exists($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php')) {
+					require_once $_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/views/login.signup.errors.php';
+					\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+						'Call' => 'Error',
+						'ErrorMessageHead' => 'Sorry, there was a Server Error',
+						'ErrorMessageFoot' => 'Invalid User Status Code.',
+						'ErrorCode' => 'DataBase Error. Invalid Data. Fatal.',
+						'Code' => 503,
+						'Mood' => 'RED'));
+					die();
+				}
+				else {
+					echo "<pre><h1>Two Dot 7 Database Error.</h1>";
+					echo "<h2>Invalid Status Code in DB.</h2>";
+					echo "<h3>If you are a User, apologies. Please Contact the support. If you're a developer, please check the Info/Tracking Logs.</h3>";
+					echo "<h4>Additionally, a 404 error occured, while trying to find the Error interface.";
+					die();
+				}
+			}
+		}
+		else {
+			return 0;
+		}
+	}
+
+	/**
+	 * Correlates the User Statuses. Checks for minimum user status requirement.
+	 * @param	string $Candidate Candidate Status.
+	 * @param	string $Subject Subject Status.
+	 * @return	boolean Contains response.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	InvalidArgument Exception.
+	 * @since	v0.0 20150808
+	 * @version	0.0
+	 */
+	public static function Correlate($Candidate, $Subject) {
+		if (!is_numeric($Candidate) &&
+			!is_numeric($Subject)) {
+			throw new \TwoDot7\Exception\InvalidArgument("Subject and Candidate must be Numeric.");
+		}
+		
+		$Subject_Digit = strlen($Subject);
+		$Candidate_Digit = strlen($Candidate);
+
+		$Iteration_Limit = $Subject_Digit < $Candidate_Digit ? $Candidate_Digit : $Subject_Digit;
+
+		for ($i = 0; $i < $Iteration_Limit; $i++) {
+			if ($Candidate % 10 > $Subject % 10) return False;
+			$Candidate = (int)($Candidate/10);
+			$Subject = (int)($Subject/10);
+		}
+
+		return True;
 	}
 }
 ?>

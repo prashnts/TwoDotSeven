@@ -217,14 +217,18 @@ class Init {
 			
 			die();
 		}
-		$functionString = "\TwoDot7\Bit\\".preg_replace('/\./', '_', $this->Bit)."\View\init";
+		
+		$functionString = "\TwoDot7\Bit\\".preg_replace('/\./', '_', $this->Bit)."\View\\{$Data['Call']}";
+
 		if (function_exists($functionString)) {
-			$functionString($Data);
+			return $functionString;
 		}
 		else {
 			require $BaseDir.'/VIEW_init.php';
-			if (function_exists($functionString)) {
-				return $functionString($Data);
+			//echo $functionString;
+
+			if (isset($functionString)) {
+				return $functionString;
 			}
 			else {
 				\TwoDot7\Util\Log("Invalid Bit: ".json_encode($this), "ALERT");
@@ -241,6 +245,29 @@ class Init {
 				die();
 			}
 		}
+	}
+	public function AutoToken() {
+		if (!\TwoDot7\User\Session::Exists()) {
+			return False;
+		}
+		# Check the Existence of AutoToken
+		# Set the Autotoken
+		if (\TwoDot7\User\Access::Check(array(
+			'UserName' => \TwoDot7\User\Session::Data()['UserName'],
+			'Domain' => $this->AutoToken
+			))) {
+			return True;
+		}
+		if (!\TwoDot7\User\Status::Correlate(
+			$this->AutoTokenUserLevel,
+			\TwoDot7\User\Status::Get())) {
+			return False;
+		}
+		\TwoDot7\User\Access::Add(array(
+			'UserName' => \TwoDot7\User\Session::Data()['UserName'],
+			'Domain' => $this->AutoToken
+			));
+		return True;
 	}
 	public function REST() {
 		//

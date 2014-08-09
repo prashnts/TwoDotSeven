@@ -241,6 +241,28 @@ class Render {
 		<?php
 	}
 	public static function Bit($Data) {
-		$Data['Bit']->CreateView($Data['ControllerResponse']);
+		if (function_exists($Data['View'])) {
+			$Data['View']($Data);
+			//call_user_func($Data['View']);
+		}
+		else {
+			?>
+			<?php
+			$Data = array(
+				'Mood'=>"RED",
+				'ErrorMessageHead' => 'Invalid Path.',
+				'ErrorMessageFoot' => 'The path specified in the URL is not handeled by current bit setup.',
+				'ErrorCode' => 'UserError: Invalid Bit Action specified.',
+				'Code' => 404,
+				'Title' => '404 Bit ID not found',
+				);
+
+			\TwoDot7\Admin\Template\Login_SignUp_Error\Mood($Data);
+
+			echo '<div style="position:relative; height:100%; width:100%" class="scrollable">';
+				\TwoDot7\Admin\Template\Login_SignUp_Error\Render::Error($Data);
+			echo '</div>';
+
+		}
 	}
 }

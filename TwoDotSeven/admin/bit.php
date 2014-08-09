@@ -26,27 +26,30 @@ function init() {
 	$BitID = $_GET['Bit'];
 	try {
 		$Bit = new \TwoDot7\Bit\Init($BitID);
-		
+		$AutoTokenResponse = $Bit->AutoToken();
+		$BiTControllerResponse = $Bit->InterFaceController();
+		$ViewVar = $Bit->CreateView($BiTControllerResponse);
+
 		\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
 			'Page' => $BitID,
 			'Call' => 'Bit',
-			'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
-				'Page' => $BitID
-				)),
-			'ControllerResponse' => $Bit->InterFaceController(),
-			'Bit' => $Bit
+			'Navigation' => \TwoDot7\Meta\Navigation::Get(array('Page' => $BitID)),
+			'ViewData' => $BiTControllerResponse,
+			'View' => $ViewVar
 			));
 
 		die();
 	} catch (\TwoDot7\Exception\InvalidBit $e) {
+
 		\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
 			'Call' => 'Error',
 			'ErrorMessageHead' => 'Invalid Bit ID.',
 			'ErrorMessageFoot' => 'The ID specified in the URL was not found in current setup. Are you trying to install it? Please contact the support if this error persists.',
 			'ErrorCode' => 'UserError: Invalid Bit specified.',
 			'Code' => 404,
-			'Title' => '404 Bit ID not found',
-			'Mood' => 'RED'));
+			'HideBottomErrorNav' => True,
+			'Mood' => 'GREEN'));
+		
 		die();
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 namespace TwoDOt7\Bit\in_ac_ducic_library\View;
 
-function init($Data) {
+function Catalogue($Data = False) {
 	?>
 	<section class="scrollable padder">
 		<div class="m-b-md row padder">
@@ -13,33 +13,32 @@ function init($Data) {
 			</div>
 			<hr>
 		</div>
-		<?php 
-			\TwoDOt7\Bit\in_ac_ducic_library\View\Render::Catalogue();
-		?>
+			<?php
+			var_dump($Data['ViewData']);
+			for ($i = 0; $i<3; $i++) {
+			?>
+				<div class="col-xs-3">
+					<div class="card">
+						<span class="badge bg-danger">267889</span>
+						<h4>ISBN12 - 234-2332-222</h4>
+						<h1>Calculus: Applications</h1>
+						<h2 class="m-b">DC Lay. Tata McGraw</h2>
+						<hr>
+						<h3>In Stock: 30</h3>
+						<h3>Available: 30</h3>
+						<button class="btn btn-success text-center">Request</button>
+						<
+					</div>
+				</div>
+			<?php
+			}
+			?>
 	</section>
 	<?php
-}
+};
 
-class Render {
-	public static function Catalogue() {
-			for ($i = 0; $i<3; $i++) {
-		?>
-			<div class="col-xs-3">
-				<div class="card">
-					<span class="badge bg-danger">267889</span>
-					<h4>ISBN12 - 234-2332-222</h4>
-					<h1>Calculus: Applications</h1>
-					<h2 class="m-b">DC Lay. Tata McGraw</h2>
-					<hr>
-					<h3>In Stock: 30</h3>
-					<h3>Available: 30</h3>
-					<button class="btn btn-success text-center">Request</button>
-					<
-				</div>
-			</div>
-		<?php
-	}
-	}
+function FoursOFour() {
+	echo "LOL";
 }
 
 ?>
