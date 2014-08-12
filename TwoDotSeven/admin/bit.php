@@ -41,15 +41,15 @@ function init() {
 		die();
 	} catch (\TwoDot7\Exception\InvalidBit $e) {
 
-		\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
-			'Call' => 'Error',
-			'ErrorMessageHead' => 'Invalid Bit ID.',
-			'ErrorMessageFoot' => 'The ID specified in the URL was not found in current setup. Are you trying to install it? Please contact the support if this error persists.',
-			'ErrorCode' => 'UserError: Invalid Bit specified.',
-			'Code' => 404,
-			'HideBottomErrorNav' => True,
-			'Mood' => 'GREEN'));
-		
-		die();
+	\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+		'Call' => 'Error',
+		'ErrorMessageHead' => 'Invalid Bit ID.',
+		'ErrorMessageFoot' => 'The ID specified in the URL was not found in current setup. Are you trying to install it? Please contact the support if this error persists.',
+		'ErrorCode' => 'UserError: Invalid Bit specified.',
+		'Code' => 404,
+		'HideBottomErrorNav' => True,
+		'Mood' => 'GREEN'));
+	
+	die();
 	}
 }

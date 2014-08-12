@@ -18,7 +18,7 @@ namespace TwoDot7\REST\Config;
 
 # Deliberately slow down responses, to better see the changes in Development Environment.
 # Comment it out in Production Environment.
-sleep(1);
+sleep(0);
 
 $ResponseHeaderMeta = array(
 	'Served-By' => 'TwoDotSeven\'s Super Awesome REST engine!',

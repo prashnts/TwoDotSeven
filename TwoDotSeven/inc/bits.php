@@ -217,7 +217,7 @@ class Init {
 			
 			die();
 		}
-		
+
 		$functionString = "\TwoDot7\Bit\\".preg_replace('/\./', '_', $this->Bit)."\View\\{$Data['Call']}";
 
 		if (function_exists($functionString)) {
@@ -270,7 +270,40 @@ class Init {
 		return True;
 	}
 	public function REST() {
-		//
+		# Check if file already imported. (Not Possible)
+		$BaseDir = \TwoDot7\Bit\ROOT_DIR().'/'.$this->Bit;
+		if (!file_exists($BaseDir.'/REST_init.php')) {
+			\Util\Log("Bit files missing Bit: ".json_encode($this), "ALERT");
+
+			header('HTTP/1.0 454 Dependency Not Found.', true, 454);
+			echo "<pre>";
+			echo "Some of the Required files are missing.\n";
+			echo "Please contact the Developer.\n";
+			echo "</pre>";
+			
+			die();
+		}
+		$functionString = "\TwoDot7\Bit\\".preg_replace('/\./', '_', $this->Bit)."\REST\init";
+		if (function_exists($functionString)) {
+			$functionString();
+		}
+		else {
+			require $BaseDir.'/REST_init.php';
+			if (function_exists($functionString)) {
+				return $functionString();
+			}
+			else {
+				\TwoDot7\Util\Log("Invalid Bit: ".json_encode($this), "ALERT");
+
+				header('HTTP/1.0 454 Dependency Not Found.', true, 454);
+				echo "<pre>";
+				echo "Some of the Required files are missing.\n";
+				echo "Please contact the Developer.\n";
+				echo "</pre>";
+			
+				die();
+			}
+		}
 	}
 
 	public static function GetTile() {

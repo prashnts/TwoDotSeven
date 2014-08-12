@@ -437,7 +437,7 @@ function init() {
 
 			header('HTTP/1.0 200 OK', True, 200);
 			header('Content-Type: application/json');
-			print json_encode($Markup);
+			print json_encode($Markup, JSON_PRETTY_PRINT);
 			die();
 		
 		default:

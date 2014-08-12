@@ -23,46 +23,59 @@ _Import('install.php');
 _Import('user.php');
 _Import('cron.php');
 _Import('mailer.php');
+_Import('bits.php');
 require "_REST_Config.php";
 require "_REST_Account.php";
 require "_REST_Direction.php";
 require "_REST_Redundant.php";
 
 # Parse incoming URI and then process it.
-$URI = preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']);
-$URIparse = explode('/', $URI);
+$URI = preg_split('/[\/\?]/', preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']));
 
 const BASE = 2;
 
-switch(strtolower(isset($URIparse[BASE]) ? $URIparse[BASE] : False)) {
+switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 	case 'account':
 		/**
 		 * @internal	Parse URI template: DOMAIN/dev/account/[add, remove, verify, confirmEmail.]
 		 */
 		$_GET = array(
-			'Function' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False);
+			'Function' => isset($URI[BASE+1]) ? $URI[BASE+1] : False);
 		Account\init();
 		break;
-	/*
-	case 'getqr':
-		# Parse URI template: one.ducic.ac.in/dev/getqr/[Encrypted QR Data, padded under serialized array.]
-		$_GET = array(
-			'Content' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False,
-			'Auth' => isset($URIparse[BASE+2]) ? $URIparse[BASE+2] : False);
-		__initQR();
+
+	case 'bit':
+	case 'plugin':
+
+		$_GET = array_merge($_GET, array(
+			'Bit' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+			'BitAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : 'init'
+			));
+
+		$BitID = $_GET['Bit'];
+		try {
+
+			$Bit = new \TwoDot7\Bit\Init($BitID);
+			$AutoTokenResponse = $Bit->AutoToken();
+			$BiTControllerResponse = $Bit->REST();
+
+			die();
+		} catch (\TwoDot7\Exception\InvalidBit $e) {
+			header('HTTP/1.0 404 Not Found.', true, 404);
+			echo "<pre>";
+			echo "This Bit ID is not registered.\n";
+			echo "Please contact the Developer.\n";
+			echo "</pre>";
+			die();
+		}
+
 		break;
 
-	case 'user':
-		# Parse URI template: one.ducic.ac.in/dev/user/[username]/[getprofile/[public, private, mini], postprofile]
-		$_GET = array(
-			'UserName' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False);
-			__initUser();
-			break;
-	*/
+
 	case 'direction':
 		$_GET = array(
-			'Function' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False,
-			'Page' => isset($URIparse[BASE+2]) ? $URIparse[BASE+2] : 1
+			'Function' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+			'Page' => isset($URI[BASE+2]) ? $URI[BASE+2] : 1
 			);
 		Direction\init();
 		break;
@@ -83,7 +96,7 @@ switch(strtolower(isset($URIparse[BASE]) ? $URIparse[BASE] : False)) {
 		 * @internal	Parse URI template: DOMAIN/dev/exists/[Email, Username]
 		 */
 		$_GET = array(
-			'Function' => isset($URIparse[BASE+1]) ? $URIparse[BASE+1] : False
+			'Function' => isset($URI[BASE+1]) ? $URI[BASE+1] : False
 			);
 		Redundant\init();
 		break;
