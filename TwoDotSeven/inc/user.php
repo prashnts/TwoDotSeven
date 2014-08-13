@@ -799,7 +799,7 @@ class REST {
 	public static function AUTH($Options = False) {
 		$Options = array_merge(array(
 			'Token' => False,
-			'API_KEY_OVERRIDE' => (isset($_POST['API_KEY']) && isset($_POST['API_KEY_ID'])),
+			'API_KEY_OVERRIDE' => (isset($_POST['API_KEY']) && isset($_POST['UserName'])),
 			'Abort' => True
 			), $Options);
 
@@ -835,7 +835,7 @@ class REST {
 			header('HTTP/1.0 401 Unauthorized.', true, 401);
 			print "<pre>";
 			print "{$ErrorMessage}\n";
-			print "Requires [UserName, Hash] or [API_KEY_ID, API_KEY].\n";
+			print "Requires [UserName, Hash] or [API_KEY_ID, UserName].\n";
 			print "Request Aborted.\n";
 			print "REQUEST DATA:\n";
 			print "==BEGIN==\n";
