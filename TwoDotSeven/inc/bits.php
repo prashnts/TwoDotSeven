@@ -37,7 +37,7 @@ class Register {
 		// Done. (For now!)
 		
 		$BaseDir = \TwoDot7\Bit\ROOT_DIR().'/'.$Installable;
-
+		
 		if (!is_dir($BaseDir)) {
 			return array(
 				'Success' => False,
@@ -103,6 +103,11 @@ class Register {
 			'UserName' => \TwoDot7\User\Access::SysAdmin()['UserName'],
 			'Domain' => $InstallMeta['bitInfo']['userToken']
 			));
+		
+		# Do a "First Run" Setup.
+		$Bit = new \TwoDot7\Bit\Init($Installable);
+		//$AutoTokenResponse = $Bit->AutoToken();
+		$Processed['9'] = $Bit->SetupRun();
 
 		return $Processed;
 	}
@@ -152,6 +157,30 @@ class Init {
 			'Meta' => json_decode($Meta['Meta'], True)
 			);
 	}
+	public function SetupRun() {
+		# Check if file already imported. (Not Possible)
+		$BaseDir = \TwoDot7\Bit\ROOT_DIR().'/'.$this->Bit;
+		if (!file_exists($BaseDir.'/CONTROLLER_init.php')) {
+			Util\Log("Bit files missing Bit: ".json_encode($this), "ALERT");
+			return False;
+		}
+		$functionString = "\TwoDot7\Bit\\".preg_replace('/\./', '_', $this->Bit)."\Controller\Install";
+		if (function_exists($functionString)) {
+			$functionString();
+		}
+		else {
+			require $BaseDir.'/CONTROLLER_init.php';
+			if (function_exists($functionString)) {
+				return $functionString();
+			}
+			else {
+				\TwoDot7\Util\Log("Invalid Bit: ".json_encode($this), "ALERT");
+				return False;
+			}
+		}
+	}
+
+
 	public function Broadcast() {
 		// Todo
 	}
@@ -162,7 +191,7 @@ class Init {
 		# Check if file already imported. (Not Possible)
 		$BaseDir = \TwoDot7\Bit\ROOT_DIR().'/'.$this->Bit;
 		if (!file_exists($BaseDir.'/CONTROLLER_init.php')) {
-			\Util\Log("Bit files missing Bit: ".json_encode($this), "ALERT");
+			Util\Log("Bit files missing Bit: ".json_encode($this), "ALERT");
 
 			\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
 				'Call' => 'Error',
@@ -204,7 +233,7 @@ class Init {
 		# Check if file already imported. (Not Possible)
 		$BaseDir = \TwoDot7\Bit\ROOT_DIR().'/'.$this->Bit;
 		if (!file_exists($BaseDir.'/VIEW_init.php')) {
-			\Util\Log("Bit files missing Bit: ".json_encode($this), "ALERT");
+			Util\Log("Bit files missing Bit: ".json_encode($this), "ALERT");
 
 			\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
 				'Call' => 'Error',
@@ -273,7 +302,7 @@ class Init {
 		# Check if file already imported. (Not Possible)
 		$BaseDir = \TwoDot7\Bit\ROOT_DIR().'/'.$this->Bit;
 		if (!file_exists($BaseDir.'/REST_init.php')) {
-			\Util\Log("Bit files missing Bit: ".json_encode($this), "ALERT");
+			Util\Log("Bit files missing Bit: ".json_encode($this), "ALERT");
 
 			header('HTTP/1.0 454 Dependency Not Found.', true, 454);
 			echo "<pre>";
