@@ -81,7 +81,7 @@ $(function() {
 					Toggle2F1 = 0;
 					EnableSubmitMode2();
 				},
-				251: function() {
+				262: function() {
 					// Error in input.
 					TintPage("RED");
 					$("#Mode2F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin fa-exclamation-triangle");
@@ -136,7 +136,7 @@ $(function() {
 					Toggle2F2 = 0;
 					EnableSubmitMode2();
 				},
-				251: function() {
+				262: function() {
 					// Error in input.
 					TintPage("RED");
 					$("#Mode2F2fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin");
@@ -241,7 +241,7 @@ $(function() {
 				$("#Mode2F4").attr("disabled","disabled");
 			},
 			statusCode: {
-				251: function(data) {
+				262: function(data) {
 					// Success. User added.
 					TintPage("GREEN");
 					
@@ -400,7 +400,7 @@ $(function() {
 						window.location = '/';
 					}, 3000);
 				},
-				251: function(data) {
+				262: function(data) {
 					// Success. User added.
 					TintPage("GREEN");
 					
@@ -526,7 +526,7 @@ $(function() {
 					}, 3000);
 
 				},
-				251: function() {
+				262: function() {
 					// Error in input.
 					TintPage("RED");
 					$("#Mode4F1fa").removeClass("fa-ellipsis-h fa-check-circle fa-times-circle fa-circle-o-notch fa-spin fa-exclamation-triangle");
@@ -617,7 +617,7 @@ $(function() {
 						window.location = '/';
 					}, 3000);
 				},
-				251: function(data) {
+				262: function(data) {
 					// Success. User added.
 					TintPage("GREEN");
 					

@@ -190,7 +190,7 @@ function init() {
 						'Success' => True));
 				}
 				else {
-					header('HTTP/1.0 4 406 Not Acceptable.', true, 406);
+					header('HTTP/1.0 406 Not Acceptable.', true, 406);
 					header('Content-Type: application/json');
 					echo json_encode(array(
 						'Success' => False,

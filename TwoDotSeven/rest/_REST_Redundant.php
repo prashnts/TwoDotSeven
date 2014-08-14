@@ -10,14 +10,14 @@ function init() {
 	switch ($_GET['Function']) {
 		case 'username':
 			# Response Code Cheat:
-			# 251: Error in Input.
+			# 262: Error in Input.
 			# 252: UserName Already Exists.
 			# 253: UserName Available.
 			# 400: Syntax Error
 
 			if(isset($_POST['UserName'])) {
 				if(!\TwoDot7\Validate\UserName($_POST['UserName'], False)) {
-					header('HTTP/1.0 251 Error In Input', True, 251);
+					header('HTTP/1.0 262 Error In Input', True, 262);
 					header('Content-Type: application/json');
 					echo json_encode(array(
 						'Success' => True,
@@ -56,14 +56,14 @@ function init() {
 			break;
 		case 'email':
 			# Response Code Cheat:
-			# 251: Error in Input.
+			# 262: Error in Input.
 			# 252: EMail Already Exists.
 			# 253: EMail Available.
 			# 400: Syntax Error
 
 			if(isset($_POST['EMail'])) {
 				if(!\TwoDot7\Validate\EMail($_POST['EMail'], False)) {
-					header('HTTP/1.0 251 Error In Input', True, 251);
+					header('HTTP/1.0 262 Error In Input', True, 262);
 					header('Content-Type: application/json');
 					echo json_encode(array(
 						'Success' => True,

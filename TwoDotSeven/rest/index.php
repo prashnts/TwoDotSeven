@@ -84,12 +84,14 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 			'_POST' => $_POST,
 			'_GET' => $_GET,
 			'_COOKIES' => $_COOKIE,
-			'_SERVER' => $_SERVER,
+			//'_SERVER' => $_SERVER,
 			'_REQUEST' => $_REQUEST);
-			header('HTTP/1.0 200 OK', true, 200);
-			header('Content-Type: application/json');
-			echo json_encode($Response);
-			\TwoDot7\Util\Log(json_encode($Response));
+
+		header('Access-Control-Allow-Origin: *');
+		header('Content-Type: application/json');
+		header('HTTP/1.0 200 OK', true, 200);
+		echo json_encode($Response, JSON_PRETTY_PRINT);
+		\TwoDot7\Util\Log(json_encode($Response));
 		break;
 	case 'redundant':
 		/**
@@ -103,9 +105,6 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 
 	default:				
 		http_response_code(400);
-		header('API-Generated-By: The awesome TwoDotSeven API Engine.');
-		header('API-Message: Just saying Hi. You have made a request that is incomplete. Please re-check it.');
-		header('API-Author: Prashant Sinha');
 		echo '<pre>';
 		echo 'You made an incomplete request to TwoDotSeven api. Please consider reading the API documentation.';
 		echo '</pre>';

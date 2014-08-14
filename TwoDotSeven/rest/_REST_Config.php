@@ -21,7 +21,13 @@ namespace TwoDot7\REST\Config;
 sleep(0);
 
 $ResponseHeaderMeta = array(
-	'Served-By' => 'TwoDotSeven\'s Super Awesome REST engine!',
-	'Server-Time' => time(),
-	'API-Author' => 'Prashant Sinha');
+	'Response-Served-By' => 'TwoDotSeven REST engine.',
+	'Request-Time' => time(),
+	'Author' => 'Prashant Sinha <prashantsinha@outlook.com>',
+	'Humans' => 'Hello There, Nerd! I see you\'re analyzing the headers. WE NEED PEOPLE LIKE YOU. Please contact author on his email, above. Cheers!'
+	);
+
+foreach ($ResponseHeaderMeta as $key => $value) {
+	header("{$key}: {$value}");
+}
 ?>
