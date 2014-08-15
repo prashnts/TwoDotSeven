@@ -32,7 +32,7 @@ function _init($Data = False) {
 		<div class="BG-Secondary-Green-Tint"></div>
 		<div class="BG-Secondary-No-Tint"></div>
 		<?PHP Node\Mood($Data); ?>
-		<div id="AutogenContainer">
+		<div id="AutogenContainer" class="fill">
 			<?php
 				if(method_exists("TwoDot7\Admin\Template\Login_SignUp_Error\Render", isset($Data['Call']) ? $Data['Call'] : False)) {
 					Node\Render::$Data['Call']($Data);
@@ -139,17 +139,12 @@ class Render {
 			@media(min-width: 768px) {
 				.error-autogen {
 					width: 100%;
-					height: 150px;
 					background-color: transparent;
-
-					position: absolute;
-					top:0;
-					bottom: 0;
-					left: 0;
-					right: 0;
-					
-					margin: auto 0 auto 0;
-
+					position: relative;
+					top: 50%;
+					-webkit-transform: translateY(-50%);
+					-ms-transform: translateY(-50%);
+					transform: translateY(-50%);
 					text-align: right;
 					color: #FFFFFF;
 				}
@@ -182,6 +177,9 @@ class Render {
 				.error-msg-autogen {
 					text-align: center;
 				}
+			}
+			.fill-error {
+				height: 100%;
 			}
 		</style>
 		<div class="row error-autogen animated fadeIn">

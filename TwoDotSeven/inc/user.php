@@ -13,19 +13,19 @@ use \TwoDot7\Mailer as Mailer;
  * Class wrapper for Account Management functions.
  * Implements Add, Escalate.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 26062014
+ * @since	v0.0 20140626
  * @version	0.0
  */
 class Account {
 	/**
 	 * Creates a User Account, in the _user Table. Fires up the Mailer class to send out verification email.
 	 * @internal Requires Validation/.
-	 * @param	$SignupData -array- Self Explanatory
-	 * @param	$Method -bool- Not Implemented. From __future__
-	 * @return	-array- Contains Success status, and Corresponding messages.
+	 * @param	$SignupData array Self Explanatory
+	 * @param	$Method bool Not Implemented. From __future__
+	 * @return	array Contains Success status, and Corresponding messages.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 26062014
+	 * @since	v0.0 20140626
 	 * @version	0.0
 	 */
 	public static function Add($SignupData, $Method=False) {
@@ -152,7 +152,7 @@ class Account {
 	 * @return	-array- Contains Success status, and Corresponding messages.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 03072014
+	 * @since	v0.0 20140703
 	 * @version	0.0
 	 */
 	public static function ChangePassword($Data) {
@@ -212,7 +212,7 @@ class Account {
 	 * @return	-array- Contains Success status, and Corresponding messages.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 03072014
+	 * @since	v0.0 20140703
 	 * @version	0.0
 	 */
 	public static function ConfirmEmail($Data) {
@@ -265,6 +265,37 @@ class Account {
 		else {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Access::ConfirmEmail");
 		}	
+	}
+
+	/**
+	 * Deletes a User Account.
+	 * @param	$UserName -string- The Username.
+	 * @return	Boolean Success Status.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @throws	IncompleteArgument Exception.
+	 * @since	v0.0 20140815
+	 * @version	0.0
+	 */
+	public static function Remove($UserName) {
+		if (isset($UserName)) {
+
+			if (Access::Check(array(
+				'UserName' => $UserName,
+				'Domain' => 'SYSADMIN'
+				))) {
+				return False;
+			}
+
+			$DatabaseHandle = new \TwoDot7\Database\Handler;
+			$DBResponse = $DatabaseHandle->Query("DELETE FROM _user WHERE UserName=:UserName", array(
+				'UserName' =>$UserName
+				))->rowCount();
+
+			return (bool)$DBResponse;
+		}
+		else {
+			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Account::Remove");
+		}
 	}
 }
 

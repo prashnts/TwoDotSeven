@@ -4,8 +4,14 @@ namespace TwoDOt7\Bit\in_ac_ducic_tabs\Controller;
 function init() {
 	switch ($_GET['BitAction']) {
 		case 'interface':
+			Utils::deleteFromAddressBook(1);
 			return array(
-				'Call' => '_Interface'
+				'Call' => '_Interface',
+				'testData' => Utils::addIntoAddressBook(array(
+					'Fax' => 901122,
+					'Name' => 'prashant sinha',
+					'Email' => 'prashantsinha@outlook.com'
+					))
 				);
 		case 'manage':
 			return array(
@@ -15,6 +21,44 @@ function init() {
 			return array(
 				'Call' => 'FourOFour');
 	 }
+}
+
+class Utils {
+	public static function addIntoAddressBook($Data = array()) {
+		$Defaults = array(
+			'Name' => "Leo Waldez",
+			'Email' => "waldez@camphalfblood.com",
+			'ChatName' => "",
+			'Organization' => "",
+			'NickName' => "",
+			'AdditionalEmail' => "",
+			'Department' => "",
+			'Title' => "",
+			'Mobile' => "",
+			'Pager' => "",
+			'Fax' => "",
+			'HomePhone' => "",
+			'WorkPhone' => "",
+			'Other' => json_encode(array())
+			);
+		$Values = array_merge($Defaults, $Data);
+		$QueryString = 
+			"INSERT INTO `_bit_in.ac.ducic.tabs.addressbook`".
+			"(Name, Email, ChatName, Organization, NickName, AdditionalEmail, Department, ".
+			"Title, Mobile, Pager, Fax, HomePhone, WorkPhone, Other) VALUES (:Name, :Email".
+			", :ChatName, :Organization, :NickName, :AdditionalEmail, :Department, :Title,".
+			" :Mobile, :Pager, :Fax, :HomePhone, :WorkPhone, :Other)";
+		$Response = \TwoDot7\Database\Handler::Exec($QueryString, $Values)->rowCount();
+		return (bool)$Response;
+	}
+	public static function deleteFromAddressBook($ID) {
+		//
+		$QueryString = "DELETE FROM `_bit_in.ac.ducic.tabs.addressbook` WHERE ID = :ID";
+		$Response = \TwoDot7\Database\Handler::Exec($QueryString, array(
+			'ID' => $ID
+			))->rowCount();
+		return (bool)$Response;
+	}
 }
 
 function Install() {

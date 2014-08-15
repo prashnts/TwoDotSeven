@@ -354,6 +354,17 @@
         float:none;
     }
 }
+
+@media (max-width: 768px) {
+	.fill-xs {
+		height: 100%;
+	}
+}
+
+.fill {
+	height: 100%;
+}
+
 .col-top {
     vertical-align:top;
 }
@@ -401,7 +412,6 @@
   font-weight: 400;
   src: local('Source Sans Pro Italic'), local('SourceSansPro-It'), url(../fonts/SourceSans400i.woff2) format('woff2'), url(../fonts/SourceSans400i.woff) format('woff');
 }
-
 
 .card {
 	min-width: 240px;

@@ -27,7 +27,7 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 		CSS\init();
 		break;
 	case 'usernameicon':
-		$Icon = isset($URI[BASE+1]) ? strtolower($URI[BASE+1]) : False;
+		$Icon = isset($URI[BASE+1]) ? strtolower($URI[BASE+1])[0] : False;
 		if (file_exists($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/assets/images/generic/alphabet/'.$Icon.'.png')) {
 			header('HTTP/1.0 200 OK', true, 200);
 			header('Content-Type: Image/PNG');

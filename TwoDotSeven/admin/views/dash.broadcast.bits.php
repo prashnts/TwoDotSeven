@@ -25,7 +25,7 @@ function _init($Data = False) {
 		<?php Node\Head($Data); ?>
 	</head>
 	<body>
-		<section class="hbox stretch">
+		<section class="fill-xs hbox stretch">
 			<aside class="bg-black aside <?php //echo 'spl-header';?>" id="nav">
 				<section class="vbox">
 					<header class="header header-md navbar navbar-fixed-top-xs bg" style="z-index:9">
@@ -57,12 +57,11 @@ function _init($Data = False) {
 							?>
 						</div>
 					</section>
-					<footer class="footer hidden-xs footer-show-hack text-center-nav-xs dker">
-						
+					<footer class="footer hidden-xs text-center-nav-xs dker">
 					</footer>
 				</section>
 			</aside>
-			<section id="content">
+			<section id="content" class="fill-error">
 				<?php
 					if(method_exists("TwoDot7\Admin\Template\Dash_Broadcasts_Bits\Render", isset($Data['Call']) ? $Data['Call'] : False)) {
 						Node\Render::$Data['Call']($Data);
@@ -246,8 +245,6 @@ class Render {
 			//call_user_func($Data['View']);
 		}
 		else {
-			?>
-			<?php
 			$Data = array(
 				'Mood'=>"RED",
 				'ErrorMessageHead' => 'Invalid Path.',
@@ -258,10 +255,12 @@ class Render {
 				);
 
 			\TwoDot7\Admin\Template\Login_SignUp_Error\Mood($Data);
+			echo '<section class="scrollable padder fill">';
 
-			echo '<div style="position:relative; height:100%; width:100%" class="scrollable">';
+			//echo '<div style="position:relative; height:100%; width:100%" class="scrollable">';
 				\TwoDot7\Admin\Template\Login_SignUp_Error\Render::Error($Data);
-			echo '</div>';
+			//echo '</div>';
+			echo '</section>';
 
 		}
 	}
