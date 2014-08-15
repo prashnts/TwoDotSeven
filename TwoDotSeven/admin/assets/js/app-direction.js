@@ -223,6 +223,78 @@ function VerifyProfile(ID) {
     });
 }
 
+DelUserOA = false;
+DelUserOAProceed = false;
+DelUserOldID = false;
+
+function ExecuteDelUserOA(ID) {
+    if (DelUserOA) {
+        return;
+    }
+
+    if (DelUserOldID && DelUserOldID != ID) {
+        DelUserOAProceed = false;
+    }
+
+    if (!DelUserOAProceed) {
+        DelUserOA = true;
+        $("#"+ID).html('<span class="text-muted">Please Wait 3 <i class="fa fa-circle-o-notch fa-spin"></i> </span>');
+        setTimeout(function(){
+            $("#"+ID).html('<span class="text-muted">Please Wait 2 <i class="fa fa-circle-o-notch fa-spin"></i> </span>');
+        }, 1000);
+        setTimeout(function(){
+            $("#"+ID).html('<span class="text-muted">Please Wait 1 <i class="fa fa-circle-o-notch fa-spin"></i> </span>');
+        }, 2000);
+        setTimeout(function(){
+            $("#"+ID).html('<span class="text-muted">Please Wait 0 <i class="fa fa-circle-o-notch fa-spin"></i> </span>');
+        }, 3000);
+        setTimeout(function(){
+            $("#"+ID).html('<span class="text-danger">Click Here to Execute the Action.</span>');
+            DelUserOA = false;
+            DelUserOldID = ID;
+            DelUserOAProceed = true;
+        }, 3000);
+
+        return;
+    }
+
+    POSTData = {
+        UserName: $("#"+ID).attr('data-username'),
+    }
+    $.ajax({
+        type: 'POST',
+        url: '/dev/direction/userProfileDelete',
+        timeout: 30000,
+        data: POSTData,
+        beforeSend: function() {
+            DelUserOA = true;
+            $("#"+ID).html('<span class="text-info">Executing <i class="fa fa-circle-o-notch fa-spin"></i> </span>');
+        },
+        success: function() {
+            $("#"+ID).html('<span class="text-success">Executed Successfully. Please Wait.</span>');
+            setTimeout(function() {
+                $("#TableToggle"+$("#"+ID).attr('data-username')).fadeOut();
+                DelUserOA = false;
+                DelUserOAProceed = false;
+                DelUserOldID = false;
+            }, 3000);
+        },
+        error: function(data) {
+            $("#"+ID).html('<span class="text-danger">Error Executing Action.</span>');
+            setTimeout(function() {
+                $("#"+ID).html('<span class="text-danger">Please Retry.</span>');
+                DelUserOA = false;
+                DelUserOAProceed = false;
+                DelUserOldID = false;
+                setTimeout(function() {
+                    $("#"+ID).html('<span class="text-danger">Delete</span>');
+                }, 2000);
+            }, 3000);
+        }
+    });
+}
+
+
 
 $(function(){
     var sr, sparkline = function($re){

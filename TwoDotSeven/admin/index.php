@@ -28,6 +28,7 @@ require "logout.php";
 require "register.php";
 require "bit.php";
 require "broadcast.php";
+require "dashboard.php";
 require "administration.php";
 
 require "views/login.signup.errors.php";
@@ -65,6 +66,12 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 	case 'broadcast':
 	case 'broadcasts':
 		Broadcast\init();
+		break;
+
+	case 'dash':
+	case 'dashboard':
+	case 'overview':
+		Dashboard\init();
 		break;
 
 	case 'plugin':

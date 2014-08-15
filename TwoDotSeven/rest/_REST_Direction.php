@@ -19,7 +19,7 @@ function init() {
 
 					# Prevent User from adding SYSADMIN tag.
 					if ($_POST['Tag'] === 'SYSADMIN') {
-						header('HTTP/1.0 4 406 Not Acceptable.', true, 406);
+						header('HTTP/1.0 406 Not Acceptable.', true, 406);
 						header('Content-Type: application/json');
 						echo json_encode(array(
 							'Success' => False,
@@ -48,7 +48,7 @@ function init() {
 					if ($_POST['UserName'] === \TwoDot7\User\Session::Data()['UserName'] &&
 						$_POST['Tag'] === 'ADMIN' ||
 						$_POST['Tag'] === 'SYSADMIN') {
-						header('HTTP/1.0 4 406 Not Acceptable.', true, 406);
+						header('HTTP/1.0 406 Not Acceptable.', true, 406);
 						header('Content-Type: application/json');
 						echo json_encode(array(
 							'Success' => False,
@@ -111,7 +111,7 @@ function init() {
 						'Success' => True));
 				}
 				else {
-					header('HTTP/1.0 4 406 Not Acceptable.', true, 406);
+					header('HTTP/1.0 406 Not Acceptable.', true, 406);
 					header('Content-Type: application/json');
 					echo json_encode(array(
 						'Success' => False,
@@ -151,7 +151,7 @@ function init() {
 						'Success' => True));
 				}
 				else {
-					header('HTTP/1.0 4 406 Not Acceptable.', true, 406);
+					header('HTTP/1.0 406 Not Acceptable.', true, 406);
 					header('Content-Type: application/json');
 					echo json_encode(array(
 						'Success' => False,
@@ -230,11 +230,45 @@ function init() {
 						'Success' => True));
 				}
 				else {
-					header('HTTP/1.0 4 406 Not Acceptable.', true, 406);
+					header('HTTP/1.0 406 Not Acceptable.', true, 406);
 					header('Content-Type: application/json');
 					echo json_encode(array(
 						'Success' => False,
 						'Error' => 'There is some problem with your input.'));
+					die();
+				}
+			}
+			else {
+				header('HTTP/1.0 450 Invalid Request.', true, 450);
+				echo "<pre>";
+				echo "usage /dev/direction/userProfileValidate/[POST UserName]\n";
+				echo "Incomplete Request. Please read the Documentation.\n";
+				echo "</pre>";
+			}
+			die();
+
+		case 'userProfileDelete':
+
+			\TwoDot7\User\REST::AUTH(array(
+				'Token' => 'ADMIN',
+				));
+
+			if (isset($_POST['UserName'])) {
+
+				$Response = \TwoDot7\User\Account::Remove($_POST['UserName']);
+
+				if ($Response) {
+					header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+					header('Content-Type: application/json');
+					echo json_encode(array(
+						'Success' => True));
+				}
+				else {
+					header('HTTP/1.0 406 Not Acceptable.', true, 406);
+					header('Content-Type: application/json');
+					echo json_encode(array(
+						'Success' => False,
+						'Error' => 'There is some problem with your request.'));
 					die();
 				}
 			}
@@ -313,7 +347,7 @@ function init() {
 						'msg' => 'Unknown');
 				}
 
-				$Markup['Table'] .= "<tr id=\"TableToggle{$Meta['ID']}\">";
+				$Markup['Table'] .= "<tr id=\"TableToggle{$Meta['UserName']}\">";
 				$Markup['Table'] .= "    <td>{$Meta['ID']}</td>";
 				$Markup['Table'] .= "    <td>";
 				$Markup['Table'] .= "		<span class=\"thumb-sm avatar pull-left m-r-sm\">";
@@ -331,10 +365,10 @@ function init() {
 				$Markup['Table'] .= '			</a> |';
 				$Markup['Table'] .= '			<a href="#">';
 				$Markup['Table'] .= '				<span class="text-warning">Send Message</span>';
-				$Markup['Table'] .= '			</a> |';
-				$Markup['Table'] .= '			<a href="#">';
-				$Markup['Table'] .= '				<span class="text-danger">Delete</span>';
-				$Markup['Table'] .= '			</a>';
+				$Markup['Table'] .= !$Meta['SysAdmin'] ? '</a> |' : '</a>';
+				$Markup['Table'] .= !$Meta['SysAdmin'] ? "<a href=\"#\" id=\"UserDeleteI{$Meta['ID']}U{$Meta['UserName']}\" data-username=\"{$Meta['UserName']}\" onclick=\"ExecuteDelUserOA(this.id);\">" : '';
+				$Markup['Table'] .= !$Meta['SysAdmin'] ? '<span class="text-danger">Delete</span>' : '' ;
+				$Markup['Table'] .= !$Meta['SysAdmin'] ? '</a>' : '';
 				$Markup['Table'] .= '		</div>';
 				$Markup['Table'] .= "		<div id=\"UserOverrideID{$Meta['ID']}UserName{$Meta['UserName']}\" class=\"collapse padder m-t-sm\">";
 				$Markup['Table'] .= '			<div class="row b-t b-light">';

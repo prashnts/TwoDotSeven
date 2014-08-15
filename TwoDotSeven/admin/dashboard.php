@@ -1,5 +1,5 @@
 <?php
-namespace TwoDot7\Admin\Broadcast;
+namespace TwoDot7\Admin\Dashboard;
 
 #  _____                      _____ 
 # /__   \__      _____       |___  |      ___     __      _    
@@ -15,13 +15,12 @@ namespace TwoDot7\Admin\Broadcast;
  * @version	0.0
  */
 function init() {
-	//$installer = new \TwoDot7\Install\Setup;
-	//$installer->Navigation();
+
 	\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
-		'Page' => 'BROADCAST',
-		'Call' => 'Broadcast',
+		'Page' => 'PRE_DASHBOARD',
+		'Call' => 'Dashboard',
 		'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
-			'Page' => 'BROADCAST'
+			'Page' => 'PRE_DASHBOARD'
 			))
 		));
 }

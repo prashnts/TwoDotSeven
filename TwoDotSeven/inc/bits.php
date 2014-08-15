@@ -118,6 +118,7 @@ class Register {
 
 class Init {
 	public $Bit;
+	public $Name;
 	private $AdminToken;
 	private $UserToken;
 	private $AutoToken;
@@ -126,6 +127,7 @@ class Init {
 	public function __construct($Bit, $ThrowOverride = False) {
 		$Response = self::GetMeta($Bit);
 		$this->Bit = $Bit;
+		$this->Name = $Response['Name'];
 		$this->AdminToken = $Response['Tokens']['adminToken'];
 		$this->UserToken = $Response['Tokens']['userToken'];
 		$this->AutoToken = $Response['Tokens']['autoToken'];
@@ -152,7 +154,7 @@ class Init {
 		}
 		return array(
 			'ID' => $Meta['ID'],
-			'Name' => $Meta['Tokens'],
+			'Name' => $Meta['Name'],
 			'Tokens' => json_decode($Meta['Tokens'], True),
 			'Meta' => json_decode($Meta['Meta'], True)
 			);

@@ -34,12 +34,15 @@ class User {
 		
 		foreach ($DatabaseHandle->Query($Query)->fetchAll() as $Meta) {
 
+			$SysAdmin = Util\Token::Exists(array(
+				'JSON' => $Meta['Tokens'],
+				'Token' => 'SYSADMIN'
+				));
+
 			$UserNameExtra = Util\Token::Exists(array(
 				'JSON' => $Meta['Tokens'],
 				'Token' => 'ADMIN')) ? ' (Admin) ' : '';
-			$UserNameExtra .= Util\Token::Exists(array(
-				'JSON' => $Meta['Tokens'],
-				'Token' => 'SYSADMIN')) ? ' (System Admin) ' : '';
+			$UserNameExtra .=  $SysAdmin ? ' (System Admin) ' : '';
 			$UserNameExtra .= (\TwoDot7\User\Session::Data()['UserName'] == $Meta['UserName']) ? ' (You) ' : '';
 
 			array_push($Response['Table'], array(
@@ -56,6 +59,7 @@ class User {
 				'AccessTokensCount' => Util\Token::Count(array(
 					'JSON' => $Meta['Tokens']
 					)),
+				'SysAdmin' => $SysAdmin,
 				'EMailStatus' => \TwoDot7\User\Status::EMail($Meta['UserName'])['Response'],
 				'ProfileStatus' => \TwoDot7\User\Status::Profile($Meta['UserName'])['Response']
 				));

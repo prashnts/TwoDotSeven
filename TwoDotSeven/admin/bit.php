@@ -31,6 +31,7 @@ function init() {
 		$ViewVar = $Bit->CreateView($BiTControllerResponse);
 
 		\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
+			'Title' => $Bit->Name,
 			'Page' => $BitID,
 			'Call' => 'Bit',
 			'Navigation' => \TwoDot7\Meta\Navigation::Get(array('Page' => $BitID)),

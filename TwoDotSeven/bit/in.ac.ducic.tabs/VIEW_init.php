@@ -3,8 +3,7 @@ namespace TwoDOt7\Bit\in_ac_ducic_tabs\View;
 
 function _Interface($Data = False) {
 	?>
-
-	<section class="scrollable padder bg-dark dk fill">
+	<section class="scrollable padder bg-dark  fill">
 		<div class="m-b-md row padder">
 			<div class="col-lg-6">
 				<h3 class="m-b-none">TABS - Address Book</h3>

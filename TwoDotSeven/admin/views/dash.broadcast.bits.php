@@ -115,6 +115,32 @@ function Head(&$Data) {
 }
 
 class Render {
+	public static function Broadcast($Data) {
+		?>
+		<section class="scrollable padder bg-dark  fill">
+			<div class="m-b-md row padder">
+				<div class="col-lg-6">
+					<h3 class="m-b-none">TwoDot7 Broadcasts</h3>
+				</div>
+				<div class="col-lg-6">
+				</div>
+			</div>
+		</section>
+		<?php
+	}
+	public static function Dashboard($Data) {
+		?>
+		<section class="scrollable padder bg-dark  fill">
+			<div class="m-b-md row padder">
+				<div class="col-lg-6">
+					<h3 class="m-b-none">TwoDot7 Dashboard</h3>
+				</div>
+				<div class="col-lg-6">
+				</div>
+			</div>
+		</section>
+		<?php
+	}
 	public static function UserManagement(&$Data) {
 		?>
 		<section class="scrollable padder">
