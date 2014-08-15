@@ -9,12 +9,8 @@ function _Interface($Data = False) {
 				<h3 class="m-b-none">TABS - Address Book</h3>
 				<small>All the Address Book entries are shown.</small>
 			</div>
-			<div class="col-lg-6">
-			</div>
-		</div>
-		<div class="row padder">
-			<div class="m-b-lg col-lg-12 text-center">
-				<div class="btn-group btn-group-center" data-toggle="buttons">
+			<div class="col-lg-6 m-t-lg padder">
+				<div class="btn-group" data-toggle="buttons">
 					<label class="btn btn-primary active"  style="width: 120px;">
 						<input type="radio" name="options" id="option1">
 						<i class="fa fa-check text-active"></i>
@@ -27,6 +23,9 @@ function _Interface($Data = False) {
 					</label>
 				</div>
 			</div>
+		</div>
+		<div class="row padder">
+
 		</div>
 		<div class="row padder">
 			<?php

@@ -18,10 +18,10 @@ function init() {
 	//$installer = new \TwoDot7\Install\Setup;
 	//$installer->Navigation();
 	\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
-		'Page' => 'BROADCAST',
+		'Page' => 'PRE_BROADCAST',
 		'Call' => 'Broadcast',
 		'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
-			'Page' => 'BROADCAST'
+			'Page' => 'PRE_BROADCAST'
 			))
 		));
 }
