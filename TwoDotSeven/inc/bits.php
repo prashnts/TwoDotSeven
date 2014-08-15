@@ -76,6 +76,7 @@ class Register {
 				'Description' => $InstallMeta['bitMeta']['description'],
 				'Icon' => $InstallMeta['bitMeta']['icon'],
 				'TileColor' => $InstallMeta['bitMeta']['tileColor'],
+				'Author' => $InstallMeta['bitMeta']['author'],
 				'Broadcasts' => $InstallMeta['registerIntoBroadcast']
 				))
 			))->rowCount());
@@ -106,7 +107,6 @@ class Register {
 		
 		# Do a "First Run" Setup.
 		$Bit = new \TwoDot7\Bit\Init($Installable);
-		//$AutoTokenResponse = $Bit->AutoToken();
 		$Processed['9'] = $Bit->SetupRun();
 
 		return $Processed;
