@@ -20,6 +20,7 @@
  - 253: * Available.
  - 450: Invalid Request.
  - 406: Not Acceptable.
+ - 461: Error while Processing the Action.
 
 ###API Version 0.1
 1. ***domain/dev/echo***

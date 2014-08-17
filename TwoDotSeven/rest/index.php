@@ -12,22 +12,22 @@ namespace TwoDot7\REST;
  * @since 0.0
  */
 
-require "../../import.php";
-_Import('direction.php');
-_Import('config.php');
-_Import('database.php');
-_Import('exceptions.php');
-_Import('validator.php');
-_Import('utility.php');
-_Import('install.php');
-_Import('user.php');
-_Import('cron.php');
-_Import('mailer.php');
-_Import('bits.php');
-require "_REST_Config.php";
-require "_REST_Account.php";
-require "_REST_Direction.php";
-require "_REST_Redundant.php";
+require "../import.php";
+_Import('../inc/direction.php');
+_Import('../config.php');
+_Import('../inc/database.php');
+_Import('../inc/exceptions.php');
+_Import('../inc/validator.php');
+_Import('../inc/utility.php');
+_Import('../inc/install.php');
+_Import('../inc/user.php');
+_Import('../inc/cron.php');
+_Import('../inc/mailer.php');
+_Import('../inc/bits.php');
+_Import("_REST_Config.php");
+_Import("_REST_Account.php");
+_Import("_REST_Direction.php");
+_Import("_REST_Redundant.php");
 
 # Parse incoming URI and then process it.
 $URI = preg_split('/[\/\?]/', preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']));

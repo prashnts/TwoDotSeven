@@ -13,6 +13,7 @@ function ROOT_DIR() {
 	return $_SERVER['DOCUMENT_ROOT']."/TwoDotSeven/bit";
 }
 
+
 /**
  * Registers a Bit into the system, and sets it up.
  * Implements Install, Register.
@@ -132,6 +133,10 @@ class Init {
 		$this->UserToken = $Response['Tokens']['userToken'];
 		$this->AutoToken = $Response['Tokens']['autoToken'];
 		$this->AutoTokenUserLevel = $Response['Tokens']['autoTokenUserLevel'];
+
+		if (is_dir(\TwoDot7\Bit\ROOT_DIR().'/'.$this->Bit))
+			define(preg_replace('/\./', '_', $this->Bit), \TwoDot7\Bit\ROOT_DIR().'/'.$this->Bit);
+		define(preg_replace('/\./', '_', $this->Bit)."_ASSET", '/assetserver/bit/'.$this->Bit);
 	}
 
 	/**
@@ -181,7 +186,6 @@ class Init {
 			}
 		}
 	}
-
 
 	public function Broadcast() {
 		// Todo

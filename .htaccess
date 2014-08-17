@@ -8,11 +8,11 @@ Addhandler cgi-script .py .pl .cgi
 RewriteEngine On
 RewriteRule ^dev/ TwoDotSeven/rest/index.php
 RewriteRule ^dev TwoDotSeven/rest/index.php
-RewriteRule ^assetserver/ TwoDotSeven/admin/assets/index.php
-RewriteRule ^assetserver TwoDotSeven/admin/assets/index.php
+RewriteRule ^assetserver/ TwoDotSeven/assetserver.php
+RewriteRule ^assetserver TwoDotSeven/assetserver.php
 RewriteRule ^test test.php
 RewriteRule ^test/ test.php
-RewriteRule ^admin TwoDotSeven/admin/index.php
-RewriteRule ^admin/ TwoDotSeven/admin/index.php
-RewriteRule ^twodot7 TwoDotSeven/admin/index.php
-RewriteRule ^twodot7/ TwoDotSeven/admin/index.php
+RewriteRule ^admin TwoDotSeven/index.php
+RewriteRule ^admin/ TwoDotSeven/index.php
+RewriteRule ^twodot7 TwoDotSeven/index.php
+RewriteRule ^twodot7/ TwoDotSeven/index.php

@@ -11,28 +11,28 @@ namespace TwoDot7\Admin;
  * @author Prashant Sinha <prashantsinha@outlook.com>
  * @since 0.0
  */
-require "../../import.php";
+require "import.php";
 _Import('config.php');
-_Import('database.php');
-_Import('exceptions.php');
-_Import('validator.php');
-_Import('utility.php');
-_Import('install.php');
-_Import('user.php');
-_Import('cron.php');
-_Import('mailer.php');
-_Import('meta.php');
-_Import('bits.php');
-require "login.php";
-require "logout.php";
-require "register.php";
-require "bit.php";
-require "broadcast.php";
-require "dashboard.php";
-require "administration.php";
+_Import('inc/database.php');
+_Import('inc/exceptions.php');
+_Import('inc/validator.php');
+_Import('inc/utility.php');
+_Import('inc/install.php');
+_Import('inc/user.php');
+_Import('inc/cron.php');
+_Import('inc/mailer.php');
+_Import('inc/meta.php');
+_Import('inc/bits.php');
+_Import("admin/login.php");
+_Import("admin/logout.php");
+_Import("admin/register.php");
+_Import("admin/bit.php");
+_Import("admin/broadcast.php");
+_Import("admin/dashboard.php");
+_Import("admin/administration.php");
 
-require "views/login.signup.errors.php";
-require "views/dash.broadcast.bits.php";
+_Import("admin/views/login.signup.errors.php");
+_Import("admin/views/dash.broadcast.bits.php");
 
 # Parse incoming URI and then process it.
 $URI = preg_split('/[\/\?]/', preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']));
