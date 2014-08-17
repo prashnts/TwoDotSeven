@@ -67,7 +67,7 @@ function _Manage($Data = False) {
 		</div>
 		<div class="row padder">
 		<div class="col-lg-12">
-		<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+		<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#AddModal">
 			Launch demo modal
 		</button>
 		<style type="text/css">
@@ -92,13 +92,14 @@ function _Manage($Data = False) {
 		</style>
 		</div>
 		</div>
+		<script type="text/javascript" src="<?php echo in_ac_ducic_tabs_ASSET."/asset/ajax.js"?>"></script>
 	</section>
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title" id="myModalLabel"><img src="<?php echo in_ac_ducic_tabs_ASSET."/asset/TABS-main.png"; ?>" height="30px">Add Into</h4>
+					<button type="button" class="close" data-dismiss="modal" id="ModalDismiss1"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="myModalLabel"><img src="<?php echo in_ac_ducic_tabs_ASSET."/asset/TABS-main.png"; ?>" height="30px"> Add Contact</h4>
 				</div>
 				<div>
 					<section class="panel panel-default">
@@ -118,45 +119,45 @@ function _Manage($Data = False) {
 								<div class="tab-pane fade active in" id="ContactInfo">
 									<div class="col-sm-8 form-horizontal">
 										<div class="form-group">
-											<label class="col-lg-2 control-label">First Name</label>
+											<label class="col-lg-2 control-label">First Name <span class="label label-danger">*</span></label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="FirstName">
+												<input type="text" class="form-control" name="FirstName" required>
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Last Name</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="LastName">
+												<input type="text" class="form-control" name="LastName">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Display</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="DisplayName">
+												<input type="text" class="form-control" name="DisplayName">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">NickName</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="NickName">
+												<input type="text" class="form-control" name="NickName">
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-lg-2 control-label">Email</label>
+											<label class="col-lg-2 control-label">Email <span class="label label-danger">*</span></label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="PrimaryEmail">
+												<input type="email" class="form-control" name="PrimaryEmail" required>
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Additional Email</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="SecondaryEmail">
+												<input type="email" class="form-control" name="SecondEmail">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Chat Name</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="_AimScreenName">
+												<input type="text" class="form-control" name="_AimScreenName">
 											</div>
 										</div>
 									</div>
@@ -164,26 +165,31 @@ function _Manage($Data = False) {
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Work</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="WorkPhone">
+												<input type="tel" class="form-control" name="WorkPhone">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Home</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="HomePhone">
+												<input type="tel" class="form-control" name="HomePhone">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Fax</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="FaxNumber">
+												<input type="tel" class="form-control" name="FaxNumber">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Mobile</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="CellularNumber">
+												<input type="tel" class="form-control" name="CellularNumber">
 											</div>
+										</div>
+										<div class="m-t">
+											<img src="/assetserver/admin/assets/images/generic/icons/waitx120.png" width="50px" class="m-r" style="float:left">
+											<p>Fields marked with <span class="label label-danger">*</span> are Required.</p>
+											<p>Rest of the Fields are Optional.</p>
 										</div>
 									</div>
 								</div>
@@ -192,25 +198,25 @@ function _Manage($Data = False) {
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Address</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="HomeAddress">
+												<input type="text" class="form-control" name="HomeAddress">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label"></label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="HomeAddress2">
+												<input type="text" class="form-control" name="HomeAddress2">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">City</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="HomeCity">
+												<input type="text" class="form-control" name="HomeCity">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">State</label>
 											<div class="col-lg-5">
-												<input type="email" class="form-control" name="HomeState">
+												<input type="text" class="form-control" name="HomeState">
 											</div>
 											<label class="col-lg-3 control-label">Zip/Postal Code</label>
 											<div class="col-lg-2">
@@ -220,7 +226,7 @@ function _Manage($Data = False) {
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Country</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="HomeCountry">
+												<input type="text" class="form-control" name="HomeCountry">
 											</div>
 										</div>
 									</div>
@@ -230,51 +236,51 @@ function _Manage($Data = False) {
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Title</label>
 											<div class="col-lg-4">
-												<input type="email" class="form-control" name="JobTitle">
+												<input type="text" class="form-control" name="JobTitle">
 											</div>
 											<label class="col-lg-2 control-label">Department</label>
 											<div class="col-lg-4">
-												<input type="email" class="form-control" name="Department">
+												<input type="text" class="form-control" name="Department">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Organization</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="Company">
+												<input type="text" class="form-control" name="Company">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Address</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="WorkAddress">
+												<input type="text" class="form-control" name="WorkAddress">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label"></label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="WorkAddress2">
+												<input type="text" class="form-control" name="WorkAddress2">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">City</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="WorkCity">
+												<input type="text" class="form-control" name="WorkCity">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">State</label>
 											<div class="col-lg-5">
-												<input type="email" class="form-control" name="WorkState">
+												<input type="text" class="form-control" name="WorkState">
 											</div>
 											<label class="col-lg-3 control-label">Zip/Postal Code</label>
 											<div class="col-lg-2">
-												<input type="email" class="form-control" name="WorkZipCode">
+												<input type="text" class="form-control" name="WorkZipCode">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-2 control-label">Country</label>
 											<div class="col-lg-10">
-												<input type="email" class="form-control" name="WorkCountry">
+												<input type="text" class="form-control" name="WorkCountry">
 											</div>
 										</div>
 									</div>
@@ -284,8 +290,8 @@ function _Manage($Data = False) {
 					</section>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Discard Changes</button>
-					<button type="button" class="btn btn-primary">Add Contact to Addressbook</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="ModalDismiss2">Discard Changes</button>
+					<button type="button" class="btn btn-success" onclick="InitClick()" id="ModalAction">Add Contact to Addressbook</button>
 				</div>
 			</div>
 		</div>

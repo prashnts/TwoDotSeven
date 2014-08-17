@@ -17,7 +17,7 @@ function init() {
 			}
 			if (!\TwoDot7\User\Access::Check(array(
 				'UserName' => \TwoDot7\User\Session::Data()['UserName'],
-				'Domain' => 'in.ac.ducic.tabs.usesssr'))) {
+				'Domain' => 'in.ac.ducic.tabs.user'))) {
 
 				\TwoDot7\Util\Log('User '.\TwoDot7\User\Session::Data()['UserName']. ' attempted acess to Bit TABS interface Page.', 'ALERT');
 
@@ -33,9 +33,7 @@ function init() {
 			}
 
 			return array(
-				'Call' => '_Interface',
-				'testData' => Utils::addIntoAddressBook(array(
-					))
+				'Call' => '_Interface'
 				);
 		case 'manage':
 			return array(
@@ -95,6 +93,11 @@ class Utils {
 			", :Company, :CellularNumber, :FaxNumber)";
 		$Response = \TwoDot7\Database\Handler::Exec($QueryString, $Values)->rowCount();
 		return (bool)$Response;
+	}
+	public static function getArray() {
+		$QueryString = "SELECT * FROM `_bit_in.ac.ducic.tabs.addressbook`";
+		$Response = \TwoDot7\Database\Handler::Exec($QueryString)->fetchAll();
+		return $Response;
 	}
 	public static function deleteFromAddressBook($ID) {
 		//

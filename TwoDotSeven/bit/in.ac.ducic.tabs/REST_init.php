@@ -98,6 +98,22 @@ function init() {
 				echo json_encode("Some Unknown Error Occured.");
 			}
 			die;
+	 	
+	 	case 'getJSON':
+
+	 		$Response = Controller\Utils::getArray();
+			if($Response) {
+				header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+				header('Content-Type: application/json');
+				echo json_encode($Response, JSON_PRETTY_PRINT);
+			}
+			else {
+				header('HTTP/1.0 461 Error while Processing the Action.', true, 461);
+				header('Content-Type: application/json');
+				echo json_encode($Response, JSON_PRETTY_PRINT);
+			}
+			die;
+
 	 	case 'catalogue':
 	 		return array(
 	 			'Call' => 'Catalogue',

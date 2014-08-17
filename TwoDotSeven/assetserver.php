@@ -26,6 +26,27 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 			'File' => isset($URI[BASE+1]) ? $URI[BASE+1] : False);
 		CSS\init();
 		break;
+    case 'admin':
+        $File = "";
+        for ($i = BASE+1; $i < count($URI); $i++) {
+            $File .= $URI[$i]."/";
+        }
+        $File = rtrim($File, "\/");
+        if (is_dir($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/'.$File)) {
+            header("HTTP/1.0 403 Unauthorized");
+            echo "403 Unauthorized";
+            die();
+        }
+        elseif (file_exists($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/'.$File)) {
+            header("Content-type: ".MIMETYPE($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/'.$File));
+            readfile($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/'.$File);
+            die();
+        }
+        else {
+            header("HTTP/1.0 404 Not Found");
+            echo "404 Not Found";
+            die();
+        }
 	case 'usernameicon':
 		$Icon = isset($URI[BASE+1]) ? strtolower($URI[BASE+1])[0] : False;
 		if (file_exists($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/assets/images/generic/alphabet/'.$Icon.'.png')) {
