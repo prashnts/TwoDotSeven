@@ -28,12 +28,13 @@ function _Interface($Data = False) {
 
 		</div>
 		<div class="row padder">
+			<div id="contains">
 			<?php
+
 				for($i=0; $i<8; $i++) {
 			?>
-			<div class="col-lg-3 m-b-lg">
-				<div class="panel-body panel-info bg-light">
-					<div class="thumb pull-right m-l m-t-xs avatar">
+			<div class="item bg-light" id="<?php echo "item".$i; ?>">
+					<div class="thumb avatar float">
 						<img src="/assetserver/userNameIcon/<?php echo $i;?>">
 					</div>
 					<div class="clear">
@@ -43,13 +44,46 @@ function _Interface($Data = False) {
 
 						<a href="#" class="btn btn-xs btn-success m-t-sm">More</a> <br>
 					</div>
-				</div>
 			</div>
 			<?php 
 				}
 			?>
+			</div>
 		</div>
 	</section>
+	<style type="text/css">
+		@media (min-width: 767px) {
+			.item {
+				width: 300px;
+				margin: 20px;
+				padding: 10px;
+				border-radius: 5px;
+				min-width: 220px;
+			}
+		}
+		@media (max-width: 768px) {
+			.item {
+				width: 95%;
+				margin: 10px;
+				padding: 10px;
+				border-radius: 5px;
+				min-width: 220px;
+			}
+		}
+		.avatar.float {
+			float: right;
+		}
+		.item.w2 { width: 50%; }
+	</style>
+	<script type="text/javascript" src="<?php echo in_ac_ducic_tabs_ASSET.'/asset/masonry.pkgd.min.js'; ?>"></script>
+	<script type="text/javascript">
+	var $container = $('#contains');
+	// initialize
+	$container.masonry({
+		columnWidth: ".item",
+		itemSelector: '.item'
+	});
+	</script>
 	<?php
 }
 
