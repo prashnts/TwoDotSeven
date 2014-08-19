@@ -1,6 +1,10 @@
 var Utils = {
 	Toggles : {
-		Add : false
+		AddUpdate : false,
+		Delete: false,
+		DeleteIDCache: false,
+		DeleteProceed: false,
+		IDNum: false
 	},
 	DataHook : function() {
 		return {
@@ -64,28 +68,13 @@ var Utils = {
 			console.log("Recovered Fatal Error "+e);
 		}
 	},
-	ClearAllFields : function(Arrows) {
+	ClearAllFields : function(Arrows, Data) {
 		if (!Arrows) Arrows = Utils.DataHook();
 		try {
 			Object.keys(Arrows).forEach(function (key) {
 				try {
-					Arrows[key].val("Clearing Field.");
-					setTimeout(function() {
-						Arrows[key].val("Clearing Field..");
-						console.log("Cleared: "+key);
-					}, 500);
-					setTimeout(function() {
-						Arrows[key].val("Clearing Field...");
-						console.log("Cleared: "+key);
-					}, 1000);
-					setTimeout(function() {
-						Arrows[key].val("Cleared");
-						console.log("Cleared: "+key);
-					}, 1500);
-					setTimeout(function() {
-						Arrows[key].val("");
-						console.log("Cleared: "+key);
-					}, 2500);
+					Arrows[key].val(Data ? Data : "");
+					console.log("Cleared: "+key);
 				}
 				catch(e) {
 					console.log(e);
@@ -112,6 +101,23 @@ var Utils = {
 		}
 		return RetObj;
 	},
+	PutData : function(Arrows, Data) {
+		if (!Arrows) Arrows = Utils.DataHook();
+		RetObj = {};
+		try {
+			Object.keys(Arrows).forEach(function (key) {
+				try {
+					RetObj[key] = Arrows[key].val(Data[key]);
+				}
+				catch(e) {
+					console.log(e);
+				}
+			});
+		} catch(e) {
+			console.log("Recovered Fatal Error "+e);
+		}
+		return RetObj;
+	},
 	ModalButtons : {
 		Dismiss : function(Action) {
 			if (Action) {
@@ -128,7 +134,8 @@ var Utils = {
 			Hook = $("#ModalAction");
 			if (!Status) {
 				// Reset the button.
-				Utils.ModalButtons.Action("Add Contact to AddressBook", "green", false);
+				if (Utils.ActionCall == "Add") Utils.ModalButtons.Action("Add Contact to AddressBook", "green", false);
+				else if (Utils.ActionCall == "Update") Utils.ModalButtons.Action("Update Contact in AddressBook", "green", false);
 				return Hook;
 			}
 			if (Color) {
@@ -148,6 +155,31 @@ var Utils = {
 			return Hook;
 		}
 	},
+	ModalMode: {
+		Add: function() {
+			$(".ModalAdd").show();
+			$("#ModalTitle").html("Add Contact");
+			Utils.ModalButtons.Action("Add Contact to AddressBook", "green", false);
+			Utils.EnableAll();
+			Utils.ClearAllFields();
+		},
+		Update: function() {
+			$(".ModalAdd").show();
+			$("#ModalTitle").html("Update Contact");
+			Utils.ModalButtons.Action("Update Contact in AddressBook", "green", false);
+			Utils.EnableAll();
+			Utils.ClearAllFields();
+		},
+		View: function() {
+			$(".ModalAdd").hide();
+			$("#ModalTitle").html("Contact Details");
+			Utils.DisableAll();
+			Utils.ClearAllFields(false, "Loading");
+		},
+	},
+	Modal: $("#Modal"),
+	Masonry: $("#contains"),
+	ActionCall: false,
 	ValidateData : function() {
 		if (($("input[name=FirstName]").val().length < 1) ||
 			($("input[name=PrimaryEmail]").val().length < 1)) {
@@ -162,14 +194,14 @@ var Utils = {
 			timeout: 30000,
 			data: Utils.GetData(),
 			beforeSend: function() {
-				Utils.Toggles.Add = true;
+				Utils.Toggles.AddUpdate = true;
 				Utils.ModalButtons.Dismiss(true);
 				Utils.DisableAll();
 				Utils.ModalButtons.Action("Please Wait. Waiting for Response.", "blue", true);
 				$('*').css('cursor','wait');
 			},
 			success: function(Response) {
-				Utils.Toggles.Add = false;
+				Utils.Toggles.AddUpdate = false;
 				Utils.ModalButtons.Dismiss(false);
 				Utils.ModalButtons.Action("Contact Added to the AddressBook", "green", false);
 				setTimeout(function(){
@@ -180,7 +212,135 @@ var Utils = {
 				$('*').css('cursor','');
 			},
 			error: function(data) {
-				Utils.Toggles.Add = false;
+				Utils.Toggles.AddUpdate = false;
+				Utils.ModalButtons.Dismiss(false);
+				Utils.ModalButtons.Action("Some Unknown Error Occured.", "red", false);
+				Utils.EnableAll();
+				setTimeout(function(){
+					Utils.ModalButtons.Action();
+				}, 5000)
+				$('*').css('cursor','');
+			}
+		});
+	},
+	GetMoreDetails : function(ID, Callback) {
+		URI = "/dev/bit/in.ac.ducic.tabs/getCardByID?ID="+ID;
+		Utils.Modal.modal("show");
+		Utils.ModalMode.View();
+		$.getJSON(
+			URI,
+			"",
+			function(data) {
+				Utils.PutData(false, data);
+				Callback ? Callback(data) : false;
+			});
+	},
+	DeleteCard: function(ID) {
+		if (Utils.Toggles.Delete) {
+			return;
+		}
+
+		if (Utils.Toggles.DeleteIDCache && Utils.Toggles.DeleteIDCache != ID) {
+			Utils.Toggles.DeleteProceed = false;
+		}
+
+		if (!Utils.Toggles.DeleteProceed) {
+			Utils.Toggles.Delete = true;
+			$("#"+ID).removeClass("btn-danger btn-default btn-primary btn-warning btn-success");
+			$("#"+ID).addClass("btn-primary");
+			$("#"+ID).html('Please Wait 3 <i class="fa fa-circle-o-notch fa-spin"></i>');
+			setTimeout(function(){
+				$("#"+ID).html('Please Wait 2 <i class="fa fa-circle-o-notch fa-spin"></i>');
+			}, 1000);
+			setTimeout(function(){
+				$("#"+ID).html('Please Wait 1 <i class="fa fa-circle-o-notch fa-spin"></i>');
+			}, 2000);
+			setTimeout(function(){
+				$("#"+ID).html('Please Wait 0 <i class="fa fa-circle-o-notch fa-spin"></i>');
+			}, 3000);
+			setTimeout(function(){
+				$("#"+ID).html('Click Here to Delete');
+				$("#"+ID).removeClass("btn-danger btn-default btn-primary btn-warning btn-success");
+				$("#"+ID).addClass("btn-danger");
+				Utils.Toggles.Delete = false;
+				Utils.Toggles.DeleteIDCache = ID;
+				Utils.Toggles.DeleteProceed = true;
+			}, 3000);
+
+			return;
+		}
+
+		$.ajax({
+			type: 'POST',
+			url: '/dev/bit/in.ac.ducic.tabs/deleteCardByID',
+			timeout: 30000,
+			data: {
+				ID: $("#"+ID).attr("data-tabs-id")
+			},
+			beforeSend: function() {
+				Utils.Toggles.Delete = true;
+				$("#"+ID).removeClass("btn-danger btn-default btn-primary btn-warning btn-success");
+				$("#"+ID).addClass("btn-primary");
+				$("#"+ID).html('Deleting <i class="fa fa-circle-o-notch fa-spin"></i>');
+			},
+			success: function() {
+				$("#"+ID).removeClass("btn-danger btn-default btn-primary btn-warning btn-success");
+				$("#"+ID).addClass("btn-success");
+				$("#"+ID).html('Please Wait.');
+				setTimeout(function() {
+					Utils.Toggles.Delete = false;
+					Utils.Toggles.DeleteProceed = false;
+					Utils.Toggles.DeleteIDCache = false;
+					Utils.Masonry.masonry("remove", $("#CardData-"+$("#"+ID).attr("data-tabs-id")));
+					Utils.Masonry.masonry()
+				}, 500);
+			},
+			error: function(data) {
+				$("#"+ID).removeClass("btn-danger btn-default btn-primary btn-warning btn-success");
+				$("#"+ID).addClass("btn-danger");
+				$("#"+ID).html('Error while Deleting.');
+				setTimeout(function() {
+					$("#"+ID).html('Please Retry.');
+					Utils.Toggles.Delete = false;
+					Utils.Toggles.DeleteProceed = false;
+					Utils.Toggles.DeleteIDCache = false;
+					setTimeout(function() {
+						$("#"+ID).removeClass("btn-danger btn-default btn-primary btn-warning btn-success");
+						$("#"+ID).addClass("btn-default");
+						$("#"+ID).html('Delete');
+					}, 2000);
+				}, 3000);
+			}
+		});
+	},
+	UpdateCard: function(ID) {
+		var Data = Utils.GetData();
+		Data.ID = Utils.Toggles.IDNum;
+		$.ajax({
+			type: 'POST',
+			url: "/dev/bit/in.ac.ducic.tabs/updateCardByID",
+			timeout: 30000,
+			data: Data,
+			beforeSend: function() {
+				Utils.Toggles.AddUpdate = true;
+				Utils.ModalButtons.Dismiss(true);
+				Utils.DisableAll();
+				Utils.ModalButtons.Action("Please Wait. Waiting for Response.", "blue", true);
+				$('*').css('cursor','wait');
+			},
+			success: function(Response) {
+				Utils.Toggles.AddUpdate = false;
+				Utils.ModalButtons.Dismiss(false);
+				Utils.ModalButtons.Action("Contact Updated Successfully.", "green", false);
+				setTimeout(function(){
+					Utils.ClearAllFields();
+					Utils.ModalButtons.Action();
+					Utils.EnableAll();
+				}, 3000)
+				$('*').css('cursor','');
+			},
+			error: function(data) {
+				Utils.Toggles.AddUpdate = false;
 				Utils.ModalButtons.Dismiss(false);
 				Utils.ModalButtons.Action("Some Unknown Error Occured.", "red", false);
 				Utils.EnableAll();
@@ -193,9 +353,8 @@ var Utils = {
 	}
 };
 
-var inAction = false;
 function InitClick() {
-	if (Utils.Toggles.Add) {
+	if (Utils.Toggles.AddUpdate) {
 		return;
 	}
 	if (!Utils.ValidateData()) {
@@ -205,5 +364,24 @@ function InitClick() {
 		}, 3000);
 		return;
 	}
-	Utils.AddIntoAb();
+	if (Utils.ActionCall == "Update") Utils.UpdateCard();
+	else if (Utils.ActionCall == "Add") Utils.AddIntoAb();
+	else return;
+}
+
+function ModalShowAddWindow() {
+	Utils.ModalMode.Add();
+	Utils.ActionCall = "Add";
+	Utils.Modal.modal("show");
+}
+
+function ModalShowUpdateWindow(ID) {
+	var IDNum = $("#"+ID).attr("data-tabs-id");
+	Utils.Toggles.IDNum = IDNum;
+	Utils.ActionCall = "Update";
+	Utils.GetMoreDetails(IDNum, function(data) {
+		Utils.ModalMode.Update();
+		//console.log(data);
+		Utils.PutData(false, data);
+	});
 }

@@ -17,6 +17,7 @@ namespace TwoDot7\Admin\Broadcast;
 function init() {
 	//$installer = new \TwoDot7\Install\Setup;
 	//$installer->Navigation();
+	//var_dump(\TwoDot7\Bit\Register::Install('in.ac.ducic.tabs'));
 	\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
 		'Page' => 'PRE_BROADCAST',
 		'Call' => 'Broadcast',

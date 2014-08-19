@@ -1,6 +1,6 @@
 <?php
 namespace TwoDOt7\Bit\in_ac_ducic_tabs\Controller;
-
+use \TwoDOt7\Bit\in_ac_ducic_tabs as Node;
 function init() {
 	switch ($_GET['BitAction']) {
 		case 'interface':
@@ -15,9 +15,22 @@ function init() {
 					'Mood' => 'RED'));
 				die();
 			}
-			if (!\TwoDot7\User\Access::Check(array(
-				'UserName' => \TwoDot7\User\Session::Data()['UserName'],
-				'Domain' => 'in.ac.ducic.tabs.user'))) {
+
+			$AdminFlag = \TwoDot7\User\Access::Check(
+				array(
+					'UserName' => \TwoDot7\User\Session::Data()['UserName'],
+					'Domain' => 'in.ac.ducic.tabs.admin'
+					)
+				);
+
+			$UserFlag = \TwoDot7\User\Access::Check(
+				array(
+					'UserName' => \TwoDot7\User\Session::Data()['UserName'],
+					'Domain' => 'in.ac.ducic.tabs.user'
+					)
+				);
+
+			if (!($AdminFlag || $UserFlag)) {
 
 				\TwoDot7\Util\Log('User '.\TwoDot7\User\Session::Data()['UserName']. ' attempted acess to Bit TABS interface Page.', 'ALERT');
 
@@ -29,16 +42,28 @@ function init() {
 					'Code' => 403,
 					'Title' => '403 Unauthorized',
 					'Mood' => 'RED'));
+
 				die();
 			}
 
-			return array(
-				'Call' => '_Interface'
+			$ShowOptions = array(
+				'AddButton' => false,
+				'DeleteButtons' => false,
+				'UpdateButtons' => false
 				);
-		case 'manage':
+			$Contacts = Utils::getArray();
+
 			return array(
-				'Call' => '_Manage'
+				'Call' => '_Interface',
+				'AddressBookData' => Utils::getArray(),
+				'Buttons' => array(
+					'Add' => $AdminFlag,
+					'Delete' => $AdminFlag,
+					'Update' => $AdminFlag
+					),
+				'View' => "Grid"
 				);
+
 		default:
 			return array(
 				'Call' => 'FourOFour');
@@ -47,6 +72,12 @@ function init() {
 
 class Utils {
 	public static function addIntoAddressBook($Data = array()) {
+
+		if (!isset($Data['FirstName']) ||
+			!isset($Data['PrimaryEmail'])) {
+			return False;
+		}
+
 		$Values = array(
 			'FirstName' => isset($Data['FirstName']) ? $Data['FirstName'] : '',
 			'LastName' => isset($Data['LastName']) ? $Data['LastName'] : '',
@@ -99,12 +130,80 @@ class Utils {
 		$Response = \TwoDot7\Database\Handler::Exec($QueryString)->fetchAll();
 		return $Response;
 	}
-	public static function deleteFromAddressBook($ID) {
+	public static function getCardByID($ID) {
+
+		if (!is_numeric($ID)) return False;
+
+		$QueryString = "SELECT * FROM `_bit_in.ac.ducic.tabs.addressbook` WHERE ID=:ID";
+		$Response = \TwoDot7\Database\Handler::Exec($QueryString, array('ID' => $ID))->fetchAll();
+		return $Response;
+	}
+	public static function deleteCardByID($ID) {
 		//
 		$QueryString = "DELETE FROM `_bit_in.ac.ducic.tabs.addressbook` WHERE ID = :ID";
 		$Response = \TwoDot7\Database\Handler::Exec($QueryString, array(
 			'ID' => $ID
 			))->rowCount();
+		return (bool)$Response;
+	}
+	public static function updateCardByID($ID, $Data=array()) {
+
+		if (!isset($Data['FirstName']) ||
+			!isset($Data['PrimaryEmail']) ||
+			!isset($ID)) {
+			return False;
+		}
+
+		if (!is_numeric($ID)) return False;
+
+		$Values = array(
+			'FirstName' => isset($Data['FirstName']) ? $Data['FirstName'] : '',
+			'LastName' => isset($Data['LastName']) ? $Data['LastName'] : '',
+			'DisplayName' => isset($Data['DisplayName']) ? $Data['DisplayName'] : '',
+			'NickName' => isset($Data['NickName']) ? $Data['NickName'] : '',
+			'PrimaryEmail' => isset($Data['PrimaryEmail']) ? $Data['PrimaryEmail'] : '',
+			'SecondEmail' => isset($Data['SecondEmail']) ? $Data['SecondEmail'] : '',
+			'_AimScreenName' => isset($Data['_AimScreenName']) ? $Data['_AimScreenName'] : '',
+			'HomeAddress' => isset($Data['HomeAddress']) ? $Data['HomeAddress'] : '',
+			'HomeAddress2' => isset($Data['HomeAddress2']) ? $Data['HomeAddress2'] : '',
+			'HomeCity' => isset($Data['HomeCity']) ? $Data['HomeCity'] : '',
+			'HomeState' => isset($Data['HomeState']) ? $Data['HomeState'] : '',
+			'HomeZipCode' => isset($Data['HomeZipCode']) ? $Data['HomeZipCode'] : '',
+			'HomeCountry' => isset($Data['HomeCountry']) ? $Data['HomeCountry'] : '',
+			'HomePhone' => isset($Data['HomePhone']) ? $Data['HomePhone'] : '',
+			'WorkAddress' => isset($Data['WorkAddress']) ? $Data['WorkAddress'] : '',
+			'WorkAddress2' => isset($Data['WorkAddress2']) ? $Data['WorkAddress2'] : '',
+			'WorkCity' => isset($Data['WorkCity']) ? $Data['WorkCity'] : '',
+			'WorkState' => isset($Data['WorkState']) ? $Data['WorkState'] : '',
+			'WorkZipCode' => isset($Data['WorkZipCode']) ? $Data['WorkZipCode'] : '',
+			'WorkCountry' => isset($Data['WorkCountry']) ? $Data['WorkCountry'] : '',
+			'WorkPhone' => isset($Data['WorkPhone']) ? $Data['WorkPhone'] : '',
+			'JobTitle' => isset($Data['JobTitle']) ? $Data['JobTitle'] : '',
+			'Department' => isset($Data['Department']) ? $Data['Department'] : '',
+			'Company' => isset($Data['Company']) ? $Data['Company'] : '',
+			'CellularNumber' => isset($Data['CellularNumber']) ? $Data['CellularNumber'] : '',
+			'FaxNumber' =>isset($Data['FaxNumber']) ? $Data['FaxNumber'] : '',
+			'ID' => $ID
+			);
+		$QueryString = 
+			"UPDATE `_bit_in.ac.ducic.tabs.addressbook` SET F".
+			"irstName = :FirstName, LastName = :LastName, Dis".
+			"playName = :DisplayName, NickName = :NickName, P".
+			"rimaryEmail = :PrimaryEmail, SecondEmail = :Seco".
+			"ndEmail, _AimScreenName = :_AimScreenName, HomeA".
+			"ddress = :HomeAddress, HomeAddress2 = :HomeAddre".
+			"ss2, HomeCity = :HomeCity, HomeState = :HomeStat".
+			"e, HomeZipCode = :HomeZipCode, HomeCountry = :Ho".
+			"meCountry, HomePhone = :HomePhone, WorkAddress =".
+			" :WorkAddress, WorkAddress2 = :WorkAddress2, Wor".
+			"kCity = :WorkCity, WorkState = :WorkState, WorkZ".
+			"ipCode = :WorkZipCode, WorkCountry = :WorkCountr".
+			"y, WorkPhone = :WorkPhone, JobTitle = :JobTitle,".
+			" Department = :Department, Company = :Company, C".
+			"ellularNumber = :CellularNumber, FaxNumber = :Fa".
+			"xNumber WHERE ID = :ID ";
+
+		$Response = \TwoDot7\Database\Handler::Exec($QueryString, $Values)->rowCount();
 		return (bool)$Response;
 	}
 }

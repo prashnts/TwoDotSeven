@@ -25,33 +25,8 @@
 				"NOTLOGGEDIN" : false
 			},
 			"Tokens" : false,
-			"Children" : {
-				"in.ac.ducic.tabs.interface" : {
-					"Name" : "Address Book",
-					"Icon" : "fa fa-cloud",
-					"Badge" : false,
-					"Visible" : {
-						"LOGGEDIN" : true,
-						"NOTLOGGEDIN" : false
-					},
-					"Tokens" : false,
-					"Children" : false,
-					"Target" : "/twodot7/bit/in.ac.ducic.tabs/interface"
-				},
-				"in.ac.ducic.tabs.manage" : {
-					"Name" : "Manage",
-					"Icon" : "fa fa-cloud",
-					"Badge" : false,
-					"Visible" : {
-						"LOGGEDIN" : true,
-						"NOTLOGGEDIN" : false
-					},
-					"Tokens" : ["in.ac.ducic.tabs.user", "in.ac.ducic.tabs.admin"],
-					"Children" : false,
-					"Target" : "/twodot7/bit/in.ac.ducic.tabs/manage"
-				}
-			},
-			"Target" : "/twodot7/bit/in.ac.ducic.tabs"
+			"Children" : false,
+			"Target" : "/twodot7/bit/in.ac.ducic.tabs/interface"
 		}
 	}
 }

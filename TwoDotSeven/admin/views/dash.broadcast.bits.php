@@ -267,7 +267,7 @@ class Render {
 	}
 	public static function Bit($Data) {
 		if (function_exists($Data['View'])) {
-			$Data['View']($Data);
+			$Data['View']($Data['ViewData']);
 			//call_user_func($Data['View']);
 		}
 		else {
