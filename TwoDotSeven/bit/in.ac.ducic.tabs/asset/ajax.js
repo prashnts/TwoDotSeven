@@ -333,7 +333,7 @@ var Utils = {
 				Utils.ModalButtons.Dismiss(false);
 				Utils.ModalButtons.Action("Contact Updated Successfully.", "green", false);
 				setTimeout(function(){
-					Utils.ClearAllFields();
+					//Utils.ClearAllFields();
 					Utils.ModalButtons.Action();
 					Utils.EnableAll();
 				}, 3000)
