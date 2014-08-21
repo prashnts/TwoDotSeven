@@ -241,7 +241,7 @@ $(function() {
 				$("#Mode2F4").attr("disabled","disabled");
 			},
 			statusCode: {
-				262: function(data) {
+				251: function(data) {
 					// Success. User added.
 					TintPage("GREEN");
 					
@@ -400,7 +400,7 @@ $(function() {
 						window.location = '/';
 					}, 3000);
 				},
-				262: function(data) {
+				251: function(data) {
 					// Success. User added.
 					TintPage("GREEN");
 					
@@ -617,7 +617,7 @@ $(function() {
 						window.location = '/';
 					}, 3000);
 				},
-				262: function(data) {
+				251: function(data) {
 					// Success. User added.
 					TintPage("GREEN");
 					
