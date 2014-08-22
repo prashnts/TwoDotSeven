@@ -166,9 +166,24 @@ class Action {
 			}
 		} else throw new \TwoDot7\Exception\InvalidArgument("TargetType is not a valid type.");
 		
-				
+		// Visibility
+		if (!$Data['Visible']) {
+			$Data['Visible'] = 0;
+		} elseif (!($Data['Visible'] === 1 || $Data['Visible'] === 2)) {
+			$Data['Visible'] = 0;
+		} else $Data['Visible'] = 0;
+
+		// Pack data.
+		$Response = Utils::Pack($Data['Data']);
+		// Set Datatype and Data.
+		$Data['Datatype'] = $Response['Datatype'];
+		$Data['Data'] = $Response['Data'];
 
 		$Query = "INSERT INTO _broadcast (OriginType, Origin, TargetType, Target, Visible, Datatype, Data) VALUES (:OriginType, :Origin, :TargetType, :Target, :Visible, :Datatype, :Data)";
+		
+		$Response = \TwoDot7\Database\Handler::Exec($Query, $Data)->rowCount();
+
+		return (bool)$Response
 	}
 
 	public static function Remove() {
@@ -185,8 +200,16 @@ class Action {
 }
 
 class Utils {
-	public static function Pack($Data) {
+	public static function Pack(&$Data) {
 		// Packs the Raw broadcast data. Packs images and stuff as well.
+		// Only supports the Text Data for now.
+		// Data Schema: BroadcastText -> Contains the Text of broadcast. Supports Markdown.
+		// 				BroadcastFileAttachements -> Contains various broadcast files. Not Supported yet.
+		// 				BroadcastMeta -> Contains various meta.
+		return array(
+			'Datatype' => 1,
+			'Data' => $Data['BroadcastText']
+			);
 	}
 
 	public static function Unpack() {
