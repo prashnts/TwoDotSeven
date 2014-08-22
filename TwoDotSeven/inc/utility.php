@@ -255,6 +255,19 @@ class Redundant {
 	}
 	
 	/**
+	 * This function checks the Group ID against the Database.
+	 * @param	string $Candidate The EMail.
+	 * @return	bool
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140822
+	 * @version	0.0
+	 */
+	public static function Group($Candidate) {
+		$Query = "SELECT count(*) AS count FROM _group WHERE GroupID=:GroupID";
+		return \TwoDot7\Database\Handler::Exec($Query, array( 'GroupID' => $Candidate))->fetch()['count'] ? True : False;
+	}
+
+	/**
 	 * This function checks the UserName against the Database.
 	 * @param	$Candidate -string- The UserName.
 	 * @return	bool

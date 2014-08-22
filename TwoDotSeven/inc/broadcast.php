@@ -61,7 +61,7 @@ class Action {
 			!isset($Data['Origin']) ||
 			!isset($Data['TargetType']) ||
 			!isset($Data['Data'])) {
-			throw new \TwoDot7\IncompleteArgument("Incomplete Arguments in \\TwoDot7\\Broadcast\\Action::Add");
+			throw new \TwoDot7\Exception\IncompleteArgument("Incomplete Arguments in \\TwoDot7\\Broadcast\\Action::Add");
 		}
 
 		// Check the Validity of Arguments
@@ -69,20 +69,75 @@ class Action {
 		if ($Data['OriginType'] === \TwoDot7\Broadcast\USER ||
 			$Data['OriginType'] === \TwoDot7\Broadcast\BIT ||
 			$Data['OriginType'] === \TwoDot7\Broadcast\SYSTEM) {
+
 			switch ($Data['OriginType']) {
 				case \TwoDot7\Broadcast\USER :
-					if (\TwoDot7\Util\Redundant::UserName($Data['Origin'])) {
-						//
+					if (!\TwoDot7\Util\Redundant::UserName($Data['Origin'])) {
+						return array(
+							'Success' => False,
+							'Error' => "Unknown User"
+							);
 					}
 					break;
 				case \TwoDot7\Broadcast\BIT :
-					//
+					if (!\TwoDot7\Util\Redundant::Bit($Data['Origin'])) {
+						return array(
+							'Success' => False,
+							'Error' => "Unknown Bit"
+							);
+					}
 					break;
 				case \TwoDot7\Broadcast\SYSTEM :
-					//
+					if (!\TwoDot7\Validate\Alphanumeric($Data['Origin'], 6, 255)) {
+						\TwoDot7\Util\Log("Invalid Broadcast Origin by System: {$Data['Origin']}", "ALERT");
+						return array(
+							'Success' => False,
+							'Error' => "Invalid system process."
+							);
+					}
 					break;
 			}
-		} else throw new \TwoDot7\InvalidArgument("OriginType is not a valid type.");
+		} else throw new \TwoDot7\Exception\InvalidArgument("OriginType is not a valid type.");
+		
+		// Target type
+		if ($Data['TargetType'] === \TwoDot7\Broadcast\USER ||
+			$Data['TargetType'] === \TwoDot7\Broadcast\GROUP ||
+			$Data['TargetType'] === \TwoDot7\Broadcast\CUSTOM) {
+			
+			switch ($Data['Target']) {
+				case \TwoDot7\Broadcast\USER:
+					if (is_array($Data['Target'])) {
+						$Pass = True;
+						foreach ($Data['Target'] as $UserName) {
+							if (!\TwoDot7\Util\Redundant::UserName($UserName)) $Pass = False;
+						}
+						if (!$Pass) {
+							return array(
+								'Success' => False,
+								'Error' => "The Target User list is not Valid"
+								);
+						}
+					} elseif (is_string($Data['Target'])) {
+						if (!\TwoDot7\Util\Redundant::UserName($Data['Target'])) {
+							return array(
+								'Success' => False,
+								'Error' => "Invalid Target User");
+						}
+						// Normalize the Data.
+						$Data['Target'] = array($Data['Target']);
+					} else {
+						return array(
+							'Success' => False,
+							'Error' => "Invalid Target"
+							);
+					}
+					break;
+				case \TwoDot7\Broadcast\GROUP:
+					break;
+				case \TwoDot7\Broadcast\CUSTOM:
+					break;
+			}
+		} else throw new \TwoDot7\Exception\InvalidArgument("TargetType is not a valid type.");
 		
 				
 
