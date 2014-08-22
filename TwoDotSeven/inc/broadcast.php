@@ -133,8 +133,35 @@ class Action {
 					}
 					break;
 				case \TwoDot7\Broadcast\GROUP:
+					if (is_array($Data['Target'])) {
+						$Pass = True;
+						foreach ($Data['Target'] as $Group) {
+							if (!\TwoDot7\Util\Redundant::Group($Group)) $Pass = False;
+						}
+						if (!$Pass) {
+							return array(
+								'Success' => False,
+								'Error' => "The Target Group list is not Valid"
+								);
+						}
+					} elseif (is_string($Data['Target'])) {
+						if (!\TwoDot7\Util\Redundant::Group($Data['Target'])) {
+							return array(
+								'Success' => False,
+								'Error' => "Invalid Target Group");
+						}
+						// Normalize the Data.
+						$Data['Target'] = array($Data['Target']);
+					} else {
+						return array(
+							'Success' => False,
+							'Error' => "Invalid Target"
+							);
+					}
 					break;
 				case \TwoDot7\Broadcast\CUSTOM:
+					if ($Data['Target']) \TwoDot7\Util\Log("WARNING: Target not supported for CUSTOM broadcasts.", "DEBUG");
+					$Data['Target'] = 0;
 					break;
 			}
 		} else throw new \TwoDot7\Exception\InvalidArgument("TargetType is not a valid type.");
