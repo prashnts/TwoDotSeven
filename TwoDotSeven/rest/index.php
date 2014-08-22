@@ -46,10 +46,10 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 		break;
 	case 'broadcast':
 		$_GET = array_merge($_GET, array(
-			'Bit' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
-			'BitAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : 'init'
+			'Action' => isset($URI[BASE+1]) ? $URI[BASE+1] : False
 			));
-
+		Broadcast\init();
+		break;
 	case 'bit':
 	case 'plugin':
 		$_GET = array_merge($_GET, array(
