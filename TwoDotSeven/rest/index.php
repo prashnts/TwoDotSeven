@@ -15,6 +15,7 @@ namespace TwoDot7\REST;
 require "../import.php";
 _Import('../inc/direction.php');
 _Import('../config.php');
+_Import('../inc/broadcast.php');
 _Import('../inc/database.php');
 _Import('../inc/exceptions.php');
 _Import('../inc/validator.php');
@@ -46,7 +47,9 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 		break;
 	case 'broadcast':
 		$_GET = array_merge($_GET, array(
-			'Action' => isset($URI[BASE+1]) ? $URI[BASE+1] : False
+			'Action' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+			'OriginType' => isset($URI[BASE+2]) ? $URI[BASE+2] : False,
+			'Origin' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
 			));
 		Broadcast\init();
 		break;

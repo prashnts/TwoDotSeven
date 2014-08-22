@@ -40,6 +40,11 @@ const GROUP = 4;
 const CUSTOM = 5;
 
 /**
+ * Broadcase Target Default.
+ */
+const _DEFAULT = 6;
+
+/**
  * Action wrapper class for Broadcasts.
  */
 class Action {
@@ -102,9 +107,10 @@ class Action {
 		// Target type
 		if ($Data['TargetType'] === \TwoDot7\Broadcast\USER ||
 			$Data['TargetType'] === \TwoDot7\Broadcast\GROUP ||
-			$Data['TargetType'] === \TwoDot7\Broadcast\CUSTOM) {
+			$Data['TargetType'] === \TwoDot7\Broadcast\CUSTOM ||
+			$Data['TargetType'] === \TwoDot7\Broadcast\_DEFAULT) {
 			
-			switch ($Data['Target']) {
+			switch ($Data['TargetType']) {
 				case \TwoDot7\Broadcast\USER:
 					if (is_array($Data['Target'])) {
 						$Pass = True;
@@ -117,6 +123,7 @@ class Action {
 								'Error' => "The Target User list is not Valid"
 								);
 						}
+						$Data['Target'] = json_encode($Data['Target']);
 					} elseif (is_string($Data['Target'])) {
 						if (!\TwoDot7\Util\Redundant::UserName($Data['Target'])) {
 							return array(
@@ -124,7 +131,7 @@ class Action {
 								'Error' => "Invalid Target User");
 						}
 						// Normalize the Data.
-						$Data['Target'] = array($Data['Target']);
+						$Data['Target'] = json_encode(array($Data['Target']));
 					} else {
 						return array(
 							'Success' => False,
@@ -151,7 +158,7 @@ class Action {
 								'Error' => "Invalid Target Group");
 						}
 						// Normalize the Data.
-						$Data['Target'] = array($Data['Target']);
+						$Data['Target'] = json_encode(array($Data['Target']));
 					} else {
 						return array(
 							'Success' => False,
@@ -183,7 +190,7 @@ class Action {
 		
 		$Response = \TwoDot7\Database\Handler::Exec($Query, $Data)->rowCount();
 
-		return (bool)$Response
+		return array( 'Success' => (bool)$Response );
 	}
 
 	public static function Remove() {
@@ -208,7 +215,7 @@ class Utils {
 		// 				BroadcastMeta -> Contains various meta.
 		return array(
 			'Datatype' => 1,
-			'Data' => $Data['BroadcastText']
+			'Data' => json_encode($Data['BroadcastText'])
 			);
 	}
 

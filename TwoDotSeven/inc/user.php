@@ -1068,12 +1068,46 @@ class Session {
 	}
 }
 
+/**
+ * Wrapper for commonly used procedures.
+ * Implemets Methods for Detectig System Admin, Admin.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 20140822
+ * @version	0.0
+ */
 class Shortcut {
+
+	/**
+	 * Checks if the User has Admin Privileges.
+	 * @return	Boolean
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 2040822
+	 * @version	0.0
+	 */
 	public static function IsAdmin() {
 		if (Session::Exists() &&
 			Access::Check(array(
 				'UserName' => Session::Data()['UserName'],
 				'Domain' => 'ADMIN'))) {
+			return True;
+		}
+		else {
+			return False;
+		}
+	}
+
+	/**
+	 * Checks if the User has SysAdmin Privileges.
+	 * @return	Boolean
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 2040822
+	 * @version	0.0
+	 */
+	public static function IsSysAdmin() {
+		if (Session::Exists() &&
+			Access::Check(array(
+				'UserName' => Session::Data()['UserName'],
+				'Domain' => 'SYSADMIN'))) {
 			return True;
 		}
 		else {

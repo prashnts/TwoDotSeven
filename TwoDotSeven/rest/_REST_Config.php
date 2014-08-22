@@ -24,7 +24,7 @@ $ResponseHeaderMeta = array(
 	'Response-Served-By' => 'TwoDotSeven REST engine.',
 	'Request-Time' => time(),
 	'Author' => 'Prashant Sinha <prashantsinha@outlook.com>',
-	'Humans' => 'Hello There, Nerd! I see you\'re analyzing the headers. WE NEED PEOPLE LIKE YOU. Please contact author on his email, above. Cheers!'
+	'Humans' => 'Hello There, Nerd! The source codes for the TwoDOt7 are at github.com/prashnts/TwoDotSeven :)!'
 	);
 
 foreach ($ResponseHeaderMeta as $key => $value) {
