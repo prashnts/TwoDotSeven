@@ -26,6 +26,7 @@ _Import('../inc/mailer.php');
 _Import('../inc/bits.php');
 _Import("_REST_Config.php");
 _Import("_REST_Account.php");
+_Import("_REST_Broadcast.php");
 _Import("_REST_Direction.php");
 _Import("_REST_Redundant.php");
 
@@ -43,22 +44,23 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 			'Function' => isset($URI[BASE+1]) ? $URI[BASE+1] : False);
 		Account\init();
 		break;
-
-	case 'bit':
-	case 'plugin':
-
+	case 'broadcast':
 		$_GET = array_merge($_GET, array(
 			'Bit' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
 			'BitAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : 'init'
 			));
 
+	case 'bit':
+	case 'plugin':
+		$_GET = array_merge($_GET, array(
+			'Bit' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+			'BitAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : 'init'
+			));
 		$BitID = $_GET['Bit'];
 		try {
-
 			$Bit = new \TwoDot7\Bit\Init($BitID);
 			$AutoTokenResponse = $Bit->AutoToken();
 			$BiTControllerResponse = $Bit->REST();
-
 			die();
 		} catch (\TwoDot7\Exception\InvalidBit $e) {
 			header('HTTP/1.0 404 Not Found.', true, 404);
@@ -68,10 +70,7 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 			echo "</pre>";
 			die();
 		}
-
 		break;
-
-
 	case 'direction':
 		$_GET = array(
 			'Function' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
