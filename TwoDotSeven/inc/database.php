@@ -61,10 +61,11 @@ class Handler {
 			$Binding = $this->DbHandle->prepare($Query);
 			$Binding->execute($Arr);
 			$this->DbHandle->Commit();
+			\TwoDot7\Util\Log($Query."..".json_encode($Arr), "DEBUG");
 			return ($Binding);
 		}
 		catch (PDOException $E) {
-			afPutLogEntry ($E->getMessage(), DEBUG);
+			\TwoDot7\Util\Log($E->getMessage(), "DEBUG");
 			$this->DbHandle->rollback();
 			return FALSE;
 		}

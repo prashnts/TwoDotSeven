@@ -125,6 +125,24 @@ class Render {
 				<div class="col-lg-6">
 				</div>
 			</div>
+			<div class="row padder">
+				<div class="col-lg-6">
+				<section class="panel bg-light">
+					<form>
+						<textarea class="form-control no-border" rows="3" placeholder="What are you doing..."></textarea>
+					</form>
+					<footer class="panel-footer">
+						<button class="btn btn-info pull-right btn-sm">POST</button>
+						<ul class="nav nav-pills nav-sm">
+							<li><a href="#"><i class="fa fa-camera text-muted"></i></a>
+							</li>
+							<li><a href="#"><i class="fa fa-video-camera text-muted"></i></a>
+							</li>
+						</ul>
+					</footer>
+				</section>
+				</div>
+			</div>
 		</section>
 		<?php
 	}
