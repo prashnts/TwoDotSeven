@@ -121,6 +121,28 @@
     GET:
     1. Page Number (Required) The pagination location on the Web app.
     - Response: 251, 261, 450.
+6. ***domain/dev/broadcast/[function]/[origin]/[origintype]***
+  - This pushes a Broadcast in the stream.
+  - V 0.1 only supports the Text Based broadcasts, but the Attachment support is on the way.
+  - Requires Authentication.
+  - *add*
+    Adds a broadcast.
+    GET:
+    - *origin*: Optional. Specify this in URI. This require a SysAdmin privilege to be executed.
+      Also specify the originType and an Override in POST (see below).
+      example: *domain/dev/broadcast/add/user/prashant Starts a broadcast process for user Prashant.
+    - *origintype*: Required, if *Origin* is specified. See *origin* for usage.
+    POST:
+    - *BroadcastText*: Required. The Broadcast text.
+    - *TargetType*: Required. Valid values are "user", "default", "custom".
+    - *Target*: Depends on TargetType. In case of "user", specify valid and existing users, deliminated by ampersand.
+    - *OverrideUserName*: Enables the "origin" override. Can be used by a Sysadmin only.
+    Example:
+    - Access URI: *domain/dev/broadcast/add/user*
+    - POST: *BroadcastText* - "Hello World!",
+      *TargetType* - "user",
+      *Target* - "apoorva&ankit&pragya"
+    - Adds a Broadcast "Hello World" targeted to user Apoorva, Ankit and Pragya.
 
 ### API Version 0.2 Additions
 
