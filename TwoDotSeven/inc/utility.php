@@ -7,18 +7,66 @@ namespace TwoDot7\Util;
 #  \/      \_/\_/ \___/  (_)  /_/   
 
 /**
+ * Class wrapper for Generating and Verifying URI components, valid for fixed duration.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 20140828
+ * @version	0.0
+ */
+class BriefURI {
+
+	/**
+	 * Generates a String Valid for fixed duration.
+	 * @param	Int $Duration. The duration for the validity of URI. Default: 600 sec. 
+	 * @return	String. The Output string.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140825
+	 * @version	0.0
+	 */
+	public static function Create($Duration = 600) {
+		$URI = array(
+			'Padding' => rand(1, 10000),
+			'Time' => time(),
+			'Duration' => is_int($Duration) ? $Duration : 600
+			);
+		return Crypt::Encrypt(json_encode($URI));
+	}
+
+	/**
+	 * Verifies the Given String to be a Valid.
+	 * @param	String $URI Required. The string.
+	 * @return	Boolean.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140825
+	 * @version	0.0
+	 */
+	public static function Verify($URI) {
+		$Data = json_decode(Crypt::Decrypt($URI), True);
+		if (is_array($Data) &&
+			isset($Data['Padding']) &&
+			isset($Data['Time']) &&
+			isset($Data['Duration'])) {
+			$CurrentTime = time();
+			$CandidateTime = $Data['Time'] + $Data['Duration'];
+			if ($CurrentTime <= $CandidateTime) return True;
+			else return False;
+		} else return False;
+	}
+}
+
+/**
  * Class wrapper for Cryptic functions.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
  * @since	v0.0 20140620
  * @version	0.0
  */
 class Crypt {
+
 	/**
 	 * This function does a Eager Comparison of two String Candidates in Length-Constant time.
 	 * @param	$Str1, $Str2: String, Comparison strings.
 	 * @return	Boolean.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 23062014
+	 * @since	v0.0 20140623
 	 * @version	0.0
 	 */
 	public static function EagerCompare($Str1, $Str2) {
@@ -35,7 +83,7 @@ class Crypt {
 	 * @param	$KeyOverride: Array, Overrides Keys set in Configuration.
 	 * @return	String, Encrypted String.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 23062014
+	 * @since	v0.0 20140623
 	 * @version	0.0
 	 */
 	public static function Encrypt($Candidate, $KeyOverride=False) {
@@ -52,7 +100,7 @@ class Crypt {
 	 * @param	$KeyOverride: Array, Overrides Keys set in Configuration.
 	 * @return	String, Decrypted String.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 23062014
+	 * @since	v0.0 20140623
 	 * @version	0.0
 	 */
 	public static function Decrypt($Candidate, $KeyOverride=False) {
