@@ -625,7 +625,7 @@ class Preferences {
 			if (!in_array($App, self::$Preferences['ExternalApp'])) return True;
 			self::$Preferences['ExternalApp'] = array_merge(array_diff(self::$Preferences['ExternalApp'], array($App)));
 			return self::PackPreferences(Session::Data()['UserName']);
-		}
+		} else throw new \TwoDot7\Exception\InvalidArgument("Invalid Option supplied: {$Action}. In User\Preferences::ExternalApp");
 	}
 
 	/**
@@ -665,14 +665,20 @@ class Preferences {
 
 /**
  * Wrapper for the User Account Recovery Related functions.
- * Implemets Methods for Password, EMail.
+ * Implements Methods for Password, EMail.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 23062014
+ * @since	v0.0 20140623
  * @version	0.0
  */
 class Recover {
 	private $AUTH;
 
+	/**
+	 * Constructs the Recovery Object.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140623
+	 * @version	0.0
+	 */
 	function __construct($Options = array()) {
 		$Options = array_merge(array(
 			'Token' => False,
@@ -699,11 +705,22 @@ class Recover {
 		}
 	}
 
+	/**
+	 * Sets a new the password.
+	 * @param	Array $Data Required. Following must be the Keys of the Array:
+	 *			UserName - String. Username of the target user.
+	 *			Deauthorize - Boolean. If specified, Unauthorizes all the tokens.
+	 *			New_Password - String. New password. Must be a valid string, specified in Password Specifications.
+	 *			Conf_Password - String. Confirm new password.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140623
+	 * @version	0.0
+	 */
 	public function Password($Data) {
 
 		if(!$this->AUTH) {
 			/**
-			 * @internal This block means this object didn't recieve correct Authentication.
+			 * @internal This block means this object didn't receive correct Authentication.
 			 */
 			Util\Log("Recovery AUTH failed. Function Called: Recover::Password. Trace: ".json_encode($Data), 'TRACK');
 			return array(
@@ -768,6 +785,14 @@ class Recover {
 		}
 	}
 
+	/**
+	 * Generates a new email confirmation code and mails it to the user.
+	 * @param	Array $Data Required. Must contain the following:
+	 *			UserName - String Required. The target User.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140623
+	 * @version	0.0
+	 */
 	public function EMailConfirmationCode($Data) {
 
 		if( isset($Data['UserName'])) {
@@ -815,11 +840,20 @@ class Recover {
 		}
 	}
 
+	/**
+	 * Changes the Email.
+	 * @param	Array $Data Required. Must contain the following:
+	 *			UserName - String Required. The target user.
+	 *			New_EMail - String Required. New Email. Must be a valid email ID.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140623
+	 * @version	0.0
+	 */
 	public function EMail($Data) {
 
 		if(!$this->AUTH) {
 			/**
-			 * @internal This block means this object didn't recieve correct Authentication.
+			 * @internal This block means this object didn't receive correct Authentication.
 			 */
 			Util\Log("Recovery AUTH failed. Function Called: Recover::EMail. Trace: ".json_encode($Data), 'TRACK');
 			return array(
@@ -884,7 +918,7 @@ class Recover {
 
 /**
  * Wrapper for the High Level - REST interface of User Namespace.
- * Implemets Methods for AUTH.
+ * Implements Methods for AUTH.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
  * @since	v0.0 20140801
  * @version	0.0
