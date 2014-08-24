@@ -322,10 +322,10 @@ class Activity {
 }
 
 /**
- * Class wrapper for User Acess controls.
+ * Class wrapper for User Access controls.
  * Implements Add, Check, Get, Revoke.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 01072014
+ * @since	v0.0 20140701
  * @version	0.0
  */
 class Access {
@@ -345,7 +345,7 @@ class Access {
 	 * @return	-bool- Indicates success or failure.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 01072014
+	 * @since	v0.0 20140701
 	 * @version	0.0
 	 */
 	public static function Add($Data) {
@@ -402,7 +402,7 @@ class Access {
 	 * @return	-bool- Indicates success or failure.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 01072014
+	 * @since	v0.0 20140701
 	 * @version	0.0
 	 */
 	public static function Check($Data) {
@@ -436,7 +436,7 @@ class Access {
 	 * @return	-array- Token Array.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 01072014
+	 * @since	v0.0 20140701
 	 * @version	0.0
 	 */
 	public static function Get($Data) {
@@ -457,7 +457,7 @@ class Access {
 	 * @return	-bool- Indicates success or failure.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 01072014
+	 * @since	v0.0 20140701
 	 * @version	0.0
 	 */
 	public static function Revoke($Data) {
@@ -586,8 +586,81 @@ class Meta {
 	}
 }
 
+/**
+ * Class wrapper for User specific Preferences.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 20140701
+ * @version	0.0
+ */
 class Preferences {
-	// Todo
+
+	/**
+	 * Stores the current instance of Preference.
+	 */
+	private static $Preferences = False;
+
+	/**
+	 * Stores the name of External apps, Using TwoDot7 as a OAUTH login.
+	 * @param	String $App Required. Name of the External App.
+	 * @param	String $Action Optional. Specifies the Action to be taken. Must be one of these values:
+	 *			"GET" - Default. Checks if an App is already used by the User.
+	 *			"ADD" - Adds an External App.
+	 *			"REMOVE" - Removes the External App.
+	 * @return	Boolean
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140824
+	 * @version	0.0
+	 */
+	public static function ExternalApp($App, $Action = "GET") {
+		if (!Session::Exists()) return False;
+		if (!self::UnpackPreferences(Session::Data()['UserName'])) return False;
+		if (!isset(self::$Preferences['ExternalApp'])) self::$Preferences['ExternalApp'] = array();
+		if ($Action === "GET") {
+			return in_array($App, self::$Preferences['ExternalApp']);
+		} elseif ($Action === "ADD") {
+			if (in_array($App, self::$Preferences['ExternalApp'])) return True;
+			array_push(self::$Preferences['ExternalApp'], $App);
+			return self::PackPreferences(Session::Data()['UserName']);
+		} elseif ($Action === "REMOVE") {
+			if (!in_array($App, self::$Preferences['ExternalApp'])) return True;
+			self::$Preferences['ExternalApp'] = array_merge(array_diff(self::$Preferences['ExternalApp'], array($App)));
+			return self::PackPreferences(Session::Data()['UserName']);
+		}
+	}
+
+	/**
+	 * Fetches and decodes the User Preferences.
+	 * @param	String $UserName Required. Username of the target user.
+	 * @return	Array
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140824
+	 * @version	0.0
+	 */
+	private static function UnpackPreferences($UserName) {
+		$Response = \TwoDot7\Database\Handler::Exec(
+			"SELECT * FROM _user WHERE UserName=:UserName",
+			array("UserName" => $UserName))->fetch();
+		if (!$Response) return False;
+		self::$Preferences = json_decode($Response['Preferences'], True);
+		return True;
+	}
+
+	/**
+	 * Encodes and puts the Modified user preferences.
+	 * @param	String $UserName Required. Username of the target user.
+	 * @return	Boolean
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140824
+	 * @version	0.0
+	 */
+	private static function PackPreferences($UserName) {
+		return (bool)\TwoDot7\Database\Handler::Exec(
+			"UPDATE _user SET Preferences=:Preferences WHERE UserName=:UserName",
+			array(
+				'UserName' => $UserName,
+				'Preferences' => json_encode(self::$Preferences)
+				))->rowCount();
+	}
 }
 
 /**
@@ -885,9 +958,9 @@ class REST {
 
 /**
  * Wrapper for the User Session Related functions.
- * Implemets Methods for Login, Logout, & Session Status.
+ * Implements Methods for Login, Logout, & Session Status.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
- * @since	v0.0 23062014
+ * @since	v0.0 20140623
  * @version	0.0
  */
 class Session {
@@ -902,7 +975,7 @@ class Session {
 	 * Returns current session data.
 	 * @return	-array- Contains UserName and their session Hash.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 18072014
+	 * @since	v0.0 20140718
 	 * @version	0.0
 	 */
 	public static function Data() {
@@ -918,7 +991,7 @@ class Session {
 	 * @return	-array- Contains Success status, Tokens and Status on successful authentication.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29062014
+	 * @since	v0.0 20140629
 	 * @version	0.0
 	 */
 	public static function Login($Data) {
@@ -979,7 +1052,7 @@ class Session {
 	 * @return	-array- Contains Success status.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 30062014
+	 * @since	v0.0 20140630
 	 * @version	0.0
 	 */
 	public static function Logout($Data) {
@@ -1017,7 +1090,7 @@ class Session {
 	 * @return	-array- Contains Success status, Tokens and Status on successful authentication.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29062014
+	 * @since	v0.0 20140629
 	 * @version	0.0
 	 */
 	public static function Status($Data) {
@@ -1057,7 +1130,7 @@ class Session {
 	 * @return	-bool- True if a Valid session exists.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 30062014
+	 * @since	v0.0 20140630
 	 * @version	0.0
 	 */
 	public static function Exists() {
@@ -1070,7 +1143,7 @@ class Session {
 
 /**
  * Wrapper for commonly used procedures.
- * Implemets Methods for Detectig System Admin, Admin.
+ * Implements Methods for Detecting System Admin, Admin.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
  * @since	v0.0 20140822
  * @version	0.0
@@ -1081,7 +1154,7 @@ class Shortcut {
 	 * Checks if the User has Admin Privileges.
 	 * @return	Boolean
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 2040822
+	 * @since	v0.0 20140822
 	 * @version	0.0
 	 */
 	public static function IsAdmin() {
@@ -1100,7 +1173,7 @@ class Shortcut {
 	 * Checks if the User has SysAdmin Privileges.
 	 * @return	Boolean
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
-	 * @since	v0.0 2040822
+	 * @since	v0.0 20140822
 	 * @version	0.0
 	 */
 	public static function IsSysAdmin() {
@@ -1118,7 +1191,7 @@ class Shortcut {
 
 /**
  * Wrapper for the Account Status Management functions.
- * Implements Get, Set, Escalade, Revoke
+ * Implements Get, Set, Escalate, Revoke
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
  * @since	v0.0 20140623
  * @version	0.0
