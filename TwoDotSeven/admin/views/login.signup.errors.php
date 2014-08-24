@@ -221,7 +221,7 @@ class Render {
 					<div class="messages">
 						<?php Node\Messages($Data); ?>
 					</div>
-					<form action="/twodot7/login" method="POST">
+					<form method="POST">
 						<div class="list-group">
 							<div class="list-group-item Field-Override-Hack">
 								<input type="text" placeholder="UserName" name="UserName" class="form-control no-border" required id="Mode1F1">
@@ -251,6 +251,54 @@ class Render {
 						<small id="MoodBlur">No Account?</small>
 					</p>
 					<a href="/twodot7/register" class="btn btn-sm btn-primary btn-block">Create an account</a>
+				</section>
+			</div>
+		</section>
+		<footer id="footer">
+			<div class="text-center padder clearfix">
+				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+			</div>
+		</footer>
+		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<?php
+	}
+
+	static function Permission(&$Data) {
+		?>
+		<section id="content" class="m-t-lg wrapper-md animated fadeIn">
+			<div class="container aside-xl">
+				<div class="logo-container-35px">
+					<a href="/" title="Home">
+						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+					</a>
+				</div>
+				<section class="m-t-lg m-b-lg">
+					<div class="messages">
+						<?php Node\Messages($Data); ?>
+					</div>
+					<section class="panel row panel-default">
+						<header class="panel-heading" style="background: #EDEDED">
+							<img src="/assetserver/admin/assets/images/generic/icons/extappx120.png"
+								width="240px"
+								class="img-responsive text-center"
+								style="margin: 10px auto;">
+						</header>
+						<section class="chat-list panel-body">
+							<h5>
+								<strong><?php echo isset($Data['AppInfo']) ? $Data['AppInfo'] : "UNKNOWN APP" ?></strong>
+								 wants to be able to: 
+								<?php echo isset($Data['AppPermissions']) ? $Data['AppPermissions'] : "UNKNOWN." ?></h5>
+							<hr>
+							<img src="/assetserver/admin/assets/images/generic/icons/shieldx120.png" width="50px" style="float:left" class="m-r-sm">
+							<h5>Your password will not be shared with this app. You'll be able to remove this app from your User Preferences. </h5>
+						</section>
+						<footer class="panel-footer" style="background: #EDEDED; border-top: 2px #CBCBCB solid">
+							<div class="text-right">
+								<a href="#" class="btn btn-primary">Grant Access</a>
+								<a href="#" class="btn btn-default">Deny</a>
+							</div>
+						</footer>
+					</section>
 				</section>
 			</div>
 		</section>

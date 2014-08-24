@@ -41,8 +41,9 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 		/**
 		 * @internal	Parse URI template: DOMAIN/dev/account/[add, remove, verify, confirmEmail.]
 		 */
-		$_GET = array(
-			'Function' => isset($URI[BASE+1]) ? $URI[BASE+1] : False);
+		$_GET = array_merge($_GET, array(
+			'Function' => isset($URI[BASE+1]) ? $URI[BASE+1] : False
+			));
 		Account\init();
 		break;
 	case 'broadcast':
