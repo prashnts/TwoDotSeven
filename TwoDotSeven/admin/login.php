@@ -29,7 +29,8 @@ function init() {
 	elseif( isset($_POST["UserName"]) && isset($_POST["Password"])) {
 		$Response = \TwoDot7\User\Session::Login(array(
 			'UserName' => $_POST['UserName'],
-			'Password' => $_POST['Password']));
+			'Password' => $_POST['Password']
+			));
 		if( $Response['Success']) {
 			// Set Cookie
 			setcookie(
@@ -48,7 +49,8 @@ function init() {
 				'',
 				False,
 				True);
-			header('Location: /');
+			$NextURI = isset($_GET['NextURI']) ? $_GET['NextURI']."?".http_build_query($_GET) : "/twodot7/dash";
+			header("Location: $NextURI");
 		}
 		else {
 			\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(

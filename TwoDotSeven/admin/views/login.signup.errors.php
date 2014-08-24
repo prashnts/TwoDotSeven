@@ -294,7 +294,7 @@ class Render {
 						</section>
 						<footer class="panel-footer" style="background: #EDEDED; border-top: 2px #CBCBCB solid">
 							<div class="text-right">
-								<a href="#" class="btn btn-primary">Grant Access</a>
+								<a href="<?php echo isset($Data['ProceedButtonURI']) ? $Data['ProceedButtonURI'] : "#" ?>" class="btn btn-primary">Grant Access</a>
 								<a href="#" class="btn btn-default">Deny</a>
 							</div>
 						</footer>

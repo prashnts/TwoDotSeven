@@ -40,7 +40,7 @@ const GROUP = 4;
 const CUSTOM = 5;
 
 /**
- * Broadcase Target Default.
+ * Broadcast Target Default.
  */
 const _DEFAULT = 6;
 
