@@ -188,12 +188,16 @@ function init() {
 					</head>
 					<body>
 							Success. Going back to the app.
-						<script type="text/javascript">
-							window.opener.postMessage(JSON.parse(<?php echo "'".json_encode($Response)."'";?>), "*");
-							window.setTimeout(function(){
-								window.close();
-							}, 1000);
-						</script>
+							<script type="text/javascript">
+								try {
+									window.opener.postMessage(JSON.parse(<?php echo "'".json_encode($Response)."'";?>), "*");
+									window.setTimeout(function(){
+										window.close();
+									}, 1000);
+								} catch (e) {
+									document.write(e.getMessage()+"sja");
+								}
+							</script>
 					</body>
 					</html>
 					<?php
