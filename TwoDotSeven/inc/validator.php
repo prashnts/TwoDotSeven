@@ -100,7 +100,7 @@ function Password($Candidate, $_Override = False) {
  * @version	0.0
  */
 function UserName($Candidate, $_Override = True) {
-	$Pattern = "/^[A-Za-z0-9_~-]{5,32}$/";
+	$Pattern = "/^[A-Za-z]{1}[A-Za-z0-9_]{5,32}$/";
 	$Result = (bool)(preg_match($Pattern, $Candidate));
 	if($_Override)
 		return $Result ? strtolower($Candidate) : False;
