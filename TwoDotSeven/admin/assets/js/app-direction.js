@@ -17,12 +17,19 @@ function GetUserListMarkup(Page) {
             $('*').css('cursor','wait');
         },
         success: function(Response) {
+            console.log(3);
             $('#REST_UserManagementTable').removeClass('Blur');
+            console.log(4);
             $('#UserListAJAXLoader').fadeOut(200);
-            $("#REST_UserManagementPageLocation").html(Response.PageLocation); 
+            console.log(5);
+            $("#REST_UserManagementPageLocation").html(Response.PageLocation);
+            console.log(6); 
             $("#REST_UserManagementPagination").html(Response.Pagination); 
+            console.log(7);
             $("#REST_UserManagementTable").html(Response.Table);
+            console.log(8);
             $('*').css('cursor','');
+            console.log(9);
             $("a[name=Pagination]").click(function() {
                 console.log($(this).attr('data-next'));
                 GetUserListMarkup($(this).attr('data-next'));

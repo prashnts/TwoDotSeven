@@ -245,8 +245,8 @@ class Render {
 					<div class="text-center m-t m-b">
 						<a href="/twodot7/recovery/start" id="MoodBlur">
 							<small>Forgot password?</small>
-						</a>
-					</div>
+						</a
+>					</div>
 					<p class="text-muted text-center litetxt">
 						<small id="MoodBlur">No Account?</small>
 					</p>
@@ -256,7 +256,7 @@ class Render {
 		</section>
 		<footer id="footer">
 			<div class="text-center padder clearfix">
-				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
 		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
@@ -304,7 +304,7 @@ class Render {
 		</section>
 		<footer id="footer">
 			<div class="text-center padder clearfix">
-				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
 		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
@@ -395,7 +395,7 @@ class Render {
 		</section>
 		<footer id="footer">
 			<div class="text-center padder clearfix">
-				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
 		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
@@ -430,7 +430,7 @@ class Render {
 		</section>
 		<footer id="footer">
 			<div class="text-center padder clearfix">
-				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
 		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
@@ -480,7 +480,7 @@ class Render {
 		</section>
 		<footer id="footer">
 			<div class="text-center padder clearfix">
-				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
 		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
@@ -530,7 +530,7 @@ class Render {
 		</section>
 		<footer id="footer">
 			<div class="text-center padder clearfix">
-				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
 		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
@@ -588,7 +588,7 @@ class Render {
 		</section>
 		<footer id="footer">
 			<div class="text-center padder clearfix">
-				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
 		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
@@ -639,7 +639,7 @@ class Render {
 		</section>
 		<footer id="footer">
 			<div class="text-center padder clearfix">
-				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
 		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
@@ -696,7 +696,7 @@ class Render {
 		</section>
 		<footer id="footer">
 			<div class="text-center padder clearfix">
-				<p><small>Developed in the <a href="#">IT Innovations Lab</a> | <a href="#">Cluster Innovation Centre</a>, <a href="#">University of Delhi</a></small></p>
+				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
 		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>

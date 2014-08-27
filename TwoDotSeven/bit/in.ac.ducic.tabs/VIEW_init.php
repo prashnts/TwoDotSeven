@@ -22,16 +22,7 @@ function _Interface($Data = False) {
 				?>
 			</div>
 			<div class="col-xs-6">
-				<div class="btn-group pull-right" data-toggle="buttons">
-					<label class="btn btn-primary active"  style="">
-						<input type="radio" name="options" id="option1">
-						Grid
-					</label>
-					<label class="btn btn-success"  style="">
-						<input type="radio" name="options" id="option2">
-						List
-					</label>
-				</div>
+
 			</div>
 		</div>
 		<div class="row padder">
