@@ -358,6 +358,14 @@ class REST {
 	 */
 	const PARAMDEPENDS = '<span style="color:#0A6">Depends on Parent</span>';
 
+	/**
+	 * Dumps the Error Message to the Browser.
+	 * @param	Mixed $Data The Error Data.
+	 * @return	bool
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140829
+	 * @version	0.1
+	 */
 	public static function PutError($Data) {
 		header('HTTP/1.0 450 Invalid Request.', true, 450);
 		echo "<pre>";
@@ -372,9 +380,8 @@ class REST {
 					(isset($value[2]) ? " (".$value[2].") " : " (".self::PARAMOPTIONAL.")");
 			echo "\n";
 		}
-		echo "<strong>Additionally, following Errors occurred while processing your request:</strong>\n";
+		echo (isset($Data['SessionError']) && $Data['SessionError']) ? "<strong>Additionally, following Error occurred while processing your request:</strong>\n" : "";
 		echo isset($Data['SessionError']) && $Data['SessionError'] ? "\t<span style=\"color: #A60\">Session cannot be created or Invalid Session Data Supplied.</span>\n" : "";
-		echo isset($Data['AUTHError']) && $Data['AUTHError'] ? "\t<span style=\"color: #A60\">AUTH ERROR. User Cannot be authenticated.</span>\n" : "";
 		echo "<strong>Response Headers:</strong>\n";
 		echo "\t<span style=\"color: #A60\">HTTP/1.0 Status: 450 Invalid Request</span>\n";
 		foreach (headers_list() as $key => $value) {
