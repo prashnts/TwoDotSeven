@@ -330,6 +330,62 @@ class Redundant {
 }
 
 /**
+* 
+*/
+class REST {
+	
+	/**
+	 * Parameter Span output style.
+	 * String PARAMREQUIRED <span style="color:#A60">Required</span>
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.1 20140829
+	 */
+	const PARAMREQUIRED = '<span style="color:#A60">Required</span>';
+	
+	/**
+	 * Parameter Span output style.
+	 * String PARAMOPTIONAL <span style="color:#04F">Optional</span>
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.1 20140829
+	 */
+	const PARAMOPTIONAL = '<span style="color:#04F">Optional</span>';
+	
+	/**
+	 * Parameter Span output style.
+	 * String PARAMDEPENDS <span style="color:#0A6">Depends on Parent</span>
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.1 20140829
+	 */
+	const PARAMDEPENDS = '<span style="color:#0A6">Depends on Parent</span>';
+
+	public static function PutError($Data) {
+		header('HTTP/1.0 450 Invalid Request.', true, 450);
+		echo "<pre>";
+		echo " ______            ____\n";
+		echo "/_  __/    _____  /_  /\n";
+		echo " / / | |/|/ / _ \_ / / \n";
+		echo "/_/  |__,__/\___(_)_/  \n\n";
+		echo "Usage\t<strong>".(isset($Data['Usage']) ? $Data['Usage'] : '')."</strong>\n";
+		foreach ((isset($Data['Params']) ? $Data['Params'] : array()) as $key => $value) {
+			echo	(isset($value[1]) ? $value[1] : "GET")."\t".
+					(isset($value[0]) ? $value[0] : "ERROR IN GETTING THE VARIABLE").
+					(isset($value[2]) ? " (".$value[2].") " : " (".self::PARAMOPTIONAL.")");
+			echo "\n";
+		}
+		echo "<strong>Additionally, following Errors occurred while processing your request:</strong>\n";
+		echo isset($Data['SessionError']) && $Data['SessionError'] ? "\t<span style=\"color: #A60\">Session cannot be created or Invalid Session Data Supplied.</span>\n" : "";
+		echo isset($Data['AUTHError']) && $Data['AUTHError'] ? "\t<span style=\"color: #A60\">AUTH ERROR. User Cannot be authenticated.</span>\n" : "";
+		echo "<strong>Response Headers:</strong>\n";
+		echo "\t<span style=\"color: #A60\">HTTP/1.0 Status: 450 Invalid Request</span>\n";
+		foreach (headers_list() as $key => $value) {
+			echo "\t$value\n";
+		}
+		echo "</pre>";
+		die();
+	}
+}
+
+/**
  * Class wrapper for JSON-fy-able Data Structure manipulation.
  * @internal Moved From \User\Session
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
