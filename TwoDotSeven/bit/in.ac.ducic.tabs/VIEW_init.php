@@ -53,8 +53,8 @@ function _Interface($Data = False) {
 						<p class="h5 m-t-sm"><?php echo $Sub2; ?></p>
 
 						<span class="btn btn-xs btn-success m-t-sm" onclick="Utils.GetMoreDetails(<?php echo $Card['ID']; ?>);">More</span>
-						<?php echo ($Data['Buttons']['Add']) ? "<span class=\"btn btn-xs btn-primary m-t-sm\" data-tabs-id=\"{$Card['ID']}\" id=\"CardUpdateI{$Card['ID']}\" onclick=\"ModalShowUpdateWindow(this.id);\">Update</span>" : ""; ?>
-						<?php echo ($Data['Buttons']['Add']) ? "<span class=\"btn btn-xs btn-default m-t-sm pull-right\" data-tabs-id=\"{$Card['ID']}\" id=\"CardDelI{$Card['ID']}\" onclick=\"Utils.DeleteCard(this.id);\">Delete</span>" : ""; ?>
+						<?php echo ($Data['Buttons']['Update']) ? "<span class=\"btn btn-xs btn-primary m-t-sm\" data-tabs-id=\"{$Card['ID']}\" id=\"CardUpdateI{$Card['ID']}\" onclick=\"ModalShowUpdateWindow(this.id);\">Update</span>" : ""; ?>
+						<?php echo ($Data['Buttons']['Delete']) ? "<span class=\"btn btn-xs btn-default m-t-sm pull-right\" data-tabs-id=\"{$Card['ID']}\" id=\"CardDelI{$Card['ID']}\" onclick=\"Utils.DeleteCard(this.id);\">Delete</span>" : ""; ?>
 					</div>
 				</div>
 				<?php

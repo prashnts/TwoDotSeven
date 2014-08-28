@@ -30,9 +30,16 @@ function init() {
 					)
 				);
 
-			if (!($AdminFlag || $UserFlag)) {
+			$SuperUserFlag = \TwoDot7\User\Access::Check(
+				array(
+					'UserName' => \TwoDot7\User\Session::Data()['UserName'],
+					'Domain' => 'in.ac.ducic.tabs.superuser'
+					)
+				);
 
-				\TwoDot7\Util\Log('User '.\TwoDot7\User\Session::Data()['UserName']. ' attempted acess to Bit TABS interface Page.', 'ALERT');
+			if (!($AdminFlag || $UserFlag || $SuperUserFlag)) {
+
+				\TwoDot7\Util\Log('User '.\TwoDot7\User\Session::Data()['UserName']. ' attempted access to Bit TABS interface Page.', 'ALERT');
 
 				\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
 					'Call' => 'Error',
@@ -51,13 +58,14 @@ function init() {
 				'DeleteButtons' => false,
 				'UpdateButtons' => false
 				);
+
 			$Contacts = Utils::getArray();
 
 			return array(
 				'Call' => '_Interface',
 				'AddressBookData' => Utils::getArray(),
 				'Buttons' => array(
-					'Add' => $AdminFlag,
+					'Add' => ($AdminFlag || $SuperUserFlag),
 					'Delete' => $AdminFlag,
 					'Update' => $AdminFlag
 					),
