@@ -408,7 +408,7 @@ class Token {
 	 * @return	-string- JSON string containing Tokens.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29062014
+	 * @since	v0.0 20140629
 	 * @version	0.0
 	 */
 	public static function Add($Data, $RollOver = False) {
@@ -437,36 +437,34 @@ class Token {
 
 	/**
 	 * This function Checks if a Key exists in the JSON string.
-	 * @param	$Data -array- JSON initial string and Token to be checked.
-	 * @return	bool Self Explanatory.
+	 * @param	Mixed $Data JSON initial string and Token to be checked.
+	 * @param	Bool $Strict If specified, checks against ALL the token. (AND Operator).
+	 * @return	Bool
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29062014
-	 * @version	0.0
+	 * @since	v0.0 20140629
+	 * @version	0.2
 	 */
-	public static function Exists($Data) {
+	public static function Exists($Data, $Strict = False) {
 		if( isset($Data['JSON']) &&
 			isset($Data['Token'])) {
 			$Tokens = json_decode($Data['JSON']);
 			if(is_array($Tokens)) {
 				if (is_array($Data['Token'])) {
-					$Success = True;
+					$Success = False;
 					foreach ($Data['Token'] as $TokenVal) {
 						if (!in_array($TokenVal, $Tokens)) {
-							$Success = False;
-						}
+							if ($Strict) return False;
+						} else $Success = $Success || True;
 					}
 					return $Success;
-				}
-				else {
+				} else {
 					return in_array($Data['Token'], $Tokens);
 				}
-			}
-			else {
+			} else {
 				return False;
 			}
-		}
-		else {
+		} else {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\Util\\Token::Exists");
 		}
 	}
@@ -501,7 +499,7 @@ class Token {
 	 * @return	-boolean- Self Explanatory.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29062014
+	 * @since	v0.0 20140629
 	 * @version	0.0
 	 */
 	public static function Get($Data) {
@@ -525,7 +523,7 @@ class Token {
 	 * @return	-string- JSON string containing Tokens.
 	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
 	 * @throws	IncompleteArgument Exception.
-	 * @since	v0.0 29062014
+	 * @since	v0.0 20140629
 	 * @version	0.0
 	 */
 	public static function Remove($Data) {
