@@ -45,3 +45,30 @@ function RenderError($Exception) {
 	die();
 	return 0;
 }
+
+namespace TwoDot7\Exception\Error;
+
+function Generic() {
+	return array('Success' => False);
+}
+
+class NotFound {
+	public static function UserName() {
+		return array(
+			'Success' => False,
+			'Error' => "Unknown Username"
+		);
+	}
+	public static function Bit() {
+		return array(
+			'Success' => False,
+			'Error' => "Unknown Bit"
+		);
+	}
+	public static function Group() {
+		return array(
+			'Success' => False,
+			'Error' => "Unknown Group"
+		);
+	}
+}
