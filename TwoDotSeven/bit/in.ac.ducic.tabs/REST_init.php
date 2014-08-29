@@ -8,7 +8,7 @@ function init() {
 		case 'addIntoAddressBook';
 
 			\TwoDOt7\User\REST::AUTH(array(
-				'Token' => 'in.ac.ducic.tabs.admin'
+				'Token' => array('in.ac.ducic.tabs.admin', 'in.ac.ducic.tabs.superuser')
 				));
 
 			if (!isset($_POST['FirstName']) &&

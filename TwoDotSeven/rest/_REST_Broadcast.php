@@ -9,81 +9,81 @@ namespace TwoDot7\REST\Broadcast;
 function init() {
 	switch ($_GET['Action']) {
 		case 'post':
-			if (!(isset($_GET['OriginType']) && $_GET['OriginType']) ||
-				!isset($_POST['TargetType'])) {
-				header('HTTP/1.0 450 Invalid Request.', true, 450);
-				echo "<pre>";
-				echo "usage /dev/broadcast/post/[OriginType]/[Origin]\n";
-				echo "Incomplete Request. Please include following in your request:\n";
-				echo "GET: OriginType (<span style=\"color: #F00\">Required</span>)\n";
-				echo "GET: Origin (<span style=\"color: #0A6\">Depends on OriginType</span>)\n";
-				echo "POST: TargetType (<span style=\"color: #F00\">Required</span>)\n";
-				echo "POST: Target (<span style=\"color: #0A6\">Depends on TargetType</span>)\n";
-				echo "</pre>";
-				die();
-			}
 
-			switch (strtolower($_GET['OriginType'])) {
+			$ToggleError =  False;
+			if (!isset($_POST['BroadcastText'])) $ToggleError = True;
+			if (!\TwoDot7\User\Session::Exists()) $ToggleError = True;
+			if (isset($_POST['TargetType'])) switch ($_POST['TargetType']) {
 				case 'user':
+				case 'group':
+				case 'custom':
 				case \TwoDot7\Broadcast\USER:
+				case \TwoDot7\Broadcast\GROUP:
+				case \TwoDot7\Broadcast\CUSTOM:
+					# Normalize the Request Variables.
+					if (!isset($_POST['Target'])) $ToggleError = True;
+					else $_POST['Target'] = preg_split("/[&]/", $_POST['Target']);
 
-					// check the target.
-					switch (strtolower($_POST['TargetType'])) {
-						case 'user':
-						case \TwoDot7\Broadcast\USER:
-							$_POST['TargetType'] = \TwoDot7\Broadcast\USER;
-							$_POST['Target'] = preg_split("/[&]/", isset($_POST['Target']) ? $_POST['Target'] : "");
-							break;
+					if ($_POST['TargetType'] === 'user') $_POST['TargetType'] = \TwoDot7\Broadcast\USER;
+					elseif ($_POST['TargetType'] === 'group') $_POST['TargetType'] = \TwoDot7\Broadcast\GROUP;
+					else $_POST['TargetType'] = \TwoDot7\Broadcast\CUSTOM;
 
-						case 'group':
-						case \TwoDot7\Broadcast\GROUP:
-							$_POST['TargetType'] = \TwoDot7\Broadcast\USER;
-							$_POST['Target'] = preg_split("/[&]/", isset($_POST['Target']) ? $_POST['Target'] : "");
-							break;
-							
-						case 'custom':
-						case \TwoDot7\Broadcast\CUSTOM:
-							$_POST['TargetType'] = \TwoDot7\Broadcast\CUSTOM;
-							$_POST['Target'] = False;
-							break;
-
-						case 'default':
-						case \TwoDot7\Broadcast\_DEFAULT:
-						default:
-							$_POST['TargetType'] = \TwoDot7\Broadcast\_DEFAULT;
-							$_POST['Target'] = False;
-					}
-
-					$OriginOverride = isset($_POST['OverrideUserName']) && \TwoDot7\User\Shortcut::IsSysAdmin() && isset($_POST['Origin']);
-
-					$_POST['Visible'] = isset($_POST['Visible']) ? $_POST['Visible'] : 0;
-
-					$AddRequest = array(
-						'OriginType' => \TwoDot7\Broadcast\USER,
-						'Origin' => $OriginOverride ? $_POST['Origin'] : \TwoDot7\User\Session::Data()['UserName'],
-						'TargetType' => $_POST['TargetType'],
-						'Target' => $_POST['Target'],
-						'Visible' => $_POST['Visible'],
-						'Data' => array('BroadcastText' => $_POST['BroadcastText'])
-						);
-
-					$Response = \TwoDot7\Broadcast\Action::Add($AddRequest);
-
-					if ($Response['Success']) {
-						header('HTTP/1.0 251 Operation completed successfully.', true, 251);
-						header('Content-Type: application/json');
-						echo json_encode($Response);
-					} else {
-						header('HTTP/1.0 261 Bad Request. Operation cannot be completed.', true, 261);
-						header('Content-Type: application/json');
-						echo json_encode('NOPE');
-					}
-					die();
 					break;
 				
 				default:
+					$ToggleError = True;
 					break;
+			} else {
+				$_POST['TargetType'] = \TwoDot7\Broadcast\_DEFAULT;
+				$_POST['Target'] = array();
 			}
+			if (isset($_POST['Visible'])) switch ($_POST['Visible']) {
+				case 'private':
+					$_POST['Visible'] = \TwoDot7\Broadcast\_PRIVATE;
+					break;
+				case 'public':
+					$_POST['Visible'] = \TwoDot7\Broadcast\_PUBLIC;
+					break;
+				default:
+					$_POST['Visible'] = \TwoDot7\Broadcast\_PUBLIC;
+			} else $_POST['Visible'] = \TwoDot7\Broadcast\_PUBLIC;
+
+			if ($ToggleError) {
+				\TwoDot7\Util\REST::PutError(array(
+					'Params' => array(
+						array("BroadcastText", "POST", \TwoDot7\Util\REST::PARAMREQUIRED),
+						array("TargetType", "GET", \TwoDot7\Util\REST::PARAMOPTIONAL),
+						array("Target", "GET", \TwoDot7\Util\REST::PARAMDEPENDS),
+						array("Visible", "POST", \TwoDot7\Util\REST::PARAMOPTIONAL),
+					),
+					'Usage' => "/dev/broadcast/post/[TargetType/Target]",
+					'SessionError' => !\TwoDot7\User\Session::Exists()
+				));
+			}
+
+			$AddRequest = array(
+				'OriginType' => \TwoDot7\Broadcast\USER,
+				'Origin' => \TwoDot7\User\Session::Data()['UserName'],
+				'TargetType' => $_POST['TargetType'],
+				'Target' => $_POST['Target'],
+				'Visible' => $_POST['Visible'],
+				'Data' => array('BroadcastText' => $_POST['BroadcastText'])
+				);
+
+			$Response = \TwoDot7\Broadcast\Action::Add($AddRequest);
+
+			if ($Response['Success']) {
+				header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+				header('Content-Type: application/json');
+				echo json_encode($Response);
+			} else {
+				header('HTTP/1.0 261 Bad Request. Operation cannot be completed.', true, 261);
+				header('Content-Type: application/json');
+				echo json_encode('NOPE');
+			}
+			die();
+			break;
+
 			break;
 		default:
 			header('HTTP/1.0 450 Invalid Request.', true, 450);

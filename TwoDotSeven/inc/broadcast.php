@@ -45,6 +45,15 @@ const CUSTOM = 5;
 const _DEFAULT = 6;
 
 /**
+ * Broadcast Visibility Private.
+ */
+const _PRIVATE = 7;
+/**
+ * Broadcast Visibility Public.
+ */
+const _PUBLIC = 8;
+
+/**
  * Action wrapper class for Broadcasts.
  */
 class Action {
