@@ -41,15 +41,18 @@ const CUSTOM = 5;
 
 /**
  * Broadcast Target Default.
+ * const _DEFAULT 6
  */
 const _DEFAULT = 6;
 
 /**
  * Broadcast Visibility Private.
+ * const _PRIVATE 7
  */
 const _PRIVATE = 7;
 /**
  * Broadcast Visibility Public.
+ * const _PUBLIC 8
  */
 const _PUBLIC = 8;
 
@@ -93,50 +96,50 @@ class Action {
 		} else throw new \TwoDot7\Exception\IncompleteArgument("OriginType is not specified.");
 
 		if (isset($Data['TargetType'])) switch ($Data['TargetType']) {
-				case \TwoDot7\Broadcast\USER:
-					if (!isset($Data['Target'])) {
-						throw new \TwoDot7\Exception\IncompleteArgument("'Target' is required argument.", 1);
-					}
-					elseif (is_array($Data['Target'])) {
-						;
-					} elseif (is_string($Data['Target'])) {
-						$Data['Target'] = array($Data['Target']);
-					} else {
-						throw new \TwoDot7\Exception\InvalidArgument("Argument 'Target' is not valid.");
-					}
+			case \TwoDot7\Broadcast\USER:
+				if (!isset($Data['Target'])) {
+					throw new \TwoDot7\Exception\IncompleteArgument("'Target' is required argument.", 1);
+				}
+				elseif (is_array($Data['Target'])) {
+					;
+				} elseif (is_string($Data['Target'])) {
+					$Data['Target'] = array($Data['Target']);
+				} else {
+					throw new \TwoDot7\Exception\InvalidArgument("Argument 'Target' is not valid.");
+				}
 
-					foreach ($Data['Target'] as $UserName) {
-						if (!\TwoDot7\Util\Redundant::UserName($UserName)) 
-							return \TwoDot7\Exception\Error\NotFound::UserName();
-					}
+				foreach ($Data['Target'] as $UserName) {
+					if (!\TwoDot7\Util\Redundant::UserName($UserName)) 
+						return \TwoDot7\Exception\Error\NotFound::UserName();
+				}
 
-					$Data['Target'] = json_encode($Data['Target']);
-					break;
+				$Data['Target'] = json_encode($Data['Target']);
+				break;
 
-				case \TwoDot7\Broadcast\GROUP:
-					if (!isset($Data['Target'])) {
-						throw new \TwoDot7\Exception\IncompleteArgument("'Target' is required argument.", 1);
-					}
-					elseif (is_array($Data['Target'])) {
-						;
-					} elseif (is_string($Data['Target'])) {
-						$Data['Target'] = array($Data['Target']);
-					} else {
-						throw new \TwoDot7\Exception\InvalidArgument("Argument 'Target' is not valid.");
-					}
+			case \TwoDot7\Broadcast\GROUP:
+				if (!isset($Data['Target'])) {
+					throw new \TwoDot7\Exception\IncompleteArgument("'Target' is required argument.", 1);
+				}
+				elseif (is_array($Data['Target'])) {
+					;
+				} elseif (is_string($Data['Target'])) {
+					$Data['Target'] = array($Data['Target']);
+				} else {
+					throw new \TwoDot7\Exception\InvalidArgument("Argument 'Target' is not valid.");
+				}
 
-					foreach ($Data['Target'] as $Group) {
-						if (!\TwoDot7\Util\Redundant::Group($Group)) 
-							return \TwoDot7\Exception\Error\NotFound::Group();
-					}
+				foreach ($Data['Target'] as $Group) {
+					if (!\TwoDot7\Util\Redundant::Group($Group)) 
+						return \TwoDot7\Exception\Error\NotFound::Group();
+				}
 
-					$Data['Target'] = json_encode($Data['Target']);
-					break;
+				$Data['Target'] = json_encode($Data['Target']);
+				break;
 
-				case \TwoDot7\Broadcast\CUSTOM:
-				default:
-					if (isset($Data['Target'])) \TwoDot7\Util\Log("WARNING: Target not supported for CUSTOM broadcasts.", "DEBUG");
-					$Data['Target'] = json_encode(array());
+			case \TwoDot7\Broadcast\CUSTOM:
+			default:
+				if (isset($Data['Target'])) \TwoDot7\Util\Log("WARNING: Target not supported for CUSTOM broadcasts.", "DEBUG");
+				$Data['Target'] = json_encode(array());
 		} else throw new \TwoDot7\Exception\InvalidArgument("TargetType is not a valid type.");
 		
 		if (isset($Data['Visible'])) switch ($Data['Visible']) {
@@ -169,9 +172,19 @@ class Action {
 	public static function Update() {
 		// Updates a broadcast
 	}
+}
 
-	public static function CreateFeed() {
-		// Creates the Feed.
+class Feed{
+	public static function _Public($Timestamp) {
+		$Query = "SELECT * FROM _broadcast WHERE Visible = :Visible ORDER BY ID DESC LIMIT 2 OFFSET 2";
+		$Response = \TwoDot7\Database\Handler::Exec($Query, array(
+			'Visible' => _PUBLIC
+			))->fetchAll();
+		return json_encode($Response, JSON_PRETTY_PRINT);
+	}
+
+	public static function _User($Timestamp) {
+		//
 	}
 }
 
