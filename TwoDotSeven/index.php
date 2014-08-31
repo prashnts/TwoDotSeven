@@ -31,8 +31,8 @@ _Import("admin/broadcast.php");
 _Import("admin/dashboard.php");
 _Import("admin/administration.php");
 
-_Import("admin/views/login.signup.errors.php");
-_Import("admin/views/dash.broadcast.bits.php");
+_Import("../data/core/views/login.signup.errors.php");
+_Import("../data/core/views/dash.broadcast.bits.php");
 
 # Parse incoming URI and then process it.
 $URI = preg_split('/[\/\?]/', preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']));
