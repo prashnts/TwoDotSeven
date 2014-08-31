@@ -1,0 +1,466 @@
+.array{
+	background:transparent; 
+	text-align:center; 
+	color:#FFF;
+}
+.array::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #999;
+}
+.array:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #999;
+}
+.array::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #999;
+}
+.array:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #999;
+}
+
+/* Hover on Logo Effect */
+
+.logo-container-35px {
+	height: 35px;
+	width: 100%;
+	text-align: center;
+	overflow: hidden;
+}
+
+.logo-container-35px img {
+	position: relative;
+	text-align: center;
+	top: 0px;
+	/*transition*/
+	-webkit-transition:top .2s ease-in-out;
+	-moz-transition:top .2s ease-in-out;
+	-o-transition:top .2s ease-in-out;
+	transition:top .2s ease-in-out;
+}
+.logo-container-35px img:hover {
+    top: -35px;
+}
+
+
+.darktxt {
+	color: #000;
+}
+.litetxt {
+	color: #FFF !important;
+}
+.liteRedField {
+	background: #FFCDCD;
+}
+.liteGreenField {
+	background: #C4E7FF;
+}
+.liteBlueField {
+	background: #B6E7D6;
+}
+
+.Img-Make-Responsive {
+	max-width: 100%;
+	height: auto;
+}
+
+.styled div {
+	display: inline-block;
+	margin-left: 10px;
+	font-size: 30px;
+	font-weight: 100;
+	line-height: 1;
+	text-align: right;
+}
+/* IE7 inline-block hack */
+*+html .styled div{
+	display: inline;
+	zoom: 1;
+}
+.styled div:first-child {
+	margin-left: 0;
+}
+.styled div span {
+	display: block;
+	border-top: 1px solid;
+	padding-top: 3px;
+	font-size: 12px;
+	font-weight: normal;
+	text-transform: uppercase;
+	text-align: left;
+}
+
+.go-transparent {
+	background:transparent; 
+	color:#FFF; 
+	width:100%; 
+	max-width:100%;
+	overflow: auto;
+}
+.go-left {
+	text-align:left;
+}
+.go-right {
+	text-align:right;
+}
+.go-center {
+	text-align:center;
+}
+
+.widget-transparent {
+	background: #3C763D rgb(60,118,60);
+	background: rgba(60,118,180,0.9);
+	color: #FFF;
+}
+
+.position-hack {
+	position: relative;
+	border-radius: 5px;
+	z-index: 10;
+}
+
+.Footer-Hack {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	height: 10px;
+}
+
+.alert-danger > p > a {
+	color: #6C0300 !important;
+}
+
+.fix-height-header-hack {
+	height: 60px !important;
+}
+
+.fix-position-header-hack {
+	top: 60px !important;
+}
+
+.Field-Override-Hack {
+	padding: 5px;
+}
+
+.Field-Margin-Override {
+	margin: 0;
+}
+
+.Input-Field-Override-Hack {
+	background: transparent !important;
+	border: 0;
+}
+
+.No-Margin-Padding-Override-Hack{
+	margin: 0;
+	padding: 0;
+}
+
+.Login-Message-Persistant {
+	margin-top: 30px;
+	margin-bottom: 20px;
+}
+
+.set-font-Open-Sans {
+	font-family: 'Kite One',Helvetica,Arial,sans-serif;
+}
+
+
+/* Profile Page Assets Begin Here. */
+
+/* Background Bases */
+.UserProfileBackgroundEdit {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	border-radius: 5px;
+	z-index: -1;
+}
+
+.ColorUndefined {
+	background: #36393F;
+}
+
+.ColorLoading {
+	background: #0D0F3F;
+}
+
+.ColorStudent {
+	background: #0A2E46;
+}
+
+.ColorFaculty {
+	background: #053F30;
+}
+
+.ColorStaff {
+	background: #1F0146;
+}
+
+.ColorAdmin {
+	background: #0D0F15;
+}
+
+
+/* END Background Bases */
+/* END Profile Page Assets */
+
+
+@font-face {
+  font-family: 'Kite One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Kite One'), local('KiteOne-Regular'), url(../fonts/KiteOne.woff) format('woff');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'), url(../fonts/LatoReg.woff) format('woff');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Lato Italic'), local('Lato-Italic'), url(../fonts/LatoItalic.woff) format('woff');
+}
+@font-face {
+  font-family: 'Josefin Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Josefin Sans'), local('JosefinSans'), url(../fonts/JosefinSansReg.woff) format('woff');
+}
+@font-face {
+  font-family: 'Josefin Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Josefin Sans Italic'), local('JosefinSans-Italic'), url(../fonts/JosefinSansItalic.woff) format('woff');
+}
+
+.tm-tag {
+	color: #555555;
+	background-color: #f5f5f5;
+	border: #bbbbbb 1px solid;
+	display: inline-block;
+	border-radius: 2px;
+	margin: 0 5px 5px 0;
+	padding: 4px;
+	text-decoration: none;
+	vertical-align: middle;
+}
+.tm-tag .tm-tag-remove {
+	color: #ffffff;
+	font-weight: bold;
+	margin-left: 4px;
+	opacity: 0.8;
+}
+.tm-tag .tm-tag-remove:hover {
+	color: #ffffff;
+	text-decoration: none;
+	opacity: 1;
+}
+.tm-tag.tm-tag-success {
+	color: #ffffff;
+	background-color: #3DCFAA;
+	border-color: transparent;
+}
+.table-responsive {
+	position: relative;
+}
+.AJAXLoader {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	min-height: 200px;
+	top: 0;
+	left: 0;
+	background: #f2f4f8;
+	padding: 50px 10% 50px 10%;
+	opacity: 0.6;
+	text-align: center;
+	display: none;
+	z-index: 22;
+}
+.AJAXLoadError {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	min-height: 200px;
+	top: 0;
+	left: 0;
+	background: #f2f4f8;
+	padding: 20px 10% 50px 10%;
+	opacity: 1;
+	text-align: center;
+	display: none;
+	z-index: 22;
+}
+.Blur {
+	-webkit-filter: blur(3px); 
+	-moz-filter: blur(3px);
+	-o-filter: blur(3px); 
+	-ms-filter: blur(3px);
+}
+/* columns of same height styles */
+.container-xs-height {
+    display:table;
+    padding-left:0px;
+    padding-right:0px;
+}
+.row-xs-height {
+    display:table-row;
+}
+.col-xs-height {
+    display:table-cell;
+    float:none;
+}
+@media (min-width: 768px) {
+    .container-sm-height {
+        display:table;
+        padding-left:0px;
+        padding-right:0px;
+    }
+    .row-sm-height {
+        display:table-row;
+    }
+    .col-sm-height {
+        display:table-cell;
+        float:none;
+    }
+}
+@media (min-width: 992px) {
+    .container-md-height {
+        display:table;
+        padding-left:0px;
+        padding-right:0px;
+    }
+    .row-md-height {
+        display:table-row;
+    }
+    .col-md-height {
+        display:table-cell;
+        float:none;
+    }
+}
+@media (min-width: 1200px) {
+    .container-lg-height {
+        display:table;
+        padding-left:0px;
+        padding-right:0px;
+    }
+    .row-lg-height {
+        display:table-row;
+    }
+    .col-lg-height {
+        display:table-cell;
+        float:none;
+    }
+}
+
+@media (max-width: 768px) {
+	.fill-xs {
+		height: 100%;
+	}
+}
+
+.fill {
+	height: 100%;
+}
+
+.col-top {
+    vertical-align:top;
+}
+.col-middle {
+    vertical-align:middle;
+}
+.col-bottom {
+    vertical-align:bottom;
+}
+
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url(../fonts/SourceSans300.woff2) format('woff2'), url(../fonts/SourceSans300.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url(../fonts/SourceSans400.woff2) format('woff2'), url(../fonts/SourceSans400.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Source Sans Pro Semibold'), local('SourceSansPro-Semibold'), url(../fonts/SourceSans600.woff2) format('woff2'), url(../fonts/SourceSans600.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(../fonts/SourceSans700.woff2) format('woff2'), url(../fonts/SourceSans700.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: italic;
+  font-weight: 300;
+  src: local('Source Sans Pro Light Italic'), local('SourceSansPro-LightIt'), url(../fonts/SourceSans300i.woff2) format('woff2'), url(../fonts/SourceSans300i.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Source Sans Pro Italic'), local('SourceSansPro-It'), url(../fonts/SourceSans400i.woff2) format('woff2'), url(../fonts/SourceSans400i.woff) format('woff');
+}
+
+.card {
+	min-width: 240px;
+	min-height: 300px;
+	background: #FFF;
+	border: 1px solid #555;
+	border-radius: 5px;
+	font-family: 'Source Sans Pro';
+	color: #000;
+	padding: 5px 10px 5px 10px;
+	position: relative;
+	-moz-box-shadow: 1px 0px 10px #CCC, inset 0 0 6px #CCC;
+	-webkit-box-shadow: 1px 0px 10px #CCC, inset 0 0 6px #CCC;
+	box-shadow: 1px 0px 10px #CCC, inset 0 0 6px #CCC;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	cursor: default;
+}
+.card h1, .card h2, .card h3, .card h4, .card h5 {
+	margin: 5px 0 0 0;
+	line-height: 1;
+}
+.card h1 {
+	font-weight: 600;
+	font-size: 2.5em;
+}
+.card h4 {
+	font-weight: 400;
+}
+.card h2 {
+	font-variasnt: small-caps;
+	font-size: 2em;
+	font-weight: 300;
+}
+.card h3 {
+	font-variant: small-caps;
+	font-size: 1.5em;	
+}
+.card .badge {
+	position: absolute;
+	right: 9px;
+	top: -9px;
+}
+.card .m-b {
+	margin-bottom: 5px;
+}
+.card br {
+	margin: 15px 0 15px 0;
+}
