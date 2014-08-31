@@ -504,7 +504,7 @@ class Token {
 	 */
 	public static function Get($Data) {
 		if( isset($Data['JSON'])) {
-			$Tokens = json_decode($Data['JSON']);
+			$Tokens = json_decode($Data['JSON'], True);
 			if(is_array($Tokens)) {
 				return $Tokens;
 			}

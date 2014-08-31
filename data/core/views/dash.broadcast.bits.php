@@ -103,7 +103,6 @@ function Head(&$Data) {
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 	<link rel="stylesheet" href="/data/core/static/css/bootstrap.css" type="text/css" />
 	<link rel="stylesheet" href="/data/core/static/css/animate.css" type="text/css" />
-	<link rel="stylesheet" href="/data/core/static/css/font-awesome.min.css" type="text/css" />
 	<link rel="stylesheet" href="/data/core/static/css/font.css" type="text/css" />
 	<link rel="stylesheet" href="/data/core/static/css/app.css" type="text/css" />
 	<link rel="stylesheet" href="/assetserver/css/backgroundstyles" type="text/css" />

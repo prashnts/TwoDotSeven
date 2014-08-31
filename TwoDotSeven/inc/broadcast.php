@@ -174,17 +174,50 @@ class Action {
 	}
 }
 
-class Feed{
-	public static function _Public($Timestamp) {
-		$Query = "SELECT * FROM _broadcast WHERE Visible = :Visible ORDER BY ID DESC LIMIT 2 OFFSET 2";
+class Feed {
+	public static function _Public($Begin = 0) {
+		$Query = "SELECT * FROM _broadcast WHERE Visible = :Visible AND Timestamp < :Timestamp ORDER BY ID DESC LIMIT 2";
 		$Response = \TwoDot7\Database\Handler::Exec($Query, array(
-			'Visible' => _PUBLIC
-			))->fetchAll();
+			'Visible' => _PUBLIC,
+			'Timestamp' => (!$Begin || $Begin === 0) ? time() : $Begin
+			))->fetchAll(\PDO::FETCH_ASSOC);
 		return json_encode($Response, JSON_PRETTY_PRINT);
 	}
 
-	public static function _User($Timestamp) {
-		//
+	public static function _User($UserName, $Begin = 0) {
+		// Feed FOR a Particular User. Not, OF a user.
+		$DatabaseHandle = new \TwoDot7\Database\Handler;
+
+		$Query = "SELECT * FROM _broadcast WHERE Timestamp < :Timestamp ORDER BY ID DESC LIMIT 15;";
+
+		$Response = $DatabaseHandle->Query($Query, array(
+			'Timestamp' => (!$Begin || $Begin === 0) ? time() : $Begin
+			));
+
+		while ($Row = $Response->fetch(\PDO::FETCH_ASSOC)) {
+			$Push = False;
+			switch ($Row['OriginType']) {
+				case USER:
+					switch ($Row['TargetType']) {
+						case USER:
+							if ($Row['Origin'] == $UserName) $Push = True;
+							if (\TwoDot7\Util\Token::Exists(array(
+								'JSON' => $Row['Target'],
+								'Token' => $UserName
+							))) {
+
+							}
+							break;
+						case _DEFAULT:
+							$Push = True;
+					}
+					break;
+				
+				default:
+					break;
+			}
+			echo $Push ? json_encode($Row, JSON_PRETTY_PRINT) : "no";
+		}
 	}
 }
 
@@ -204,4 +237,12 @@ class Utils {
 	public static function Unpack() {
 		// Unpacks a Packed broadcast data.
 	}
+
+	public static function GetTaggedUserMeta($TagJSON) {
+		if (!is_array($TagJSON)) return False;
+		$TaggedUsers = \TwoDot7\Util\Token::Get(array('JSON' => $TagJSON));
+		$TaggedUserQuery = "SELECT ID, UserName, EMail, Status FROM _user WHERE false ".str_repeat("OR UserName = ? ", count($TaggedUsers));
+		return \TwoDot7\Database\Handler::Exec($TaggedUserQuery, $TaggedUsers);
+	}
+
 }

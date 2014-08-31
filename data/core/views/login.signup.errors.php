@@ -67,9 +67,13 @@ function Head(&$Data) {
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-	<link rel="stylesheet" href="/TwoDotSeven/admin/assets/css/base.css" type="text/css" />
-	<link rel="stylesheet" href="/TwoDotSeven/admin/assets/css/style.css" type="text/css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<link rel="stylesheet" href="/data/core/static/css/bootstrap.css" type="text/css" />
+	<link rel="stylesheet" href="/data/core/static/css/animate.css" type="text/css" />
+	<link rel="stylesheet" href="/data/core/static/css/font.css" type="text/css" />
+	<link rel="stylesheet" href="/data/core/static/css/app.css" type="text/css" />
 	<link rel="stylesheet" href="/assetserver/css/backgroundstyles" type="text/css" />
+	<link rel="stylesheet" href="/data/core/static/css/style.css" type="text/css" />
 
 	<script src="/TwoDotSeven/admin/assets/js/jquery.js"></script>
 
@@ -98,6 +102,16 @@ function Messages(&$Data) {
 		}
 	}
 	else;
+}
+
+function JS() {
+	echo '<script src="/data/core/static/js/jquery.min.js"></script>';
+	echo '<script src="/data/core/static/js/bootstrap.js"></script>';
+	echo '<script src="/data/core/static/js/app.js"></script>';
+	echo '<script src="/data/core/static/js/app-direction.js"></script>';
+	echo '<script src="/data/core/static/js/slimscroll/jquery.slimscroll.min.js"></script>';
+	//echo '<script src="/data/core/static/js/app/SignInUp.js"></script>';
+	//echo '<script src="/data/core/static/js/charts/sparkline/jquery.sparkline.min.js"></script>';
 }
 
 function Mood(&$Data) {
