@@ -187,37 +187,58 @@ class Feed {
 	public static function _User($UserName, $Begin = 0) {
 		// Feed FOR a Particular User. Not, OF a user.
 		$DatabaseHandle = new \TwoDot7\Database\Handler;
+		
+		$Result = array();
+		$Counter = 0;
+		do {
+			$Counter = 0;
+			$Query = "SELECT * FROM _broadcast WHERE Timestamp < :Timestamp ORDER BY ID DESC LIMIT ".\TwoDot7\Config\BROADCAST_FEED_UNIT.";";
 
-		$Query = "SELECT * FROM _broadcast WHERE Timestamp < :Timestamp ORDER BY ID DESC LIMIT 15;";
+			$Response = $DatabaseHandle->Query($Query, array(
+				'Timestamp' => (!$Begin || $Begin === 0) ? time() : $Begin,
+				));
 
-		$Response = $DatabaseHandle->Query($Query, array(
-			'Timestamp' => (!$Begin || $Begin === 0) ? time() : $Begin
-			));
+			while ($Row = $Response->fetch(\PDO::FETCH_ASSOC)) {
+				$Counter++;
+				switch ($Row['OriginType']) {
+					case USER:
+						switch ($Row['TargetType']) {
+							case USER:
+								if ($Row['Origin'] == $UserName ||
+									\TwoDot7\Util\Token::Exists(array(
+										'JSON' => $Row['Target'],
+										'Token' => $UserName
+									))) {
+									$OP = Utils::GetUserMeta(json_encode(array($Row['Origin'])));
+									$Row['Meta']['OP'] = isset($OP[0]) ? $OP[0] : $OP;
+									$Row['Meta']['TaggedUsers'] = Utils::GetUserMeta($Row['Target']);
+									array_push($Result, $Row);
+									break;
+								} else break;
+							case GROUP:
+								// IF Origin == $Username OR user belongs to one of the group.
+							case _DEFAULT:
+							default:
+								if ($Row['Origin'] == $UserName ||
+									$Row['Visible'] == _PUBLIC) {
+									$Row['Meta']['OP'] = Utils::GetUserMeta(json_encode(array($Row['Origin'])));
+									$Row['Meta']['TaggedUsers'] = Utils::GetUserMeta($Row['Target']);
+									array_push($Result, $Row);
+									break;
+								} else break;
+						}
+						break;
+					
+					default:
 
-		while ($Row = $Response->fetch(\PDO::FETCH_ASSOC)) {
-			$Push = False;
-			switch ($Row['OriginType']) {
-				case USER:
-					switch ($Row['TargetType']) {
-						case USER:
-							if ($Row['Origin'] == $UserName) $Push = True;
-							if (\TwoDot7\Util\Token::Exists(array(
-								'JSON' => $Row['Target'],
-								'Token' => $UserName
-							))) {
-
-							}
-							break;
-						case _DEFAULT:
-							$Push = True;
-					}
-					break;
-				
-				default:
-					break;
+						break;
+				}
+				$Begin = $Row['Timestamp'];
 			}
-			echo $Push ? json_encode($Row, JSON_PRETTY_PRINT) : "no";
-		}
+
+		} while ($Counter && count($Result) < \TwoDot7\Config\BROADCAST_FEED_UNIT);
+
+		echo json_encode($Result, JSON_PRETTY_PRINT);
 	}
 }
 
@@ -238,11 +259,11 @@ class Utils {
 		// Unpacks a Packed broadcast data.
 	}
 
-	public static function GetTaggedUserMeta($TagJSON) {
-		if (!is_array($TagJSON)) return False;
+	public static function GetUserMeta($TagJSON) {
+		if (is_array($TagJSON) || !$TagJSON) return False;
 		$TaggedUsers = \TwoDot7\Util\Token::Get(array('JSON' => $TagJSON));
 		$TaggedUserQuery = "SELECT ID, UserName, EMail, Status FROM _user WHERE false ".str_repeat("OR UserName = ? ", count($TaggedUsers));
-		return \TwoDot7\Database\Handler::Exec($TaggedUserQuery, $TaggedUsers);
+		return \TwoDot7\Database\Handler::Exec($TaggedUserQuery, $TaggedUsers)->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
 }
