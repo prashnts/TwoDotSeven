@@ -26,7 +26,7 @@ function _init($Data = False) {
 	</head>
 	<body>
 		<section class="hbox stretch">
-			<aside class="bg-black aside" id="nav">
+			<aside class="<?php echo isset($Data['NavbarMood']) ? $Data['NavbarMood'] : "bg-black";?> aside" id="nav">
 				<section class="vbox">
 					<header class="header header-md navbar navbar-fixed-top-xs bg" style="z-index:9">
 						<div class="navbar-header">
@@ -108,6 +108,7 @@ function Head(&$Data) {
 	<link rel="stylesheet" href="/assetserver/css/backgroundstyles" type="text/css" />
 	<link rel="stylesheet" href="/data/core/static/css/style.css" type="text/css" />
 
+	<script src="/data/core/static/js/jquery.min.js"></script>
 	<!--[if lt IE 9]>	
 		<script src="/TwoDotSeven/admin/assets/js/ie/html5shiv.js"></script>
 		<script src="/TwoDotSeven/admin/assets/js/ie/respond.min.js"></script>
@@ -117,9 +118,9 @@ function Head(&$Data) {
 }
 
 function JS() {
-	echo '<script src="/data/core/static/js/jquery.min.js"></script>';
 	echo '<script src="/data/core/static/js/bootstrap.js"></script>';
 	echo '<script src="/data/core/static/js/app.js"></script>';
+	echo '<script src="/data/core/static/js/masonry.pkgd.min.js"></script>';
 	echo '<script src="/data/core/static/js/app-direction.js"></script>';
 	echo '<script src="/data/core/static/js/slimscroll/jquery.slimscroll.min.js"></script>';
 	//echo '<script src="/data/core/static/js/app/SignInUp.js"></script>';
@@ -129,30 +130,56 @@ function JS() {
 class Render {
 	public static function Broadcast($Data) {
 		?>
-		<section class="scrollable padder bg-dark  fill">
+		<section class="scrollable padder bg-light  fill">
 			<div class="m-b-md row padder">
 				<div class="col-lg-6">
-					<h3 class="m-b-none">TwoDot7 Broadcasts</h3>
 				</div>
 				<div class="col-lg-6">
 				</div>
 			</div>
-			<div class="row padder">
-				<div class="col-lg-6">
-				<section class="panel bg-light">
-					<form>
-						<textarea class="form-control no-border" rows="3" placeholder="What are you doing..."></textarea>
-					</form>
-					<footer class="panel-footer">
-						<button class="btn btn-info pull-right btn-sm">POST</button>
-						<ul class="nav nav-pills nav-sm">
-							<li><a href="#"><i class="fa fa-camera text-muted"></i></a>
+			<div class="row">
+				<div class="col-lg-8">
+					<section class="panel panel-default">
+						<h4 class="padder">POST A Broadcast</h4>
+						<ul class="list-group">
+							<li class="list-group-item broadcast-card" onclick="$(this).css('margin', '100px 0 10px 0')">
+								<a href="#" class="thumb pull-left m-r-sm">
+								<img src="/assetserver/userNameIcon/p" class="img-circle b-a b-3x b-white">
+								</a>
+								<div class="clear">
+									<a href="#">
+										<span class="text-dark h4">Prashant Sinha</span>
+										<span class="h5">@prashant &bullet;</span>
+										<br>
+										<span class="text-muted">Posted 4 Minutes Ago</span>
+									</a>
+									<hr class="m-t-xs m-b-xs">
+									<p><img src="http://www.thatsitcom.co.za/wp-content/uploads/2012/08/infographics.jpg" class="img-responsive"></p>
+									<p class="text-dark">Hey, what's up?</p>
+								</div>
 							</li>
-							<li><a href="#"><i class="fa fa-video-camera text-muted"></i></a>
+							<li class="bg-dasrk broadcast-card">
+								<a href="#" class="thumb pull-left m-r">
+								<img src="/assetserver/userNameIcon/g" class="img-circle b-a b-3x b-white">
+								</a>
+								<div class="clear">
+									<a href="#"><span class="text-light">Some One</span> @prashant <span class="text-muted">4 Minutes Ago</span></a>
+									<h3 class="m-t-sm">LOL?</h3>
+									<p>LOL!!</p>
+								</div>
+							</li>
+							<li class=" broadcast-card">
+								<a href="#" class="thumb pull-left m-r">
+								<img src="/assetserver/userNameIcon/p" class="img-circle b-a b-3x b-white">
+								</a>
+								<div class="clear">
+									<a href="#"><span class="text-dark">Prashant Sinha</span> @prashant <span class="text-muted">4 Minutes Ago</span></a>
+									<h3 class="m-t-sm">LOL?</h3>
+									<p>LOL!!</p>
+								</div>
 							</li>
 						</ul>
-					</footer>
-				</section>
+					</section>
 				</div>
 			</div>
 		</section>

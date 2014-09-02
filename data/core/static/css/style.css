@@ -464,3 +464,19 @@
 .card br {
 	margin: 15px 0 15px 0;
 }
+
+.broadcast-card {
+	border: 1px solid #eaeef1;
+	position: relative;
+	display: block;
+	padding: 10px;
+	z-index: 10;
+	margin-bottom: -1px;
+	msargin: 5px 0;
+	-webkit-transition: border .081s linear;
+}
+.broadcast-card:hover {
+	cursor: pointer;
+	border-color: #00F;
+	z-index: 111;
+}
