@@ -85,7 +85,7 @@ function init() {
 			break;
 
 		case 'feed':
-				header('Content-Type: application/json');
+			header('Content-Type: application/json');
 			\TwoDot7\Broadcast\Feed::_User(\TwoDot7\User\Session::Data()['UserName']);
 
 			break;

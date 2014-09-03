@@ -209,9 +209,32 @@ class Feed {
 										'JSON' => $Row['Target'],
 										'Token' => $UserName
 									))) {
+
+									$TranslateTargetType = function($i) {
+										switch ($i) {
+											case USER: return 'with';
+											case GROUP: return 'in';
+											default: return '';
+										}
+									};
+									$TranslateVisibleClass = function($i) {
+										switch ($i) {
+											case _PRIVATE: return "fa fa-lock";
+											case _PUBLIC:
+											default: return "fa fa-globe";
+										}
+									};
+
 									$OP = Utils::GetUserMeta(json_encode(array($Row['Origin'])));
 									$Row['Meta']['OP'] = isset($OP[0]) ? $OP[0] : $OP;
 									$Row['Meta']['TaggedUsers'] = Utils::GetUserMeta($Row['Target']);
+									
+									$Row['Target'] = \TwoDot7\Util\Token::Get(array('JSON' => $Row['Target']));
+									$Row['TargetType'] = $TranslateTargetType($Row['TargetType']);
+									
+									$Row['TimeAgo'] = Utils::timeAgo($Row['Timestamp']);
+									$Row['VisibleClass'] = $TranslateVisibleClass($Row['Visible']);
+
 									array_push($Result, $Row);
 									break;
 								} else break;
@@ -221,8 +244,32 @@ class Feed {
 							default:
 								if ($Row['Origin'] == $UserName ||
 									$Row['Visible'] == _PUBLIC) {
-									$Row['Meta']['OP'] = Utils::GetUserMeta(json_encode(array($Row['Origin'])));
+
+									$TranslateTargetType = function($i) {
+										switch ($i) {
+											case USER: return 'with';
+											case GROUP: return 'in';
+											default: return '';
+										}
+									};
+									$TranslateVisibleClass = function($i) {
+										switch ($i) {
+											case _PRIVATE: return "fa fa-lock";
+											case _PUBLIC:
+											default: return "fa fa-globe";
+										}
+									};
+
+									$OP = Utils::GetUserMeta(json_encode(array($Row['Origin'])));
+									$Row['Meta']['OP'] = isset($OP[0]) ? $OP[0] : $OP;
 									$Row['Meta']['TaggedUsers'] = Utils::GetUserMeta($Row['Target']);
+									
+									$Row['Target'] = \TwoDot7\Util\Token::Get(array('JSON' => $Row['Target']));
+									$Row['TargetType'] = $TranslateTargetType($Row['TargetType']);
+									
+									$Row['TimeAgo'] = Utils::timeAgo($Row['Timestamp']);
+									$Row['VisibleClass'] = $TranslateVisibleClass($Row['Visible']);
+
 									array_push($Result, $Row);
 									break;
 								} else break;
@@ -262,8 +309,30 @@ class Utils {
 	public static function GetUserMeta($TagJSON) {
 		if (is_array($TagJSON) || !$TagJSON) return False;
 		$TaggedUsers = \TwoDot7\Util\Token::Get(array('JSON' => $TagJSON));
-		$TaggedUserQuery = "SELECT ID, UserName, EMail, Status FROM _user WHERE false ".str_repeat("OR UserName = ? ", count($TaggedUsers));
-		return \TwoDot7\Database\Handler::Exec($TaggedUserQuery, $TaggedUsers)->fetchAll(\PDO::FETCH_ASSOC);
+		return \TwoDot7\User\Meta::Get($TaggedUsers);
 	}
 
+	/**
+	 * Returns a Pretty Time Ago string from given Timestamp. Returns bare date if
+	 * timestamp is way back in past.
+	 * @param	int $Timestamp The timestamp.
+	 * @return	string The Pretty string.
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @see		\Time()
+	 * @since	v0.0 20140904
+	 * @version	0.1
+	 */
+	public static function timeAgo($Timestamp) {
+		/**
+		 * @internal Get Time Difference and then return the String.
+		 */
+		$Ago = time() - $Timestamp;
+
+		if ($Ago < 60) return "just now";
+		elseif ($Ago < 120) return "a few minutes ago";
+		elseif ($Ago < 3570) return round($Ago / 60)." minutes ago";
+		elseif ($Ago < 86400) return "today, at ".date('g:iA', $Timestamp);
+		elseif ($Ago < 172800) return "yesterday, at ".date('g:iA', $Timestamp);
+		else return date('g:iA, j F Y', $Timestamp);
+	}
 }

@@ -472,6 +472,23 @@
 	box-shadow: none;
 }
 
+.broadcast-post {
+	bordser: 1px solid #eaeef1;
+	baackground: #FFFFFF;
+	position: relative;
+	display: block;
+	padding: 10px 0 10px 10px;
+	z-index: 10;
+	margin-bottom: -1px;
+}
+
+.broadcast-post textarea {
+	resize: none;
+	margin: 0;
+	height: 100px;
+	width: 100%;
+}
+
 .broadcast-card {
 	border: 1px solid #eaeef1;
 	background: #FFFFFF;

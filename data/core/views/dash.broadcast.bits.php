@@ -139,34 +139,26 @@ class Render {
 				<div class="col-lg-6">
 				</div>
 			</div>
+			<div class="row m-b-lg">
+				<div class="col-lg-8">
+					<div class="broadcast-post m-b-lg" id="p">
+						<a href="#" class="thumb pull-left m-r">
+						<img src="/assetserver/userNameIcon/g" class="img-circle b-a b-3x b-white">
+						</a>
+						<div class="clear row No-Margin-Padding-Override-Hack">
+                            <textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here"></textarea>
+                            <button class="btn btn-primary m-t-xs " type="button">POST</button>
+                            <button class="btn btn-primary m-t-xs pull-right " type="button">POST</button>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-lg-8">
 					<section class="panel broadcast-container">
 						<ul class="list-group" id="broadcast-container">
-
-							<li class="broadcast-card broadcast-default" id="p">
-								<a href="#" class="thumb pull-left m-r">
-								<img src="/assetserver/userNameIcon/g" class="img-circle b-a b-3x b-white">
-								</a>
-								<div class="clear">
-									<a href="#"><span class="text-light">Some One</span> @prashant <span class="text-muted">4 Minutes Ago</span></a>
-									<h3 class="m-t-sm">LOL?</h3>
-									<p>LOL!!</p>
-								</div>
-							</li>
-							<li class="broadcast-card broadcast-default">
-								<a href="#" class="thumb pull-left m-r">
-								<img src="/assetserver/userNameIcon/p" class="img-circle b-a b-3x b-white">
-								</a>
-								<div class="clear">
-									<a href="#"><span class="text-dark">Prashant Sinha</span> @prashant <span class="text-muted">4 Minutes Ago</span></a>
-									<h3 class="m-t-sm">LOL?</h3>
-									<p>LOL!!</p>
-								</div>
-							</li>
 						</ul>
 					</section>
-					<a href="#" onclick='$.get("/test", function(data){$(data).hide().prependTo("#broadcast-container").slideDown();})'>dsocjlxk</a>
 				</div>
 			</div>
 		</section>

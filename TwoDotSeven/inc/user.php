@@ -574,32 +574,55 @@ class Access {
 
 class Meta {
 
-	public static function User($UserName) {
+	public static function Get($UserName) {
 		$Response = array();
+
+		$GetMeta = function ($Data) {
+			$Data['Meta'] = json_decode($Data['Meta'], True);
+			$Data['Preferences'] = json_decode($Data['Preferences'], True);
+			return array(
+				'ID' => $Data['ID'],
+				'UserName' => $Data['UserName'],
+				'EMail' => $Data['EMail'],
+				'ProfileStatus' => \TwoDot7\User\Status::Profile(False, array(
+					'Action' => 'GET',
+					'TRANSLATEONLY' => True,
+					'Translation' => $Data['Status']
+					)
+				),
+				'Name' => isset($Data['Meta']['Name']) ? $Data['Meta']['Name'] : $Data['UserName'],
+				'IMG' => isset($Data['Meta']['IMG']) ? $Data['Meta']['IMG'] : '/assetserver/userNameIcon/'.$Data['UserName'],
+				'IMG_BG' => isset($Data['Meta']['IMG_BG']) ? $Data['Meta']['IMG_BG'] : False,
+				'EMailStatus' => \TwoDot7\User\Status::EMail(False, array(
+					'Action' => 'GET',
+					'TRANSLATEONLY' => True,
+					'Translation' => $Data['Status']
+					)
+				),
+				'URI' => isset($Data['Meta']['URI']) ? $Data['Meta']['URI'] : '/user/'.$Data['ID'],
+				//'ExtraInfo' => Preferences\ProfileApps('ProfileApps', 'GET', $Data['UserName']),
+			);
+		};
+
 		if (is_array($UserName)) {
-			$UserQuery = "SELECT ID, UserName, EMail, Status, Preferences, Meta FROM _user WHERE false ".str_repeat("OR UserName = ? ", count($TaggedUsers));
+			$UserQuery = "SELECT ID, UserName, EMail, Status, Preferences, Meta FROM _user WHERE false ".str_repeat("OR UserName = ? ", count($UserName));
+			$MetaList = \TwoDot7\Database\Handler::Exec($UserQuery, $UserName)->fetchAll(\PDO::FETCH_ASSOC);
+
+			foreach ($MetaList as $Value) {
+				array_push($Response, $GetMeta($Value));
+			}
+
 		} elseif (is_string($UserName)) {
-			//Do it for just one.
-		} else throw new \TwoDot7\Exception\InvalidArgument("\$Username should be a list, or string.", 1);
+			$UserQuery = "SELECT ID, UserName, EMail, Status, Preferences, Meta FROM _user WHERE UserName = :UserName;";
+			$Meta = \TwoDot7\Database\Handler::Exec($UserQuery, $UserName)->fetch(\PDO::FETCH_ASSOC);
+
+			$Response = $GetMeta($Meta);
+
+		} else throw new \TwoDot7\Exception\InvalidArgument("\$Username should be a list, or string.");
 		
-
-		/*return array(
-			'ID' => ,
-			'UserName' => ,
-			'EMail' => ,
-			'ProfileStatus' => ,
-			'Name' => ,
-			'IMG' => ,
-			'IMG_BG' => ,
-			'EMailStatus' => ,
-			'URI' => ,
-			'ExtraInfo' => ,
-		);*/
+		return $Response;
 	}
 
-	public static function Get () {
-
-	}
 }
 
 /**
@@ -627,9 +650,9 @@ class Preferences {
 	 * @since	v0.0 20140824
 	 * @version	0.0
 	 */
-	public static function ExternalApp($App, $Action = "GET") {
+	public static function ExternalApp($App, $Action = "GET", $UserName = False) {
 		if (!Session::Exists()) return False;
-		if (!self::UnpackPreferences(Session::Data()['UserName'])) return False;
+		if (!self::UnpackPreferences($UserName ? $UserName : Session::Data()['UserName'])) return False;
 		if (!isset(self::$Preferences['ExternalApp'])) self::$Preferences['ExternalApp'] = array();
 		if ($Action === "GET") {
 			return in_array($App, self::$Preferences['ExternalApp']);
@@ -1271,33 +1294,41 @@ class Status {
 	 * @version	0.0
 	 */
 	public static function Profile($UserName, $Override = array(
-		'Action' => 'GET')) {
+		'Action' => 'GET',
+		'TRANSLATEONLY' => False,
+		'Translation' => False)) {
 
 		switch ($Override['Action']) {
 			case 'GET':
+				$Translate = function($Data) {
+					$ProfileStatus = $Data%10;
+					$PrettyStatus = function() use (&$ProfileStatus) {
+						switch ($ProfileStatus) {
+							case 0:
+								return 'Unverified Profile';
+							case 1:
+								return 'Verified User';
+							case 2:
+								return 'Under Review';
+							default:
+								return 'Huh';
+						}
+					};
+					return array(
+						'Success' => True,
+						'Response' => $ProfileStatus,
+						'ResponseText' => $PrettyStatus());
+				};
+
+				if (isset($Override['TRANSLATEONLY']) && $Override['TRANSLATEONLY']) return $Translate($Override['Translation']);
+
 				$DBResponse = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
 					'UserName' => $UserName))->fetch();
 				if ($DBResponse) {
 					$Status = $DBResponse['Status'];
 					if (is_numeric($Status)) {
 						# Proceed. In all normal cases, this block should be the one executing.
-						$ProfileStatus = $Status%10;
-						$PrettyStatus = function() use (&$ProfileStatus) {
-							switch ($ProfileStatus) {
-								case 0:
-									return 'Unverified Profile';
-								case 1:
-									return 'Regular User';
-								case 2:
-									return 'Verified User';
-								default:
-									return 'Huh';
-							}
-						};
-						return array(
-							'Success' => True,
-							'Response' => $ProfileStatus,
-							'ResponseText' => $PrettyStatus());
+						return $Translate($Status);
 					}
 					else {
 						Util\Log("Invalid Data stored in DB. UserMeta = \"".json_encode($DBResponse)."\" Function User/Status/Profile", "TRACK");
@@ -1434,29 +1465,35 @@ class Status {
 
 		switch ($Override['Action']) {
 			case 'GET':
+				$Translate = function ($Data) {
+					$EMailStatus = (int)(($Data%100)/10);
+					$PrettyStatus = function() use (&$EMailStatus) {
+						switch ($EMailStatus) {
+							case 0:
+								return 'Unconfirmed EMail ID';
+							case 1:
+								return 'Confirmed EMail ID';
+							case 2:
+								return 'EMail ID Updated - but unconfirmed.';
+							default:
+								return 'Huh';
+						}
+					};
+					return array(
+						'Success' => True,
+						'Response' => $EMailStatus,
+						'ResponseText' => $PrettyStatus());
+				};
+
+				if (isset($Override['TRANSLATEONLY']) && $Override['TRANSLATEONLY']) return $Translate($Override['Translation']);
+
 				$DBResponse = \TwoDot7\Database\Handler::Exec("SELECT * FROM _user WHERE UserName=:UserName", array(
 					'UserName' => $UserName))->fetch();
 				if ($DBResponse) {
 					$Status = $DBResponse['Status'];
 					if (is_numeric($Status)) {
 						# Proceed. In all normal cases, this block should be the one executing.
-						$EMailStatus = (int)(($Status%100)/10);
-						$PrettyStatus = function() use (&$EMailStatus) {
-							switch ($EMailStatus) {
-								case 0:
-									return 'Unconfirmed EMail ID';
-								case 1:
-									return 'Confirmed EMail ID';
-								case 2:
-									return 'EMail ID Updated - but unconfirmed.';
-								default:
-									return 'Huh';
-							}
-						};
-						return array(
-							'Success' => True,
-							'Response' => $EMailStatus,
-							'ResponseText' => $PrettyStatus());
+						return $Translate($Status);
 					}
 					else {
 						Util\Log("Invalid Data stored in DB. UserMeta = \"".json_encode($DBResponse)."\" Function User/Status/EMail", "TRACK");
