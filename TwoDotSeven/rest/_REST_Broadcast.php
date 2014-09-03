@@ -84,6 +84,10 @@ function init() {
 			die();
 			break;
 
+		case 'feed':
+				header('Content-Type: application/json');
+			\TwoDot7\Broadcast\Feed::_User(\TwoDot7\User\Session::Data()['UserName']);
+
 			break;
 		default:
 			header('HTTP/1.0 450 Invalid Request.', true, 450);

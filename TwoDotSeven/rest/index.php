@@ -49,8 +49,8 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 	case 'broadcast':
 		$_GET = array_merge($_GET, array(
 			'Action' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
-			'OriginType' => isset($URI[BASE+2]) ? $URI[BASE+2] : False,
-			'Origin' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
+			'ActionHook' => isset($URI[BASE+2]) ? $URI[BASE+2] : False,
+			'ActionHookData' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
 			));
 		Broadcast\init();
 		break;

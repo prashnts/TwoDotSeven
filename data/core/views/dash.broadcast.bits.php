@@ -28,13 +28,14 @@ function _init($Data = False) {
 		<section class="hbox stretch">
 			<aside class="<?php echo isset($Data['NavbarMood']) ? $Data['NavbarMood'] : "bg-black";?> aside" id="nav">
 				<section class="vbox">
-					<header class="header header-md navbar navbar-fixed-top-xs bg" style="z-index:9">
+					<header class="header header-md navbar navbar-fixed-top-xs bg" style="z-index:900">
 						<div class="navbar-header">
 							<a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="#nav">
 								<i class="fa fa-bars"></i> 
 							</a>
 							<a href="/" class="navbar-brand">
-								<img src="/TwoDotSeven/admin/assets/images/2.7/2.7-box.png" class="m-r-sm" height="25px">
+								<!--img src="/TwoDotSeven/admin/assets/images/2.7/2.7-box.png" class="m-r-sm" height="25px"-->
+								<img src="/data/core/images/1/logoinv.png" class="m-r-sm" height="25px">
 							</a>
 							<a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-user">
 								<i class="fa fa-cog"></i> 
@@ -122,6 +123,7 @@ function JS() {
 	echo '<script src="/data/core/static/js/app.js"></script>';
 	echo '<script src="/data/core/static/js/masonry.pkgd.min.js"></script>';
 	echo '<script src="/data/core/static/js/app-direction.js"></script>';
+	echo '<script src="/data/core/static/js/app-broadcast.js"></script>';
 	echo '<script src="/data/core/static/js/slimscroll/jquery.slimscroll.min.js"></script>';
 	//echo '<script src="/data/core/static/js/app/SignInUp.js"></script>';
 	//echo '<script src="/data/core/static/js/charts/sparkline/jquery.sparkline.min.js"></script>';
@@ -139,26 +141,10 @@ class Render {
 			</div>
 			<div class="row">
 				<div class="col-lg-8">
-					<section class="panel panel-default">
-						<h4 class="padder">POST A Broadcast</h4>
-						<ul class="list-group">
-							<li class="list-group-item broadcast-card" onclick="$(this).css('margin', '100px 0 10px 0')">
-								<a href="#" class="thumb pull-left m-r-sm">
-								<img src="/assetserver/userNameIcon/p" class="img-circle b-a b-3x b-white">
-								</a>
-								<div class="clear">
-									<a href="#">
-										<span class="text-dark h4">Prashant Sinha</span>
-										<span class="h5">@prashant &bullet;</span>
-										<br>
-										<span class="text-muted">Posted 4 Minutes Ago</span>
-									</a>
-									<hr class="m-t-xs m-b-xs">
-									<p><img src="http://www.thatsitcom.co.za/wp-content/uploads/2012/08/infographics.jpg" class="img-responsive"></p>
-									<p class="text-dark">Hey, what's up?</p>
-								</div>
-							</li>
-							<li class="bg-dasrk broadcast-card">
+					<section class="panel broadcast-container">
+						<ul class="list-group" id="broadcast-container">
+
+							<li class="broadcast-card broadcast-default" id="p">
 								<a href="#" class="thumb pull-left m-r">
 								<img src="/assetserver/userNameIcon/g" class="img-circle b-a b-3x b-white">
 								</a>
@@ -168,7 +154,7 @@ class Render {
 									<p>LOL!!</p>
 								</div>
 							</li>
-							<li class=" broadcast-card">
+							<li class="broadcast-card broadcast-default">
 								<a href="#" class="thumb pull-left m-r">
 								<img src="/assetserver/userNameIcon/p" class="img-circle b-a b-3x b-white">
 								</a>
@@ -180,6 +166,7 @@ class Render {
 							</li>
 						</ul>
 					</section>
+					<a href="#" onclick='$.get("/test", function(data){$(data).hide().prependTo("#broadcast-container").slideDown();})'>dsocjlxk</a>
 				</div>
 			</div>
 		</section>
