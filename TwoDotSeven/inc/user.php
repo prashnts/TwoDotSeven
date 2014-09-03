@@ -87,7 +87,7 @@ class Account {
 
 				$DatabaseHandle = new \TwoDot7\Database\Handler;
 
-				$Query1 = "INSERT INTO _user (UserName, Password, EMail, Hash, Tokens, Status, Preferences) VALUES (:UserName, :Password, :EMail, :Hash, :Tokens, :Status, :Preferences)";
+				$Query1 = "INSERT INTO _user (UserName, Password, EMail, Hash, Tokens, Status, Preferences, Meta) VALUES (:UserName, :Password, :EMail, :Hash, :Tokens, :Status, :Preferences, :Meta)";
 
 				$Response = $DatabaseHandle->Query($Query1, array(
 					'UserName' => $SignupData['UserName'],
@@ -96,7 +96,8 @@ class Account {
 					'Hash' => json_encode(array()),
 					'Tokens' => json_encode(array()),
 					'Status' => 0,
-					'Preferences' => json_encode(array())
+					'Preferences' => json_encode(array()),
+					'Meta' => json_encode(array())
 					)
 				)->rowCount();
 				
@@ -573,12 +574,27 @@ class Access {
 
 class Meta {
 
-	function __construct($UserName = False) {
-		// Pseudo 
-	}
+	public static function User($UserName) {
+		$Response = array();
+		if (is_array($UserName)) {
+			$UserQuery = "SELECT ID, UserName, EMail, Status, Preferences, Meta FROM _user WHERE false ".str_repeat("OR UserName = ? ", count($TaggedUsers));
+		} elseif (is_string($UserName)) {
+			//Do it for just one.
+		} else throw new \TwoDot7\Exception\InvalidArgument("\$Username should be a list, or string.", 1);
+		
 
-	public static function User() {
-		return array('');
+		/*return array(
+			'ID' => ,
+			'UserName' => ,
+			'EMail' => ,
+			'ProfileStatus' => ,
+			'Name' => ,
+			'IMG' => ,
+			'IMG_BG' => ,
+			'EMailStatus' => ,
+			'URI' => ,
+			'ExtraInfo' => ,
+		);*/
 	}
 
 	public static function Get () {
