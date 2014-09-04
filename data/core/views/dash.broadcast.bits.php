@@ -132,7 +132,7 @@ function JS() {
 class Render {
 	public static function Broadcast($Data) {
 		?>
-		<section class="scrollable padder bg-light  fill">
+		<section class="scrollable padder bg-light  fill" id="broadcast">
 			<div class="m-b-md row padder">
 				<div class="col-lg-6">
 				</div>
@@ -142,9 +142,6 @@ class Render {
 			<div class="row m-b-lg">
 				<div class="col-lg-8">
 					<div class="broadcast-post m-b-lg" id="p">
-						<a href="#" class="thumb pull-left m-r">
-						<img src="/assetserver/userNameIcon/g" class="img-circle b-a b-3x b-white">
-						</a>
 						<div class="clear row No-Margin-Padding-Override-Hack">
                             <textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here"></textarea>
                             <button class="btn btn-primary m-t-xs " type="button">POST</button>
@@ -155,7 +152,7 @@ class Render {
 			</div>
 			<div class="row">
 				<div class="col-lg-8">
-					<section class="panel broadcast-container">
+					<section class="panel broadcast-clear">
 						<ul class="list-group" id="broadcast-container">
 						</ul>
 					</section>

@@ -1,24 +1,48 @@
 var Broadcast = {
 	HOOKID : "broadcast-container",
-	GETURI : "/dev/broadcast/feed",
+	PREURI : "/dev/broadcast/feed/pre/",
+	POSTURI : "/dev/broadcast/feed/post/",
+	POSTFIX : false,
+	PREFIX : false,
 	getHook : function() {
 		return $("#"+this.HOOKID);
 	},
-	prependPost : function(feed) {
-		//
+	getPOSTFIX : function() {
+		_Candidate = Number($("#broadcast-container li:last").attr("data-timestamp"));
+		if (_Candidate) return _Candidate;
+		else return 0;
 	},
-	fetchPosts : function() {
-		$.getJSON(this.GETURI, function(data) {
-			for (var i = data.length - 1; i >= 0; i--) {
-				var feed = Broadcast.createPost(data[i]);
-				$(feed).hide().prependTo("#broadcast-container").slideDown();
-			};
-		})
+	getPREFIX : function() {
+		_Candidate = Number($("#broadcast-container li:first").attr("data-timestamp"));
+		if (_Candidate) return _Candidate;
+		else return 0;
+	},
+	preFetch : function() {
+		$.getJSON(Broadcast.PREURI+Broadcast.getPREFIX(), function(data) {
+			Broadcast.prependIntoHook(data);
+		});
+	},
+	postFetch : function() {
+		$.getJSON(Broadcast.POSTURI+Broadcast.getPOSTFIX(), function(data) {
+			Broadcast.appendIntoHook(data);
+		});
+	},
+	prependIntoHook : function(data) {
+		for (var i = data.length - 1; i >= 0; i--) {
+			var feed = Broadcast.createPost(data[i]);
+			$(feed).hide().prependTo("#"+Broadcast.HOOKID).delay(90*i).slideDown(100);
+		};
+	},
+	appendIntoHook : function(data) {
+		for (var i = 0; i < data.length; i++) {
+			var feed = Broadcast.createPost(data[i]);
+			$(feed).hide().appendTo("#"+Broadcast.HOOKID).delay(90*i).slideDown(100);
+		};
 	},
 	createPost : function(data) {
 		var _Post = "";
-		console.log(data);
-		_Post +=	'<li class="broadcast-card broadcast-default" id="BROADCAST_'+data.ID+'">';
+		//console.log(data);
+		_Post +=	'<li class="broadcast-card broadcast-default" id="BROADCAST_'+data.ID+'" data-timestamp="'+data.Timestamp+'">';
 		_Post +=		'<a href="'+data.Meta.OP.URI+'" class="thumb pull-left m-r-sm">';
 		_Post +=			'<img src="'+data.Meta.OP.IMG+'" class="img-circle b-a b-3x b-white">';
 		_Post +=		'</a>';
@@ -53,4 +77,16 @@ var Broadcast = {
 	}
 }
 
-setTimeout(Broadcast.fetchPosts(), 1000);
+Broadcast.postFetch();
+console.log(Broadcast.getPOSTFIX());
+console.log(Broadcast.getPREFIX());
+
+setInterval(function() {
+	Broadcast.preFetch();
+}, 2000);
+
+    $('#broadcast').bind('scroll', function() {
+        if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+            console.log("LOL");
+        }
+    })

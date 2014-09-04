@@ -472,6 +472,10 @@
 	box-shadow: none;
 }
 
+.broadcast-clear {
+	border: none;
+}
+
 .broadcast-post {
 	bordser: 1px solid #eaeef1;
 	baackground: #FFFFFF;

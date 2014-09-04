@@ -184,15 +184,24 @@ class Feed {
 		return json_encode($Response, JSON_PRETTY_PRINT);
 	}
 
-	public static function _User($UserName, $Begin = 0) {
+	public static function _User($UserName, $Begin = 0, $Direction = "<") {
 		// Feed FOR a Particular User. Not, OF a user.
+
+		if (!is_numeric($Begin) ||
+			!($Direction === "<" ||
+			$Direction === ">" ||
+			$Direction === ">=" ||
+			$Direction === "<=")) throw new \TwoDot7\Exception\InvalidArgument("Check arguments\' $Direction validity.");
+			
+
 		$DatabaseHandle = new \TwoDot7\Database\Handler;
 		
 		$Result = array();
 		$Counter = 0;
 		do {
 			$Counter = 0;
-			$Query = "SELECT * FROM _broadcast WHERE Timestamp < :Timestamp ORDER BY ID DESC LIMIT ".\TwoDot7\Config\BROADCAST_FEED_UNIT.";";
+			$Direction = 
+			$Query = "SELECT * FROM _broadcast WHERE Timestamp {$Direction} :Timestamp ORDER BY ID DESC LIMIT ".\TwoDot7\Config\BROADCAST_FEED_UNIT.";";
 
 			$Response = $DatabaseHandle->Query($Query, array(
 				'Timestamp' => (!$Begin || $Begin === 0) ? time() : $Begin,
@@ -235,6 +244,8 @@ class Feed {
 									$Row['TimeAgo'] = Utils::timeAgo($Row['Timestamp']);
 									$Row['VisibleClass'] = $TranslateVisibleClass($Row['Visible']);
 
+									$Row['Data'] = Utils::Unpack($Row['Data']);
+
 									array_push($Result, $Row);
 									break;
 								} else break;
@@ -270,6 +281,8 @@ class Feed {
 									$Row['TimeAgo'] = Utils::timeAgo($Row['Timestamp']);
 									$Row['VisibleClass'] = $TranslateVisibleClass($Row['Visible']);
 
+									$Row['Data'] = Utils::Unpack($Row['Data']);
+
 									array_push($Result, $Row);
 									break;
 								} else break;
@@ -285,7 +298,7 @@ class Feed {
 
 		} while ($Counter && count($Result) < \TwoDot7\Config\BROADCAST_FEED_UNIT);
 
-		echo json_encode($Result, JSON_PRETTY_PRINT);
+		return $Result;
 	}
 }
 
@@ -302,8 +315,9 @@ class Utils {
 			);
 	}
 
-	public static function Unpack() {
+	public static function Unpack(&$Data) {
 		// Unpacks a Packed broadcast data.
+		return json_decode($Data, true);
 	}
 
 	public static function GetUserMeta($TagJSON) {

@@ -85,9 +85,26 @@ function init() {
 			break;
 
 		case 'feed':
-			header('Content-Type: application/json');
-			\TwoDot7\Broadcast\Feed::_User(\TwoDot7\User\Session::Data()['UserName']);
-
+			switch ($_GET['ActionHook']) {
+				case '<':
+				case 'post':
+				case '>':
+				case 'pre':
+					$UserName = False;
+					$Begin = 0;
+					$Direction = "<";
+					if (\TwoDot7\User\Session::Exists()) $UserName = \TwoDot7\User\Session::Data()['UserName'];
+					if ($_GET['ActionHookData']) $Begin = $_GET['ActionHookData'];
+					if ($_GET['ActionHook'] == ">" || $_GET['ActionHook'] == "pre") $Direction = ">";
+					elseif ($_GET['ActionHook'] == "<" || $_GET['ActionHook'] == "post") $Direction = "<";
+					$Feeds = \TwoDot7\Broadcast\Feed::_User($UserName, $Begin, $Direction);
+					header('Content-Type: application/json');
+					echo json_encode($Feeds);
+					die();
+					break;
+				default:
+					break;
+			}
 			break;
 		default:
 			header('HTTP/1.0 450 Invalid Request.', true, 450);
