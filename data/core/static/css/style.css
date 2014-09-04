@@ -474,6 +474,7 @@
 
 .broadcast-clear {
 	border: none;
+	background: transparent;
 }
 
 .broadcast-post {
@@ -501,6 +502,7 @@
 	padding: 10px;
 	z-index: 10;
 	margin-bottom: -1px;
+	margin: 10px 0;
 	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
 	box-shadow: 0 1px 1px rgba(0,0,0,.05);
 	-webkit-transition: border-color .081s linear;

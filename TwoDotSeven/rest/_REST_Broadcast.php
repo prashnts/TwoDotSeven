@@ -103,6 +103,7 @@ function init() {
 					die();
 					break;
 				default:
+					var_dump($_GET);
 					break;
 			}
 			break;

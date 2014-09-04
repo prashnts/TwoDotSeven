@@ -209,6 +209,7 @@ class Feed {
 
 			while ($Row = $Response->fetch(\PDO::FETCH_ASSOC)) {
 				$Counter++;
+				if (count($Result) === \TwoDot7\Config\BROADCAST_FEED_UNIT) break;
 				switch ($Row['OriginType']) {
 					case USER:
 						switch ($Row['TargetType']) {
@@ -294,8 +295,9 @@ class Feed {
 						break;
 				}
 				$Begin = $Row['Timestamp'];
+				$Direction = "<";
 			}
-
+			//echo $Begin. "     ".count($Result)."     ";
 		} while ($Counter && count($Result) < \TwoDot7\Config\BROADCAST_FEED_UNIT);
 
 		return $Result;

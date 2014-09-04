@@ -83,10 +83,10 @@ console.log(Broadcast.getPREFIX());
 
 setInterval(function() {
 	Broadcast.preFetch();
-}, 2000);
+}, 5000);
 
-    $('#broadcast').bind('scroll', function() {
-        if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
-            console.log("LOL");
-        }
-    })
+$('#broadcast').bind('scroll', function() {
+	if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+		Broadcast.postFetch();
+	}
+})
