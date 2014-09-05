@@ -121,7 +121,6 @@ function Head(&$Data) {
 function JS() {
 	echo '<script src="/data/core/static/js/bootstrap.js"></script>';
 	echo '<script src="/data/core/static/js/app.js"></script>';
-	echo '<script src="/data/core/static/js/masonry.pkgd.min.js"></script>';
 	echo '<script src="/data/core/static/js/app-direction.js"></script>';
 	echo '<script src="/data/core/static/js/app-broadcast.js"></script>';
 	echo '<script src="/data/core/static/js/slimscroll/jquery.slimscroll.min.js"></script>';
@@ -144,8 +143,10 @@ class Render {
 					<div class="broadcast-post m-b-lg" id="p">
 						<div class="clear row No-Margin-Padding-Override-Hack">
 							<textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here" id="broadcast-post-area"></textarea>
-							<button class="btn btn-success m-t-xs " type="button">Tag People</button>
-							<button class="btn btn-primary m-t-xs pull-right" type="button" id="broadcast-post-btn">Broadcast to Everyone</button>
+						</div>
+						<div class="clear row No-Margin-Padding-Override-Hack">
+							<!--button class="btn btn-success m-t-xs " type="button" id="lol">Tag People</button-->
+							<button class="btn btn-success m-t-xs pull-right" type="button" id="broadcast-post-btn">Broadcast to Everyone</button>
 						</div>
 					</div>
 				</div>
@@ -155,8 +156,8 @@ class Render {
 					<section class="panel broadcast-clear">
 						<ul class="list-group" id="broadcast-container">
 						</ul>
-						<div>LOADING</div>
 					</section>
+					<div><img src="/data/core/static/images/generic/727.gif"></div>
 				</div>
 			</div>
 		</section>
@@ -467,8 +468,9 @@ class Render {
 					toggleEdit: 'Toggle Edit Mode',
 					toggleFullscreen: 'Enter Fullscreen'
 				},
-				autogrow: true
+				autogrow: true,
 			}
+				opts.autogrow.scroll =  false
 			var editor = new EpicEditor(opts).load();
 		</script>
 		<?php
