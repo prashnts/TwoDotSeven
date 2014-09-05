@@ -28,6 +28,7 @@ _Import("admin/logout.php");
 _Import("admin/register.php");
 _Import("admin/bit.php");
 _Import("admin/broadcast.php");
+_Import("admin/profile.php");
 _Import("admin/dashboard.php");
 _Import("admin/administration.php");
 
@@ -83,6 +84,10 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 			));
 		Bit\init();
 		break;
+
+	case 'profile':
+	case 'userprofile':
+		Profile\init();
 
 	case 'administration':
 	case 'management':

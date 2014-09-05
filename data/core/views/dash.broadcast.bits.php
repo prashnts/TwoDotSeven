@@ -328,5 +328,149 @@ class Render {
 
 		}
 	}
-	//public static function 
+	public static function Profile($Data) {
+		?>
+		<section class="hbox stretch">
+			<aside class="col-lg-6 bg-light lt b-r no-padder">
+				<section class="vbox">
+					<section class="scrollable">
+						<div class="wrapper">
+							<section class="panel panel-default">
+							<div class="panel-heading no-border">
+								<div class="clearfix m-b-sm">
+									<a href="#" class="pull-left thumb-md avatar b-3x m-r">
+										<img src="/assetserver/userNameIcon/p">
+									</a>
+									<div class="clear">
+										<div class="h3 m-t-xs m-b-xs">
+											Prashant Sinha
+										</div>
+									<a href="#" class="btn btn-small btn-default btn-sm pull-right">Edit Profile</a>
+										<h5>Student &bullet; B.Tech. IT &bullet; 1<SUP>st</SUP> year</h5> 
+									</div>
+								</div>
+								<hr class="m-t-sm m-b-sm">
+								<div class="paffe">
+									<div id="epiceditor">
+									</div>
+										<h3>Academia</h3>
+										<h4>Research Interest:</h4>
+										<p>Machine learning, Computational Linguistics, Computational Biology</p>
+										<textarea>Machine learning, Computational Linguistics, Computational Biology</textarea>
+										<h4>Skills and Competence</h4>
+										<p>GD, WD etc</p>
+										<h3>Projects and Internships</h3>
+										<h4>Semester Projects</h4>
+										<p>LOL?</p>
+										<h4>Innovation Projects</h4>
+										<p>Yeahh</p>
+									<h3>Personal Info</h3>
+									<dl class="dl-horizontal">
+										<dt>Mobile</dt>
+										<dd>9910134045</dd>
+										<dt>Public Email</dt>
+										<dd>prashant@ducic.ac.in</dd>
+										<dt>Date of Birth</dt>
+										<dd>August 11, 1996</dd>
+										<dt>Address</dt>
+										<dd>108, ITIL, Cluster Innovation Centre, University of Delhi</dd>
+									</dl>
+								<hr class="m-t-sm m-b-sm">
+							</div>
+						</section>
+						</div>
+					</section>
+				</section>
+			</aside>
+			<aside class="col-lg-6 b-l no-padder">
+				<section class="vbox">
+					<section class="scrollable">
+						<div class="wrapper">
+							<section class="panel panel-default">
+								<form>
+									<textarea class="form-control no-border" rows="3" placeholder="What are you doing..."></textarea>
+								</form>
+								<footer class="panel-footer bg-light lter">
+									<button class="btn btn-info pull-right btn-sm">POST</button>
+									<ul class="nav nav-pills nav-sm">
+										<li><a href="#"><i class="fa fa-camera text-muted"></i></a>
+										</li>
+										<li><a href="#"><i class="fa fa-video-camera text-muted"></i></a>
+										</li>
+									</ul>
+								</footer>
+							</section>
+							<section class="panel panel-default">
+								<h4 class="padder">Latest Tweets</h4>
+								<ul class="list-group">
+									<li class="list-group-item">
+										<p>Wellcome <a href="#" class="text-info">@Drew Wllon</a> and play this web application template, have fun1</p>
+										<small class="block text-muted"><i class="fa fa-clock-o"></i> 2 minuts ago</small> 
+									</li>
+									<li class="list-group-item">
+										<p>Morbi nec <a href="#" class="text-info">@Jonathan George</a> nunc condimentum ipsum dolor sit amet, consectetur</p>
+										<small class="block text-muted"><i class="fa fa-clock-o"></i> 1 hour ago</small> 
+									</li>
+									<li class="list-group-item">
+										<p><a href="#" class="text-info">@Josh Long</a> Vestibulum ullamcorper sodales nisi nec adipiscing elit.</p>
+										<small class="block text-muted"><i class="fa fa-clock-o"></i> 2 hours ago</small> 
+									</li>
+								</ul>
+							</section>
+							<section class="panel clearfix bg-primary dk">
+								<div class="panel-body">
+									<a href="#" class="thumb pull-left m-r">
+										<img src="images/a0.jpg" class="img-circle b-a b-3x b-white">
+									</a>
+									<div class="clear"> <a href="#" class="text-info">@Mike Mcalidek <i class="fa fa-twitter"></i></a>  <small class="block text-muted">2,415 followers / 225 tweets</small>  <a href="#" class="btn btn-xs btn-info m-t-xs">Follow</a> 
+									</div>
+								</div>
+							</section>
+						</div>
+					</section>
+				</section>
+			</aside>
+		</section>
+		<script type="text/javascript" src="/data/core/static/js/markdown/js/epiceditor.min.js"></script>
+		<script type="text/javascript">
+var opts = {
+  container: 'epiceditor',
+  textarea: null,
+  basePath: '/data/core/static/js/markdown',
+  clientSideStorage: true,
+  localStorageName: 'epiceditor',
+  useNativeFullscreen: false,
+  parser: marked,
+  file: {
+    name: 'epiceditor',
+    defaultContent: '',
+    autoSave: 100
+  },
+  theme: {
+    base: '/themes/base/epiceditor.css',
+    preview: '/themes/preview/github.css',
+    editor: '/themes/editor/epic-light.css'
+  },
+  button: {
+    preview: true,
+    fullscreen: true,
+    bar: "auto"
+  },
+  focusOnLoad: false,
+  shortcut: {
+    modifier: 18,
+    fullscreen: 70,
+    preview: 80
+  },
+  string: {
+    togglePreview: 'Toggle Preview Mode',
+    toggleEdit: 'Toggle Edit Mode',
+    toggleFullscreen: 'Enter Fullscreen'
+  },
+  autogrow: true
+}
+var editor = new EpicEditor(opts).load();
+		</script>
+		<?php
+	}
 }

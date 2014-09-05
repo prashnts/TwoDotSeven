@@ -1005,7 +1005,7 @@ body.container {
   }
   html,
   body {
-    overflow-x: hidden;
+    overflow-x: auto;
     min-height: 100%;
   }
   .nav-primary .dropdown-menu {

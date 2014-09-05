@@ -4,6 +4,7 @@ var Broadcast = {
 	POSTURI : "/dev/broadcast/feed/post/",
 	POSTFIX : false,
 	PREFIX : false,
+	ActionToggle : false,
 	getHook : function() {
 		return $("#"+this.HOOKID);
 	},
@@ -18,25 +19,33 @@ var Broadcast = {
 		else return 0;
 	},
 	preFetch : function() {
+		if (Broadcast.ActionToggle) return;
+		Broadcast.ActionToggle = true;
 		$.getJSON(Broadcast.PREURI+Broadcast.getPREFIX(), function(data) {
 			Broadcast.prependIntoHook(data);
+			//Broadcast.ActionToggle = false;
 		});
 	},
 	postFetch : function() {
+		if (Broadcast.ActionToggle) return;
+		Broadcast.ActionToggle = true;
 		$.getJSON(Broadcast.POSTURI+Broadcast.getPOSTFIX(), function(data) {
 			Broadcast.appendIntoHook(data);
+			//Broadcast.ActionToggle = false;
 		});
 	},
 	prependIntoHook : function(data) {
 		for (var i = data.length - 1; i >= 0; i--) {
 			var feed = Broadcast.createPost(data[i]);
 			$(feed).hide().prependTo("#"+Broadcast.HOOKID).delay(90*i).slideDown(100);
+			if (i == 0) Broadcast.ActionToggle = false;
 		};
 	},
 	appendIntoHook : function(data) {
 		for (var i = 0; i < data.length; i++) {
 			var feed = Broadcast.createPost(data[i]);
 			$(feed).hide().appendTo("#"+Broadcast.HOOKID).delay(90*i).slideDown(100);
+			if (data.length-1 == i) Broadcast.ActionToggle = false;
 		};
 	},
 	createPost : function(data) {
@@ -77,16 +86,26 @@ var Broadcast = {
 	}
 }
 
+$.ajaxSetup ({
+    // Disable caching of AJAX responses */
+    cache: false
+});
+
 Broadcast.postFetch();
 console.log(Broadcast.getPOSTFIX());
 console.log(Broadcast.getPREFIX());
 
-setInterval(function() {
-	Broadcast.preFetch();
+window.setInterval(function() {
+	//Broadcast.preFetch();
 }, 5000);
 
-$('#broadcast').bind('scroll', function() {
+$('#broadcast').scroll(function() {
 	if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
 		Broadcast.postFetch();
 	}
 })
+window.onscroll = function(ev) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-10) {
+        Broadcast.postFetch();
+    }
+};

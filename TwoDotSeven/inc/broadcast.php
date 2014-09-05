@@ -295,7 +295,7 @@ class Feed {
 						break;
 				}
 				$Begin = $Row['Timestamp'];
-				$Direction = "<";
+				//$Direction = "<";
 			}
 			//echo $Begin. "     ".count($Result)."     ";
 		} while ($Counter && count($Result) < \TwoDot7\Config\BROADCAST_FEED_UNIT);
