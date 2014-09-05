@@ -143,9 +143,9 @@ class Render {
 				<div class="col-lg-8">
 					<div class="broadcast-post m-b-lg" id="p">
 						<div class="clear row No-Margin-Padding-Override-Hack">
-                            <textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here"></textarea>
-                            <button class="btn btn-primary m-t-xs " type="button">POST</button>
-                            <button class="btn btn-primary m-t-xs pull-right " type="button">POST</button>
+							<textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here" id="broadcast-post-area"></textarea>
+							<button class="btn btn-success m-t-xs " type="button">Tag People</button>
+							<button class="btn btn-primary m-t-xs pull-right" type="button" id="broadcast-post-btn">Broadcast to Everyone</button>
 						</div>
 					</div>
 				</div>
@@ -155,6 +155,7 @@ class Render {
 					<section class="panel broadcast-clear">
 						<ul class="list-group" id="broadcast-container">
 						</ul>
+						<div>LOADING</div>
 					</section>
 				</div>
 			</div>
@@ -356,7 +357,6 @@ class Render {
 										<h3>Academia</h3>
 										<h4>Research Interest:</h4>
 										<p>Machine learning, Computational Linguistics, Computational Biology</p>
-										<textarea>Machine learning, Computational Linguistics, Computational Biology</textarea>
 										<h4>Skills and Competence</h4>
 										<p>GD, WD etc</p>
 										<h3>Projects and Internships</h3>
@@ -433,43 +433,43 @@ class Render {
 		</section>
 		<script type="text/javascript" src="/data/core/static/js/markdown/js/epiceditor.min.js"></script>
 		<script type="text/javascript">
-var opts = {
-  container: 'epiceditor',
-  textarea: null,
-  basePath: '/data/core/static/js/markdown',
-  clientSideStorage: true,
-  localStorageName: 'epiceditor',
-  useNativeFullscreen: false,
-  parser: marked,
-  file: {
-    name: 'epiceditor',
-    defaultContent: '',
-    autoSave: 100
-  },
-  theme: {
-    base: '/themes/base/epiceditor.css',
-    preview: '/themes/preview/github.css',
-    editor: '/themes/editor/epic-light.css'
-  },
-  button: {
-    preview: true,
-    fullscreen: true,
-    bar: "auto"
-  },
-  focusOnLoad: false,
-  shortcut: {
-    modifier: 18,
-    fullscreen: 70,
-    preview: 80
-  },
-  string: {
-    togglePreview: 'Toggle Preview Mode',
-    toggleEdit: 'Toggle Edit Mode',
-    toggleFullscreen: 'Enter Fullscreen'
-  },
-  autogrow: true
-}
-var editor = new EpicEditor(opts).load();
+			var opts = {
+				container: 'epiceditor',
+				textarea: null,
+				basePath: '/data/core/static/js/markdown',
+				clientSideStorage: true,
+				localStorageName: 'epiceditor',
+				useNativeFullscreen: false,
+				parser: marked,
+				file: {
+					name: 'epiceditor',
+					defaultContent: '',
+					autoSave: 100
+				},
+				theme: {
+					base: '/themes/base/epiceditor.css',
+					preview: '/themes/preview/github.css',
+					editor: '/themes/editor/epic-light.css'
+				},
+				button: {
+					preview: true,
+					fullscreen: true,
+					bar: "auto"
+				},
+				focusOnLoad: false,
+				shortcut: {
+					modifier: 18,
+					fullscreen: 70,
+					preview: 80
+				},
+				string: {
+					togglePreview: 'Toggle Preview Mode',
+					toggleEdit: 'Toggle Edit Mode',
+					toggleFullscreen: 'Enter Fullscreen'
+				},
+				autogrow: true
+			}
+			var editor = new EpicEditor(opts).load();
 		</script>
 		<?php
 	}

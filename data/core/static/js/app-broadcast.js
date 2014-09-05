@@ -1,4 +1,4 @@
-var Broadcast = {
+var BroadcastSvc = {
 	HOOKID : "broadcast-container",
 	PREURI : "/dev/broadcast/feed/pre/",
 	POSTURI : "/dev/broadcast/feed/post/",
@@ -19,33 +19,33 @@ var Broadcast = {
 		else return 0;
 	},
 	preFetch : function() {
-		if (Broadcast.ActionToggle) return;
-		Broadcast.ActionToggle = true;
-		$.getJSON(Broadcast.PREURI+Broadcast.getPREFIX(), function(data) {
-			Broadcast.prependIntoHook(data);
-			//Broadcast.ActionToggle = false;
+		if (BroadcastSvc.ActionToggle) return;
+		BroadcastSvc.ActionToggle = true;
+		$.getJSON(BroadcastSvc.PREURI+BroadcastSvc.getPREFIX(), function(data) {
+			BroadcastSvc.prependIntoHook(data);
+			//BroadcastSvc.ActionToggle = false;
 		});
 	},
 	postFetch : function() {
-		if (Broadcast.ActionToggle) return;
-		Broadcast.ActionToggle = true;
-		$.getJSON(Broadcast.POSTURI+Broadcast.getPOSTFIX(), function(data) {
-			Broadcast.appendIntoHook(data);
-			//Broadcast.ActionToggle = false;
+		if (BroadcastSvc.ActionToggle) return;
+		BroadcastSvc.ActionToggle = true;
+		$.getJSON(BroadcastSvc.POSTURI+BroadcastSvc.getPOSTFIX(), function(data) {
+			BroadcastSvc.appendIntoHook(data);
+			//BroadcastSvc.ActionToggle = false;
 		});
 	},
 	prependIntoHook : function(data) {
 		for (var i = data.length - 1; i >= 0; i--) {
-			var feed = Broadcast.createPost(data[i]);
-			$(feed).hide().prependTo("#"+Broadcast.HOOKID).delay(90*i).slideDown(100);
-			if (i == 0) Broadcast.ActionToggle = false;
+			var feed = BroadcastSvc.createPost(data[i]);
+			$(feed).hide().prependTo("#"+BroadcastSvc.HOOKID).delay(90*i).slideDown(100);
+			if (i == 0) BroadcastSvc.ActionToggle = false;
 		};
 	},
 	appendIntoHook : function(data) {
 		for (var i = 0; i < data.length; i++) {
-			var feed = Broadcast.createPost(data[i]);
-			$(feed).hide().appendTo("#"+Broadcast.HOOKID).delay(90*i).slideDown(100);
-			if (data.length-1 == i) Broadcast.ActionToggle = false;
+			var feed = BroadcastSvc.createPost(data[i]);
+			$(feed).hide().appendTo("#"+BroadcastSvc.HOOKID).delay(90*i).slideDown(100);
+			if (data.length-1 == i) BroadcastSvc.ActionToggle = false;
 		};
 	},
 	createPost : function(data) {
@@ -91,21 +91,21 @@ $.ajaxSetup ({
     cache: false
 });
 
-Broadcast.postFetch();
-console.log(Broadcast.getPOSTFIX());
-console.log(Broadcast.getPREFIX());
+BroadcastSvc.postFetch();
+console.log(BroadcastSvc.getPOSTFIX());
+console.log(BroadcastSvc.getPREFIX());
 
 window.setInterval(function() {
-	//Broadcast.preFetch();
+	//BroadcastSvc.preFetch();
 }, 5000);
 
 $('#broadcast').scroll(function() {
 	if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
-		Broadcast.postFetch();
+		BroadcastSvc.postFetch();
 	}
 })
 window.onscroll = function(ev) {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-10) {
-        Broadcast.postFetch();
+        BroadcastSvc.postFetch();
     }
 };
