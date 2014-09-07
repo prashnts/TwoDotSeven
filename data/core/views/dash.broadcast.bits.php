@@ -118,12 +118,19 @@ function Head(&$Data) {
 	<?php
 }
 
-function JS() {
-	echo '<script src="/data/core/static/js/bootstrap.js"></script>';
-	echo '<script src="/data/core/static/js/app.js"></script>';
+function JS($Files = array()) {
+	$Defaults = array(
+		'/data/core/static/js/bootstrap.js',
+		'/data/core/static/js/app.js',
+		'/data/core/static/js/slimscroll/jquery.slimscroll.min.js'
+	);
+
+	foreach ( array_merge($Defaults, $Files) as $File) {
+		echo '<script src="'.$File.'"></script>';
+	 } ;
+
 	echo '<script src="/data/core/static/js/app-direction.js"></script>';
 	echo '<script src="/data/core/static/js/app-broadcast.js"></script>';
-	echo '<script src="/data/core/static/js/slimscroll/jquery.slimscroll.min.js"></script>';
 	//echo '<script src="/data/core/static/js/app/SignInUp.js"></script>';
 	//echo '<script src="/data/core/static/js/charts/sparkline/jquery.sparkline.min.js"></script>';
 }
