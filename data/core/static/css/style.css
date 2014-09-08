@@ -487,11 +487,19 @@
 	margin-bottom: -1px;
 }
 
-.broadcast-post textarea {
-	resize: none;
+#broadcast-post-area {
+	resize: vertical;
 	margin: 0;
-	height: 100px;
+	height: 50px;
 	width: 100%;
+	opacity: 0.5;
+	height: auto;
+	-webkit-transition: min-height .15s ease-in, opacity .5s linear;
+}
+
+#broadcast-post-area:focus, #broadcast-post-area.active {
+	opacity: 1;
+	min-height: 100px;
 }
 
 .broadcast-card {

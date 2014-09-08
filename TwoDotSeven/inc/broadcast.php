@@ -319,7 +319,10 @@ class Utils {
 
 	public static function Unpack(&$Data) {
 		// Unpacks a Packed broadcast data.
-		return json_decode($Data, true);
+		_Import($_SERVER['DOCUMENT_ROOT']."/TwoDotSeven/inc/external/parsedown.php");
+		$A = json_decode($Data, true);
+		$Parsedown = new \Parsedown();
+		return $Parsedown->text(strip_tags($A));
 	}
 
 	public static function GetUserMeta($TagJSON) {

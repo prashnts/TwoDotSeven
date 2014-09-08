@@ -164,7 +164,9 @@ class Render {
 						<ul class="list-group" id="broadcast-container">
 						</ul>
 					</section>
-					<div><img src="/data/core/static/images/generic/727.gif"></div>
+					<div class="loadMore text-center">
+						<a href="#" class="btn btn-success" id="broadcast-load-post"><i class="fa fa-circle-o-notch fa-spin"></i> Load past Broadcasts</a>
+					</div>
 				</div>
 			</div>
 		</section>

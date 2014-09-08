@@ -93,12 +93,12 @@ $.ajaxSetup ({
     cache: false
 });
 
-BroadcastSvc.postFetch();
+//BroadcastSvc.postFetch();
 console.log(BroadcastSvc.getPOSTFIX());
 console.log(BroadcastSvc.getPREFIX());
 
 window.setInterval(function() {
-    BroadcastSvc.preFetch();
+    //BroadcastSvc.preFetch();
 }, 5000);
 
 $('#broadcast').scroll(function() {
@@ -140,6 +140,15 @@ var BroadcastPushSvc = {
                 BroadcastPushSvc.ButtonMsg("Whoops");
             }
         });
+    },
+    BroadcastAreaInit: function () {
+        _hook = BroadcastPushSvc.TextboxHook;
+        #("#"+_hook).addClass("active");
+    },
+    BroadcastAreaDeInit: function () {
+        _hook = BroadcastPushSvc.TextboxHook;
+        #("#"+_hook).removeClass("active");
+        #("#"+_hook).val("");
     }
 }
 
