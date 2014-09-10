@@ -494,10 +494,10 @@
 	width: 100%;
 	opacity: 0.5;
 	height: auto;
-	-webkit-transition: min-height .15s ease-in, opacity .5s linear;
+	-webkit-transition: min-height .215s linear, opacity .5s linear;
 }
 
-#broadcast-post-area:focus, #broadcast-post-area.active {
+#broadcast-post-area.active {
 	opacity: 1;
 	min-height: 100px;
 }

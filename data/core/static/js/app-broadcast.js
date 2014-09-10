@@ -85,44 +85,116 @@ var BroadcastSvc = {
         _Post +=    '</li>';
 
         return _Post;
+    },
+    init: function() {
+        $.ajaxSetup ({
+            cache: false
+        });
+        window.setInterval(function() {
+            BroadcastSvc.preFetch();
+        }, 5000);
+        $('#broadcast').scroll(function() {
+            if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+                BroadcastSvc.postFetch();
+            }
+        })
+        window.onscroll = function() {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-10) {
+                BroadcastSvc.postFetch();
+            }
+        };
     }
 }
-
-$.ajaxSetup ({
-    // Disable caching of AJAX responses */
-    cache: false
-});
-
-//BroadcastSvc.postFetch();
-console.log(BroadcastSvc.getPOSTFIX());
-console.log(BroadcastSvc.getPREFIX());
-
-window.setInterval(function() {
-    //BroadcastSvc.preFetch();
-}, 5000);
-
-$('#broadcast').scroll(function() {
-    if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
-        BroadcastSvc.postFetch();
-    }
-})
-window.onscroll = function(ev) {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-10) {
-        BroadcastSvc.postFetch();
-    }
-};
-
 
 var BroadcastPushSvc = {
     TextboxHook: "broadcast-post-area",
     BtnHook: "broadcast-post-btn",
     POSTURI: "/dev/broadcast/post",
-    ButtonMsg: function(Message) {
-        $("#"+BroadcastPushSvc.BtnHook).html(Message);
-    },
-    POST: function () {
-        var BroadcastText = $("#"+BroadcastPushSvc.TextboxHook).val();
+    ActionToggle: false,
+    POST: function() {
+        var BroadcastText = $("#"+this.TextboxHook).val();
         if (BroadcastText.length < 2) return;
+        $.ajax({
+            type: 'POST',
+            url: this.POSTURI,
+            timeout: 30000,
+            data: {
+                BroadcastText: BroadcastText
+            },
+            beforeSend: function() {
+                this.ButtonMsg("Posting");
+            },
+            success: function() {
+                this.ButtonMsg("Done!");
+            },
+            error: function(data) {
+                this.ButtonMsg("Whoops");
+            }
+        });
+    },
+    BroadcastAreaInit: function() {
+        _hook = this.TextboxHook;
+        $("#"+this.BtnHook).slideDown();
+        $("#"+_hook).addClass("active");
+    },
+    BroadcastAreaDeInit: function() {
+        _hook = this.TextboxHook;
+        $("#"+_hook).removeClass("active");
+        $("#"+_hook).val("");
+        $("#"+this.BtnHook).slideUp()
+        setTimeout(function() {
+            BroadcastPushSvc.BroadcastButtonMessage(5);
+        }, 500); 
+    },
+    BroadcastDisable: function() {
+        $("#"+this.TextboxHook).attr("disabled", "true");
+        $("#"+this.BtnHook).attr("disabled", "true");
+    },
+    BroadcastEnable: function() {
+        $("#"+this.TextboxHook).removeAttr("disabled");
+        $("#"+this.BtnHook).removeAttr("disabled");
+    },
+    BroadcastButtonMessage: function (ID) {
+        $("#"+this.BtnHook).removeClass("btn-primary btn-success btn-danger");
+        switch (ID) {
+            case 1:
+                $("#"+this.BtnHook).addClass("btn-primary");
+                $("#"+this.BtnHook).html('<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;Processing');
+                break;
+            case 2:
+                $("#"+this.BtnHook).addClass("btn-success");
+                $("#"+this.BtnHook).html('<i class="fa fa-check-circle"></i>&nbsp;Posted');
+                break;
+            case 3:
+                $("#"+this.BtnHook).addClass("btn-danger");
+                $("#"+this.BtnHook).html('<i class="fa fa-times-circle"></i>&nbsp;Error Processing Request');
+                break;
+            case 4:
+                $("#"+this.BtnHook).addClass("btn-danger");
+                $("#"+this.BtnHook).html('<i class="fa fa-times-circle"></i>&nbsp;Please Post Something');
+                break;
+            case 5:
+                $("#"+this.BtnHook).addClass("btn-success");
+                $("#"+this.BtnHook).html('Broadcast to Everyone');
+                break;
+            case 6:
+            default:
+                $("#"+this.BtnHook).addClass("btn-success");
+                $("#"+this.BtnHook).html('Broadcast to These People');
+                break;
+        }
+    },
+    Broadcast: function() {
+        if (BroadcastPushSvc.ActionToggle) return;
+        var BroadcastText = $("#"+this.TextboxHook).val();
+        if (BroadcastText.length < 2) {
+            this.BroadcastButtonMessage(4);
+            setTimeout(function() {
+                BroadcastPushSvc.BroadcastButtonMessage(5);
+            }, 2000);
+            return;
+        }
+        //return;
         $.ajax({
             type: 'POST',
             url: BroadcastPushSvc.POSTURI,
@@ -131,27 +203,37 @@ var BroadcastPushSvc = {
                 BroadcastText: BroadcastText
             },
             beforeSend: function() {
-                BroadcastPushSvc.ButtonMsg("Posting");
+                BroadcastPushSvc.BroadcastButtonMessage(1);
+                BroadcastPushSvc.BroadcastDisable();
+                BroadcastPushSvc.ActionToggle = true;
             },
             success: function() {
-                BroadcastPushSvc.ButtonMsg("Done!");
+                BroadcastPushSvc.BroadcastButtonMessage(2);
+                BroadcastSvc.preFetch();
+                setTimeout(function() {
+                    BroadcastPushSvc.BroadcastAreaDeInit();
+                    BroadcastPushSvc.BroadcastEnable();
+                }, 2000);
+                BroadcastPushSvc.ActionToggle = false;
             },
             error: function(data) {
-                BroadcastPushSvc.ButtonMsg("Whoops");
+                BroadcastPushSvc.BroadcastEnable();
+                BroadcastPushSvc.BroadcastButtonMessage(1);
+                BroadcastPushSvc.ActionToggle = false;
             }
         });
     },
-    BroadcastAreaInit: function () {
-        _hook = BroadcastPushSvc.TextboxHook;
-        #("#"+_hook).addClass("active");
-    },
-    BroadcastAreaDeInit: function () {
-        _hook = BroadcastPushSvc.TextboxHook;
-        #("#"+_hook).removeClass("active");
-        #("#"+_hook).val("");
+    init: function() {
+        $("#"+this.BtnHook).click(function() {
+            BroadcastPushSvc.Broadcast();
+        });
+
+        $("#"+this.TextboxHook).click(function(){
+            BroadcastPushSvc.BroadcastAreaInit();
+        });
     }
 }
 
-$("#"+BroadcastPushSvc.BtnHook).click(function(){
-    BroadcastPushSvc.POST();
-})
+BroadcastSvc.postFetch();
+BroadcastSvc.init();
+BroadcastPushSvc.init();

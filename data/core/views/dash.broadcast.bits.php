@@ -35,7 +35,7 @@ function _init($Data = False) {
 							</a>
 							<a href="/" class="navbar-brand">
 								<!--img src="/TwoDotSeven/admin/assets/images/2.7/2.7-box.png" class="m-r-sm" height="25px"-->
-								<img src="/data/core/images/1/logoinv.png" class="m-r-sm" height="25px">
+								<img src="/data/core/images/1/logo.png" class="m-r-sm" height="25px">
 							</a>
 							<a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-user">
 								<i class="fa fa-cog"></i> 
@@ -153,7 +153,7 @@ class Render {
 						</div>
 						<div class="clear row No-Margin-Padding-Override-Hack">
 							<!--button class="btn btn-success m-t-xs " type="button" id="lol">Tag People</button-->
-							<button class="btn btn-success m-t-xs pull-right" type="button" id="broadcast-post-btn">Broadcast to Everyone</button>
+							<button class="btn btn-success m-t-xs pull-right" type="button" id="broadcast-post-btn" style="display:none;">Broadcast to Everyone</button>
 						</div>
 					</div>
 				</div>
