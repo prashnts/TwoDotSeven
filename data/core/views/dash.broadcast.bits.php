@@ -145,19 +145,25 @@ class Render {
 				<div class="col-lg-6">
 				</div>
 			</div>
-			<div class="row m-b-lg">
-				<div class="col-lg-8">
-					<div class="broadcast-post m-b-lg" id="p">
-						<div class="clear row No-Margin-Padding-Override-Hack">
-							<textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here" id="broadcast-post-area"></textarea>
-						</div>
-						<div class="clear row No-Margin-Padding-Override-Hack">
-							<!--button class="btn btn-success m-t-xs " type="button" id="lol">Tag People</button-->
-							<button class="btn btn-success m-t-xs pull-right" type="button" id="broadcast-post-btn" style="display:none;">Broadcast to Everyone</button>
+			<?php
+			if (isset($Data['BroadcastEnabled']) && $Data['BroadcastEnabled']) {
+			?>
+				<div class="row m-b-lg">
+					<div class="col-lg-8">
+						<div class="broadcast-post m-b-lg" id="p">
+							<div class="clear row No-Margin-Padding-Override-Hack">
+								<textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here" id="broadcast-post-area"></textarea>
+							</div>
+							<div class="clear row No-Margin-Padding-Override-Hack">
+								<!--button class="btn btn-success m-t-xs " type="button" id="lol">Tag People</button-->
+								<button class="btn btn-success m-t-xs pull-right" type="button" id="broadcast-post-btn" style="display:none;">Broadcast to Everyone</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			<?php
+			}
+			?>
 			<div class="row">
 				<div class="col-lg-8">
 					<section class="panel broadcast-clear">
