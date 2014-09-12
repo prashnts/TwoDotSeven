@@ -1,5 +1,6 @@
 var BroadcastSvc = {
     HOOKID : "broadcast-container",
+    BtnLoadHook: "broadcast-load-post",
     PREURI : "/dev/broadcast/feed/pre/",
     POSTURI : "/dev/broadcast/feed/post/",
     POSTFIX : false,
@@ -43,7 +44,11 @@ var BroadcastSvc = {
         };
     },
     appendIntoHook : function(data) {
-        if (data.length == 0) BroadcastSvc.ActionToggle = false;
+        if (data.length == 0) {
+            BroadcastSvc.ActionToggle = false;
+            $("#"+BroadcastSvc.BtnLoadHook).html('<i class="fa fa-times-circle"></i> No More Posts.');
+            $("#"+BroadcastSvc.BtnLoadHook).attr('disabled', 'true');
+        }
         for (var i = 0; i < data.length; i++) {
             var feed = BroadcastSvc.createPost(data[i]);
             $(feed).hide().appendTo("#"+BroadcastSvc.HOOKID).delay(90*i).slideDown(100);
@@ -95,14 +100,17 @@ var BroadcastSvc = {
         }, 5000);
         $('#broadcast').scroll(function() {
             if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
-                BroadcastSvc.postFetch();
+                //BroadcastSvc.postFetch();
             }
         })
         window.onscroll = function() {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-10) {
-                BroadcastSvc.postFetch();
+                //BroadcastSvc.postFetch();
             }
         };
+        $("#"+BroadcastSvc.BtnLoadHook).click(function() {
+            BroadcastSvc.postFetch();
+        });
     }
 }
 

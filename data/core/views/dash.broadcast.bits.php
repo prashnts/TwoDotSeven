@@ -171,7 +171,7 @@ class Render {
 						</ul>
 					</section>
 					<div class="loadMore text-center">
-						<a href="#" class="btn btn-success" id="broadcast-load-post"><i class="fa fa-circle-o-notch fa-spin"></i> Load past Broadcasts</a>
+						<a href="#" class="btn btn-success" id="broadcast-load-post">Load more Broadcasts</a>
 					</div>
 				</div>
 			</div>
