@@ -21,7 +21,7 @@ function init() {
 	\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
 		'Page' => 'PRE_BROADCAST',
 		'Call' => 'Profile',
-		'NavbarMood' => 'bg-light dker',
+		//'NavbarMood' => 'bg-light dker',
 		'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
 			'Page' => 'PRE_BROADCAST'
 			))

@@ -623,6 +623,18 @@ class Meta {
 		return $Response;
 	}
 
+	public static function GetProfile($UserName) {
+		if (!isset($UserName)) throw new \TwoDot7\Exception\IncompleteArgument("UserName required in Meta::Profile");
+		$Response = self::Get($UserName);
+		if (isset($Response['Meta'])) {
+			
+		} else return False;
+	}
+
+	public static function Put($UserName, $Data) {
+		// Only puts into the Meta
+	}
+
 }
 
 /**
@@ -699,6 +711,15 @@ class Preferences {
 				'UserName' => $UserName,
 				'Preferences' => json_encode(self::$Preferences)
 				))->rowCount();
+	}
+}
+
+class Profile {
+	public static function Bio() {
+		// Set Bio
+	}
+	public static function Info() {
+		//
 	}
 }
 
