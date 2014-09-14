@@ -146,4 +146,12 @@
 
 ### API Version 0.2 Additions
 
-*Todo.*
+1. ***domain/dev/account/[ACTION]***
+  - *legacyAuth*
+    Manual Login/Logout interfaces.
+    GET:
+    - *ActionHook*: Required. Provide EITHER of {checkSession, login, logout}.
+    POST:
+    - *UserName*: Required. The target UserName.
+    - *Password*: Depends on ActionHook. In case of *login* it is required. Returns *UserLegacyAuthHash*.
+    - *UserLegacyAuthHash*: Depends on ActionHook. In case of *checkSession*, *logout* it is required.
