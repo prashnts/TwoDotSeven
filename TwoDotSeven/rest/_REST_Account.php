@@ -219,6 +219,84 @@ function init() {
 				die();
 			}
 
+		case 'legacyAuth':
+			$Error = array(
+				'Params' => array(
+					array("Action", "GET", \TwoDot7\Util\REST::PARAMREQUIRED),
+					array("UserName", "POST", \TwoDot7\Util\REST::PARAMOPTIONAL),
+					array("Password", "POST", \TwoDot7\Util\REST::PARAMDEPENDS),
+					array("UserLegacyAuthHash", "POST", \TwoDot7\Util\REST::PARAMDEPENDS)
+				),
+				'Usage' => "/dev/broadcast/post/[checkSession, login, logout]",
+				'SessionError' => !\TwoDot7\User\Session::Exists()
+			);
+
+			if (isset($_GET['Action'])) switch ($_GET['Action']) {
+				case 'checkSession':
+				case 'session':
+					if (!isset($_POST['UserName']) ||
+						!isset($_POST['UserLegacyAuthHash'])) {
+						\TwoDot7\Util\REST::PutError($Error);
+					}
+					// Translate the AUTH Mode.
+					$_COOKIE['Two_7User'] = $_POST['UserName'];
+					$_COOKIE['Two_7Hash'] = \TwoDot7\Util\Crypt::Decrypt($_POST['UserLegacyAuthHash']);
+
+					header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+					header('Content-Type: application/json');
+					echo json_encode(\TwoDot7\User\Session::Status(\TwoDot7\User\Session::Data())['Success']);
+					die();
+					break;
+
+				case 'login':
+					if (!isset($_POST['UserName']) ||
+						!isset($_POST['Password'])) {
+						\TwoDot7\Util\REST::PutError($Error);
+					}
+					$Response = \TwoDot7\User\Session::Login(array(
+						'UserName' => $_POST['UserName'],
+						'Password' => $_POST['Password']
+					));
+
+					if ($Response['Success']) {
+						header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+						header('Content-Type: application/json');
+						echo json_encode(array(
+							'UserName' => $_POST['UserName'],
+							'UserLegacyAuthHash' => \TwoDot7\Util\Crypt::Encrypt($Response['Hash'])
+						));
+					} else {
+						header('HTTP/1.0 261 Bad Request. Operation cannot be completed.', true, 261);
+						header('Content-Type: application/json');
+						echo json_encode(array('AUTH Error.'));
+					}
+					die();
+					break;
+
+				case 'logout':
+
+					if (!isset($_POST['UserName']) ||
+						!isset($_POST['UserLegacyAuthHash'])) {
+						\TwoDot7\Util\REST::PutError($Error);
+					}
+					// Translate the AUTH Mode.
+					$_COOKIE = array_merge($_COOKIE, array(
+						'Two_7User' => $_POST['UserName'],
+						'Two_7Hash' => \TwoDot7\Util\Crypt::Decrypt($_POST['UserLegacyAuthHash'])
+					));
+					header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+					header('Content-Type: application/json');
+					echo json_encode(\TwoDot7\User\Session::Logout(\TwoDot7\User\Session::Data()));
+					die();
+					break;
+
+				default:
+					\TwoDot7\Util\REST::PutError($Error);
+			} else {
+				\TwoDot7\Util\REST::PutError($Error);
+			}
+			break;
+
 		default:
 			header('HTTP/1.0 450 Invalid Request.', true, 450);
 			echo "<pre>";

@@ -42,7 +42,8 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 		 * @internal	Parse URI template: DOMAIN/dev/account/[add, remove, verify, confirmEmail.]
 		 */
 		$_GET = array_merge($_GET, array(
-			'Function' => isset($URI[BASE+1]) ? $URI[BASE+1] : False
+			'Function' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+			'Action' => isset($URI[BASE+2]) ? $URI[BASE+2] : False
 			));
 		Account\init();
 		break;
@@ -112,5 +113,3 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 		echo 'You made an incomplete request to TwoDotSeven api. Please consider reading the API documentation.';
 		echo '</pre>';
 }
-
-?>
