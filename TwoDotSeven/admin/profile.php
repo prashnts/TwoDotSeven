@@ -19,7 +19,7 @@ function init() {
 	//$installer->Navigation();
 	//var_dump(\TwoDot7\Bit\Register::Install('in.ac.ducic.tabs'));
 	\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
-		'Page' => 'PRE_BROADCAST',
+		'Page' => 'PRE_PROFILE',
 		'Call' => 'Profile',
 		//'NavbarMood' => 'bg-light dker',
 		'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
