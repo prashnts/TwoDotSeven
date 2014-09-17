@@ -279,15 +279,16 @@ var Elapsed = {
             Elapsed.debugMsg("ElapsedJS action is Locked.");
             return;
         }
-        Elapsed.ActionToggle = true;
-        Elapsed.debugMsg("Locked ElapsedJS action.");
 
         Elapses = document.getElementsByClassName(Elapsed.ClassHook);
         
         for (var i = 0; i < Elapses.length; i++) {
-        
+            if (i == 0) {
+                Elapsed.ActionToggle = true;
+                Elapsed.debugMsg("Locked ElapsedJS action.");
+            }
+            
             var Elapse = Elapses[i];
-        
             try {
                 var pastTime = parseInt(Elapse.getAttribute(Elapsed.DataHook));
                 var past = new Date(pastTime*1000);
@@ -311,9 +312,12 @@ var Elapsed = {
             } catch (E) {
                 Elapsed.debugMsg(E.message);
             }
+
+            if (i == Elapses.length-1) {
+                Elapsed.ActionToggle = false;
+                Elapsed.debugMsg("Unlocked ElapsedJS action.");
+            }
         }
-        Elapsed.ActionToggle = false;
-        Elapsed.debugMsg("Unlocked ElapsedJS action.");
     },
 
     /**
@@ -440,6 +444,7 @@ var Elapsed = {
         }, Elapsed.RoutineInterval);
     }
 };
+
 
 BroadcastSvc.postFetch();
 BroadcastSvc.init();
