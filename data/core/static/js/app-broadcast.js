@@ -267,7 +267,7 @@ var Elapsed = {
     /**
      * Enables Debugging Mode.
      */
-    ElapsedDEBUG: true,
+    ElapsedDEBUG: false,
 
     /**
      * Main Action. Iterates through ALL elapse elements and converts them into Elapse Objects.
@@ -444,7 +444,6 @@ var Elapsed = {
         }, Elapsed.RoutineInterval);
     }
 };
-
 
 BroadcastSvc.postFetch();
 BroadcastSvc.init();
