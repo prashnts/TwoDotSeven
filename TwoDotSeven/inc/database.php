@@ -61,7 +61,7 @@ class Handler {
 			$Binding = $this->DbHandle->prepare($Query);
 			$Binding->execute($Arr);
 			$this->DbHandle->Commit();
-			\TwoDot7\Config\DEBUG ? \TwoDot7\Util\Log($Query."..".json_encode($Arr), "DEBUG") : False;
+			\TwoDot7\Config\DEBUG ? \TwoDot7\Util\Log($Query."\t".json_encode($Arr), "DEBUG") : False;
 			return ($Binding);
 		}
 		catch (PDOException $E) {

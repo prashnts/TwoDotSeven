@@ -330,7 +330,10 @@ class Redundant {
 }
 
 /**
-* 
+ * Class wrapper for REST template functions.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 20140829
+ * @version	0.1
 */
 class REST {
 	
@@ -540,6 +543,101 @@ class Token {
 		else {
 			throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\Util\\Token::Remove");
 		}
+	}
+}
+
+/**
+ * Class wrapper for Dictionary implementation of Arrays.
+ * @internal Moved From \User\Profile
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 20140919
+ * @version	0.1
+ */
+class Dictionary {
+
+	/**
+	 * Stores the Instance of Dictionary.
+	 */
+	private $DictionaryArray;
+
+	/**
+	 * Enforces Strict. Prevents Overwrite of keys. 
+	 */
+	private $Strict;
+
+	/**
+	 * Constructs the Dictionary Object.
+	 * @param	Array $Array Optional. The initial array, to be converted in Dictionary.
+	 * @return	NaN
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140919
+	 * @version	0.1 
+	 */
+	function __construct($Array = array(), $Strict = False) {
+		if (!is_array($Array) || 
+			!is_bool($Strict)) {
+			throw new \TwoDot7\Exception\InvalidArgument("Error in Arguments.");
+		}
+		$this->DictionaryArray = $Array;
+		$this->Strict = $Strict;
+	}
+
+	/**
+	 * Adds a key-value pair in Dictionary.
+	 * @param	String $Key Required. The Dictionary key.
+	 * @param	Mixed $Value Optional. The corresponding value.
+	 * @return	Boolean
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140919
+	 * @version	0.1 
+	 */
+	public function add($Key, $Value = False) {
+		if (array_key_exists($Key, $this->DictionaryArray)) {
+			if ($Value && !$this->Strict) {
+				$this->DictionaryArray[$Key] = $Value;
+				return True;
+			} elseif ($Value && $this->DictionaryArray) {
+				return False;
+			} else {
+				$this->DictionaryArray[$Key] = False;
+				return True;
+			}
+		} else {
+			if ($Value) {
+				$this->DictionaryArray[$Key] = $Value;
+			} else {
+				$this->DictionaryArray[$Key] = False;
+			}
+		}
+	}
+
+	/**
+	 * Removes the given key from Dictionary.
+	 * @param	String $Key Required. The Dictionary key.
+	 * @return	Boolean
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140919
+	 * @version	0.1 
+	 */
+	public function remove($Key) {
+		if (array_key_exists($Key, $this->DictionaryArray)) {
+			unset($this->DictionaryArray[$Key]);
+			return True;
+		} else return True;
+	}
+
+	/**
+	 * Gets the Dictionary array.
+	 * @param	String $Key Optional. The Dictionary key. If unspecified, full Array is returned.
+	 * @return	Mixed
+	 * @author	Prashant Sinha <firstname,lastname>@outlook.com
+	 * @since	v0.0 20140919
+	 * @version	0.1 
+	 */
+	public function get($Key = False) {
+		if ($Key === False) return $this->DictionaryArray;
+		elseif (array_key_exists($Key, $this->DictionaryArray)) return $this->DictionaryArray[$Key];
+		else return False;
 	}
 }
 
