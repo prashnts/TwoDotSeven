@@ -609,6 +609,7 @@ class Dictionary {
 				$this->DictionaryArray[$Key] = False;
 			}
 		}
+		return True;
 	}
 
 	/**

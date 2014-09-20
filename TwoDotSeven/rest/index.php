@@ -30,6 +30,7 @@ _Import("_REST_Account.php");
 _Import("_REST_Broadcast.php");
 _Import("_REST_Direction.php");
 _Import("_REST_Redundant.php");
+_Import("_REST_User.php");
 
 # Parse incoming URI and then process it.
 $URI = preg_split('/[\/\?]/', preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI']));
@@ -106,7 +107,14 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 			);
 		Redundant\init();
 		break;
-
+	case 'user':
+		$_GET = array(
+			'UserName' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+			'Function' => isset($URI[BASE+2]) ? $URI[BASE+2] : False,
+			'Action' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
+			);
+		User\init();
+		break;
 	default:				
 		http_response_code(400);
 		echo '<pre>';
