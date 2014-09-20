@@ -707,13 +707,130 @@ class Preferences {
 }
 
 class Profile {
-	public static function Bio() {
-		// Set Bio
+
+	private $UserName;
+	private $UserID;
+	private $UserEMail;
+	private $Meta;
+	public $Success = False;
+
+	function __construct($UserName) {
+		$this->UserName = $UserName;
+		$this->FetchMeta();
 	}
-	public static function Info() {
-		//
+	public function GetAll() {
+		return $this->Meta->get();
+	}
+	private function FetchMeta() {
+		$Query = "SELECT ID as UserID, EMail as UserEMail, Meta FROM _user WHERE UserName = :UserName;";
+		$Response = \TwoDot7\Database\Handler::Exec($Query, array('UserName' => $this->UserName))->fetch(\PDO::FETCH_ASSOC);
+		if ($Response) {
+			$this->Success = True;
+			$MetaJSON = json_decode($Response['Meta'], true);
+			$this->Meta = $MetaJSON ? new Util\Dictionary($MetaJSON) : new Util\Dictionary;
+			$this->UserID = $Response['UserID'];
+			$this->UserEMail = $Response['UserEMail'];
+		} else {
+			$this->Success = False;
+		}
+	}
+	private function PushMeta() {
+		return (bool)\TwoDot7\Database\Handler::Exec(
+			"UPDATE _user SET Meta = :Meta WHERE UserName = :UserName;",
+			array(
+				'Meta' => json_encode($this->Meta->get()),
+				'UserName' => $this->UserName
+			))->rowCount();
+	}
+	private function MetaHandler($Key, $Data = False) {
+		if (!is_string($Key)) throw new \TwoDot7\Exception\InvalidArgument("Key should be a valid string.");
+		if (is_bool($Data)) return $this->Meta->get($Key);
+		else {
+			$this->Meta->add($Key, $Data);
+			return $this->PushMeta();
+		}
+	}
+
+	public function Get() {
+		$Response = new \TwoDot7\Util\Dictionary;
+		$Response->add("Self", $this->Self());
+		$Response->add("UserID", $this->UserID());
+		$Response->add("UserName", $this->UserName());
+		$Response->add("ProfileStatus", $this->ProfileStatus());
+		$Response->add("FirstName", $this->FirstName());
+		$Response->add("LastName", $this->LastName());
+		$Response->add("Gender", $this->Gender());
+		$Response->add("Designation", $this->Designation());
+		$Response->add("Course", $this->Course());
+		$Response->add("Year", $this->Year());
+		$Response->add("Bio", $this->Bio());
+		$Response->add("ProfilePicture", $this->ProfilePicture());
+		$Response->add("ProfileBackground", $this->ProfileBackground());
+		if (\TwoDot7\User\Session::Exists() &&
+			\TwoDot7\User\Status::Profile(\TwoDot7\User\Session::Data()['UserName'])['Response'] === 1) {
+			$Response->add("UserEMail", $this->UserEMail());
+			$Response->add("DOB", $this->DOB());
+			$Response->add("Mobile", $this->Mobile());
+			$Response->add("Address", $this->Address());
+		}
+		return $Response->get();
+	}
+
+	public function Self() {
+		return strcasecmp($this->UserName, Session::Data()['UserName']) === 0;
+	}
+	public function UserEMail() {
+		return $this->UserEMail;
+	}
+	public function UserID() {
+		return $this->UserID;
+	}
+	public function UserName() {
+		return $this->UserName;
+	}
+	public function ProfileStatus() {
+		return Status::Profile($this->UserName)['Response'];
+	}
+	public function FirstName($Data = False) {
+		return $this->MetaHandler("FirstName", $Data);
+	}
+	public function LastName($Data = False) {
+		return $this->MetaHandler("LastName", $Data);
+	}
+	public function Gender($Data = False) {
+		return $this->MetaHandler("Gender", $Data);
+	}
+	public function Designation($Data = False) {
+		return $this->MetaHandler("Designation", $Data);
+	}
+	public function Course($Data = False) {
+		return $this->MetaHandler("Course", $Data);
+	}
+	public function Year($Data = False) {
+		return $this->MetaHandler("Year", $Data);
+	}
+	public function DOB($Data = False) {
+		return $this->MetaHandler("DOB", $Data);
+	}
+	public function Mobile($Data = False) {
+		return $this->MetaHandler("Mobile", $Data);
+	}
+	public function Address($Data = False) {
+		return $this->MetaHandler("Address", $Data);
+	}
+	public function Bio($Data = False) {
+		return $this->MetaHandler("Bio", $Data);
+	}
+	public function ProfilePicture($Data = False) {
+		$URI = $this->MetaHandler("ProfilePicture", $Data);
+		return $URI ? $URI : "/assetserver/userNameIcon/".$this->UserName;
+	}
+	public function ProfileBackground($Data = False) {
+		$URI = $this->MetaHandler("ProfileBackground", $Data);
+		return $URI ? $URI : "/assetserver/generic/profileBackground";
 	}
 }
+
 
 /**
  * Wrapper for the User Account Recovery Related functions.

@@ -1,7 +1,7 @@
 <?php
 namespace TwoDot7\Admin\Template\Dash_Broadcasts_Bits;
 use TwoDot7\Admin\Template\Dash_Broadcasts_Bits as Node;
-
+use TwoDot7\Util as Util;
 #  _____                      _____ 
 # /__   \__      _____       |___  |     _   ___              
 #   / /\/\ \ /\ / / _ \         / /     | | / (_)__ _    _____
@@ -356,40 +356,33 @@ class Render {
 							<div class="panel-heading no-border">
 								<div class="clearfix m-b-sm">
 									<a href="#" class="pull-left thumb-md avatar b-3x m-r">
-										<img src="/assetserver/userNameIcon/p">
+										<img src="<?php Util\_echo($Data['Meta']['ProfilePicture']); ?>">
 									</a>
 									<div class="clear">
 										<div class="h3 m-t-xs m-b-xs">
-											Prashant Sinha
+										<?php echo $Data['Meta']['FirstName']." ".$Data['Meta']['LastName']." @".$Data['Meta']['UserName'];?>
 										</div>
-									<a href="#" class="btn btn-small btn-default btn-sm pull-right">Edit Profile</a>
-										<h5>Student &bullet; B.Tech. IT &bullet; 1<SUP>st</SUP> year</h5> 
+										<?php if (isset($Data['Meta']['Self']) && $Data['Meta']['Self']) echo '<a href="#" class="btn btn-small btn-default btn-sm pull-right">Edit Profile</a>'; ?>
+										<h5>
+											<?php Util\_echo($Data['Meta']['Designation'], "Unknown User"); ?> &bullet;
+											<?php Util\_echo($Data['Meta']['Course'], "Course Unspecified"); ?> &bullet;
+											<?php Util\_echo($Data['Meta']['Year']); ?>
+										</h5> 
 									</div>
 								</div>
 								<hr class="m-t-sm m-b-sm">
 								<div class="paffe">
-									<div id="epiceditor">
-									</div>
-										<h3>Academia</h3>
-										<h4>Research Interest:</h4>
-										<p>Machine learning, Computational Linguistics, Computational Biology</p>
-										<h4>Skills and Competence</h4>
-										<p>GD, WD etc</p>
-										<h3>Projects and Internships</h3>
-										<h4>Semester Projects</h4>
-										<p>LOL?</p>
-										<h4>Innovation Projects</h4>
-										<p>Yeahh</p>
+										<?php Util\_echo($Data['Meta']['Bio']); ?>
 									<h3>Personal Info</h3>
 									<dl class="dl-horizontal">
 										<dt>Mobile</dt>
-										<dd>9910134045</dd>
+										<dd><?php Util\_echo($Data['Meta']['Mobile'], "Unspecified"); ?></dd>
 										<dt>Public Email</dt>
-										<dd>prashant@ducic.ac.in</dd>
+										<dd><?php Util\_echo($Data['Meta']['UserEMail'], "Unspecified"); ?></dd>
 										<dt>Date of Birth</dt>
-										<dd>August 11, 1996</dd>
+										<dd><?php Util\_echo($Data['Meta']['DOB'], "Unspecified"); ?></dd>
 										<dt>Address</dt>
-										<dd>108, ITIL, Cluster Innovation Centre, University of Delhi</dd>
+										<dd><?php Util\_echo($Data['Meta']['Address'], "Unspecified"); ?></dd>
 									</dl>
 								<hr class="m-t-sm m-b-sm">
 							</div>
@@ -402,46 +395,30 @@ class Render {
 				<section class="vbox">
 					<section class="scrollable">
 						<div class="wrapper">
-							<section class="panel panel-default">
-								<form>
-									<textarea class="form-control no-border" rows="3" placeholder="What are you doing..."></textarea>
-								</form>
-								<footer class="panel-footer bg-light lter">
-									<button class="btn btn-info pull-right btn-sm">POST</button>
-									<ul class="nav nav-pills nav-sm">
-										<li><a href="#"><i class="fa fa-camera text-muted"></i></a>
-										</li>
-										<li><a href="#"><i class="fa fa-video-camera text-muted"></i></a>
-										</li>
-									</ul>
-								</footer>
-							</section>
-							<section class="panel panel-default">
-								<h4 class="padder">Latest Tweets</h4>
-								<ul class="list-group">
-									<li class="list-group-item">
-										<p>Wellcome <a href="#" class="text-info">@Drew Wllon</a> and play this web application template, have fun1</p>
-										<small class="block text-muted"><i class="fa fa-clock-o"></i> 2 minuts ago</small> 
-									</li>
-									<li class="list-group-item">
-										<p>Morbi nec <a href="#" class="text-info">@Jonathan George</a> nunc condimentum ipsum dolor sit amet, consectetur</p>
-										<small class="block text-muted"><i class="fa fa-clock-o"></i> 1 hour ago</small> 
-									</li>
-									<li class="list-group-item">
-										<p><a href="#" class="text-info">@Josh Long</a> Vestibulum ullamcorper sodales nisi nec adipiscing elit.</p>
-										<small class="block text-muted"><i class="fa fa-clock-o"></i> 2 hours ago</small> 
-									</li>
-								</ul>
-							</section>
-							<section class="panel clearfix bg-primary dk">
-								<div class="panel-body">
-									<a href="#" class="thumb pull-left m-r">
-										<img src="images/a0.jpg" class="img-circle b-a b-3x b-white">
-									</a>
-									<div class="clear"> <a href="#" class="text-info">@Mike Mcalidek <i class="fa fa-twitter"></i></a>  <small class="block text-muted">2,415 followers / 225 tweets</small>  <a href="#" class="btn btn-xs btn-info m-t-xs">Follow</a> 
+							<div class="row m-b-xs">
+								<div class="col-lg-12">
+									<div class="broadcast-post m-b-lg" id="p">
+										<div class="clear row No-Margin-Padding-Override-Hack">
+											<textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here" id="broadcast-post-area"></textarea>
+										</div>
+										<div class="clear row No-Margin-Padding-Override-Hack">
+											<!--button class="btn btn-success m-t-xs " type="button" id="lol">Tag People</button-->
+											<button class="btn btn-success m-t-xs pull-right" type="button" id="broadcast-post-btn" style="display:none;">Broadcast to Everyone</button>
+										</div>
 									</div>
 								</div>
-							</section>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<section class="panel broadcast-clear">
+										<ul class="list-group" id="broadcast-container">
+										</ul>
+									</section>
+									<div class="loadMore text-center">
+										<a href="#" class="btn btn-success" id="broadcast-load-post">Load more Broadcasts</a>
+									</div>
+								</div>
+							</div>
 						</div>
 					</section>
 				</section>

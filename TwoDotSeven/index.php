@@ -87,6 +87,10 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 
 	case 'profile':
 	case 'userprofile':
+		$_GET = array_merge($_GET, array(
+			'UserName' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+			'Action' => isset($URI[BASE+2]) ? $URI[BASE+2] : 'show'
+			));
 		Profile\init();
 
 	case 'administration':

@@ -15,15 +15,25 @@ namespace TwoDot7\Admin\Profile;
  * @version	0.0
  */
 function init() {
-	//$installer = new \TwoDot7\Install\Setup;
-	//$installer->Navigation();
-	//var_dump(\TwoDot7\Bit\Register::Install('in.ac.ducic.tabs'));
-	\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
-		'Page' => 'PRE_PROFILE',
-		'Call' => 'Profile',
-		//'NavbarMood' => 'bg-light dker',
-		'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
-			'Page' => 'PRE_BROADCAST'
-			))
-		));
+	$UserProfile = new \TwoDot7\User\Profile($_GET['UserName']);
+	if ($UserProfile->Success) switch ($_GET['Action']) {
+		case 'view':
+		default:
+			\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
+				'Page' => 'PRE_PROFILE',
+				'Call' => 'Profile',
+				'Meta' => $UserProfile->Get(),
+				'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
+					'Page' => 'PRE_BROADCAST'
+					))
+				));
+	} else {
+		\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(
+			'Call' => 'Error',
+			'ErrorMessageHead' => 'No one is here.',
+			'ErrorMessageFoot' => 'No user called '.(strlen($_GET['UserName'])>1? $_GET['UserName'] : "<kbd>UNSPECIFIED</kbd>"). ' exists.',
+			'ErrorCode' => 'UserError: Invalid UserName.',
+			'Code' => 404,
+			'Mood' => 'Red'));
+	}
 }

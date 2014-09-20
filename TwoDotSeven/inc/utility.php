@@ -642,6 +642,10 @@ class Dictionary {
 	}
 }
 
+function _echo($Variable, $Default = "") {
+	echo isset($Variable) && $Variable ? $Variable : $Default;
+}
+
 /**
  * Returns the HTTP Request Headers.
  * @return array Contains all the Request Headers.
