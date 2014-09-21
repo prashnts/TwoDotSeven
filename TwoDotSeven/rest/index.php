@@ -111,7 +111,7 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 		$_GET = array(
 			'UserName' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
 			'Function' => isset($URI[BASE+2]) ? $URI[BASE+2] : False,
-			'Action' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
+			'SubAction' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
 			);
 		User\init();
 		break;

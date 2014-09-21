@@ -108,6 +108,7 @@ function Head(&$Data) {
 	<link rel="stylesheet" href="/data/core/static/css/app.css" type="text/css" />
 	<link rel="stylesheet" href="/assetserver/css/backgroundstyles" type="text/css" />
 	<link rel="stylesheet" href="/data/core/static/css/style.css" type="text/css" />
+	<link rel="stylesheet" href="/data/core/static/js/datepicker/datepicker.css" type="text/css" />
 
 	<script src="/data/core/static/js/jquery.min.js"></script>
 	<!--[if lt IE 9]>	
@@ -131,6 +132,7 @@ function JS($Files = array()) {
 
 	echo '<script src="/data/core/static/js/app-direction.js"></script>';
 	echo '<script src="/data/core/static/js/app-broadcast.js"></script>';
+	echo '<script src="/data/core/static/js/datepicker/bootstrap-datepicker.js"></script>';
 	//echo '<script src="/data/core/static/js/app/SignInUp.js"></script>';
 	//echo '<script src="/data/core/static/js/charts/sparkline/jquery.sparkline.min.js"></script>';
 }
@@ -353,40 +355,120 @@ class Render {
 					<section class="scrollable">
 						<div class="wrapper">
 							<section class="panel panel-default">
-							<div class="panel-heading no-border">
-								<div class="clearfix m-b-sm">
-									<a href="#" class="pull-left thumb-md avatar b-3x m-r">
-										<img src="<?php Util\_echo($Data['Meta']['ProfilePicture']); ?>">
-									</a>
-									<div class="clear">
-										<div class="h3 m-t-xs m-b-xs">
-										<?php echo $Data['Meta']['FirstName']." ".$Data['Meta']['LastName']." @".$Data['Meta']['UserName'];?>
+								<!--div class="panel-heading no-border">
+									<div class="clearfix m-b-sm">
+										<a href="#" class="pull-left thumb-md avatar b-3x m-r">
+											<img src="<?php Util\_echo($Data['Meta']['ProfilePicture']); ?>">
+										</a>
+										<div class="clear">
+											<div class="h3 m-t-xs m-b-xs">
+											<?php echo $Data['Meta']['FirstName']." ".$Data['Meta']['LastName']." @".$Data['Meta']['UserName'];?>
+											</div>
+											<?php if (isset($Data['Meta']['Self']) && $Data['Meta']['Self']) echo '<a href="#" class="btn btn-small btn-default btn-sm pull-right">Edit Profile</a>'; ?>
+											<h5>
+												<?php Util\_echo($Data['Meta']['Designation'], "Unknown User"); ?> &bullet;
+												<?php Util\_echo($Data['Meta']['Course'], "Course Unspecified"); ?> &bullet;
+												<?php Util\_echo($Data['Meta']['Year']); ?>
+											</h5> 
 										</div>
-										<?php if (isset($Data['Meta']['Self']) && $Data['Meta']['Self']) echo '<a href="#" class="btn btn-small btn-default btn-sm pull-right">Edit Profile</a>'; ?>
-										<h5>
-											<?php Util\_echo($Data['Meta']['Designation'], "Unknown User"); ?> &bullet;
-											<?php Util\_echo($Data['Meta']['Course'], "Course Unspecified"); ?> &bullet;
-											<?php Util\_echo($Data['Meta']['Year']); ?>
-										</h5> 
+									</div>
+									<hr class="m-t-sm m-b-sm">
+									<div class="paffe">
+											<?php Util\_echo($Data['Meta']['Bio']); ?>
+										<h3>Personal Info</h3>
+										<dl class="dl-horizontal">
+											<dt>Mobile</dt>
+											<dd><?php Util\_echo($Data['Meta']['Mobile'], "Unspecified"); ?></dd>
+											<dt>Public Email</dt>
+											<dd><?php Util\_echo($Data['Meta']['UserEMail'], "Unspecified"); ?></dd>
+											<dt>Date of Birth</dt>
+											<dd><?php Util\_echo($Data['Meta']['DOB'], "Unspecified"); ?></dd>
+											<dt>Address</dt>
+											<dd><?php Util\_echo($Data['Meta']['Address'], "Unspecified"); ?></dd>
+										</dl>
+									<hr class="m-t-sm m-b-sm">
+								</div!-->
+						
+								<div class="panel-heading no-border m-t">
+									<div class="row">
+										<img src="\data\core\images\generic\profilex128.png" class="pull-left m-r-sm m-l" height="32">
+										<span class="h3">@<?php Util\_echo($Data['Meta']['UserName']); ?></span>
+										<a href="#" class="btn btn-success pull-right m-r"><i class="fa fa-check-circle"></i>&nbsp; Save Changes</a>
+									</div>
+									<hr class="m-t-sm m-b-sm">
+									<div class="clearfix m-b-sm">
+										<a href="#" class="pull-left thumb-md avatar b-3x m-r">
+											<img src="<?php Util\_echo($Data['Meta']['ProfilePicture']); ?>">
+										</a>
+										<div class="clear">
+											<div class="row padder">
+												<div class="col-lg-7 no-padder m-r-xs">
+													<input type="text" class="form-control" placeholder="First Name" value="<?php Util\_echo($Data['Meta']['FirstName']); ?>">
+												</div>
+												<div class="col-lg-4 no-padder m-l-xs">
+													<input type="text" class="form-control" placeholder="Last Name" value="<?php Util\_echo($Data['Meta']['LastName']); ?>">
+												</div>
+											</div>
+											<div class="row padder m-t-sm">
+												<div class="col-lg-4 no-padder m-r-xs">
+													<select name="account" class="form-control input-sm col-lg-4">
+														<option <?php if (!$Data['Meta']['Designation']) echo "selected"; ?> value="" disabled>Designation</option>
+														<option <?php if (strcasecmp($Data['Meta']['Designation'], "Student") == 0) echo "selected"; ?> value="Student">Student</option>
+														<option <?php if (strcasecmp($Data['Meta']['Designation'], "Faculty") == 0) echo "selected"; ?> value="Faculty">Faculty</option>
+														<option <?php if (strcasecmp($Data['Meta']['Designation'], "Staff") == 0) echo "selected"; ?> value="Staff">Staff</option>
+														<option <?php if (strcasecmp($Data['Meta']['Designation'], "Others") == 0) echo "selected"; ?> value="Others">Others</option>
+													</select>
+												</div>
+												<div class="col-lg-4 no-padder m-r-xs">
+													<select class="form-control input-sm" name="Course" required>
+														<option <?php if (!$Data['Meta']['Course']) echo "selected"; ?> value="" disabled>Course</option>
+														<option <?php if (strcasecmp($Data['Meta']['Course'], "B.Tech. (IT &amp; Mathematical Innovations)") == 0) echo "selected"; ?> value="B.Tech. (IT and Mathematical Innovations)">B.Tech. (IT &amp; Mathematical Innovations)</option>
+														<option <?php if (strcasecmp($Data['Meta']['Course'], "B.A. Honours (Humanities)") == 0) echo "selected"; ?> value="B.A. Honours (Humanities)">B.A. Honours (Humanities)</option>
+														<option <?php if (strcasecmp($Data['Meta']['Course'], "M.Sc. (Mathematics Education)") == 0) echo "selected"; ?> value="M.Sc. (Mathematics Education)">M.Sc. (Mathematics Education)</option>
+													</select>
+												</div>
+												<div class="col-lg-3 no-padder">
+													<select name="account" class="form-control input-sm">
+														<option <?php if (!$Data['Meta']['Year']) echo "selected"; ?> value="" disabled >Year</option>
+														<option <?php if (strcasecmp($Data['Meta']['Year'], "First") == 0) echo "selected"; ?> value="First">First</option>
+														<option <?php if (strcasecmp($Data['Meta']['Year'], "Second") == 0) echo "selected"; ?> value="Second">Second</option>
+														<option <?php if (strcasecmp($Data['Meta']['Year'], "Third") == 0) echo "selected"; ?> value="Third">Third</option>
+														<option <?php if (strcasecmp($Data['Meta']['Year'], "Fourth") == 0) echo "selected"; ?> value="Fourth">Fourth</option>
+													</select>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+									<hr class="m-t-sm m-b-sm">
+									<div class="paffe">
+										<textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here" rows="10"></textarea>
+										<h3>Personal Info</h3>
+										<dl class="dl-horizontal">
+											<dt class="m-t-sm">Mobile</dt>
+											<dd class="m-t-sm"><input type="text" class="form-control" placeholder="Mobile Number" value="<?php Util\_echo($Data['Meta']['Mobile']); ?>"></dd>
+											<dt class="m-t">Roll Number</dt>
+											<dd class="m-t-sm"><input type="text" class="form-control" placeholder="Roll Number" value="<?php Util\_echo($Data['Meta']['RollNumber']); ?>"></dd>
+											<dt class="m-t">Gender</dt>
+											<dd class="m-t-sm">
+												<select name="account" class="form-control input-sm">
+													<option <?php if (!$Data['Meta']['Gender']) echo "selected"; ?> value="" disabled >Gender</option>
+													<option <?php if (strcasecmp($Data['Meta']['Gender'], "Female") == 0) echo "selected"; ?> value="Female">Female</option>
+													<option <?php if (strcasecmp($Data['Meta']['Gender'], "Male") == 0) echo "selected"; ?> value="Male">Male</option>
+													<option <?php if (strcasecmp($Data['Meta']['Gender'], "Other") == 0) echo "selected"; ?> value="Third">Other</option>
+												</select>
+											</dd>
+											<dt class="m-t">Date of Birth</dt>
+											<dd class="m-t-sm"><input class="input-sm input-s datepicker-input form-control" size="16" type="text" value="12-02-2013" data-date-format="dd-mm-yyyy"></dd>
+											<dt class="m-t-sm">Address</dt>
+											<dd class="m-t-sm"><textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here"><?php Util\_echo($Data['Meta']['Address']); ?></textarea></dd>
+										</dl>
+									<hr class="m-t-sm m-b-sm">
+									<div class="row">
+										<a href="#" class="btn btn-success pull-right m-r"><i class="fa fa-check-circle"></i>&nbsp; Save Changes</a>
 									</div>
 								</div>
-								<hr class="m-t-sm m-b-sm">
-								<div class="paffe">
-										<?php Util\_echo($Data['Meta']['Bio']); ?>
-									<h3>Personal Info</h3>
-									<dl class="dl-horizontal">
-										<dt>Mobile</dt>
-										<dd><?php Util\_echo($Data['Meta']['Mobile'], "Unspecified"); ?></dd>
-										<dt>Public Email</dt>
-										<dd><?php Util\_echo($Data['Meta']['UserEMail'], "Unspecified"); ?></dd>
-										<dt>Date of Birth</dt>
-										<dd><?php Util\_echo($Data['Meta']['DOB'], "Unspecified"); ?></dd>
-										<dt>Address</dt>
-										<dd><?php Util\_echo($Data['Meta']['Address'], "Unspecified"); ?></dd>
-									</dl>
-								<hr class="m-t-sm m-b-sm">
-							</div>
-						</section>
+							</section>
 						</div>
 					</section>
 				</section>
@@ -424,47 +506,6 @@ class Render {
 				</section>
 			</aside>
 		</section>
-		<script type="text/javascript" src="/data/core/static/js/markdown/js/epiceditor.min.js"></script>
-		<script type="text/javascript">
-			var opts = {
-				container: 'epiceditor',
-				textarea: null,
-				basePath: '/data/core/static/js/markdown',
-				clientSideStorage: true,
-				localStorageName: 'epiceditor',
-				useNativeFullscreen: false,
-				parser: marked,
-				file: {
-					name: 'epiceditor',
-					defaultContent: '',
-					autoSave: 100
-				},
-				theme: {
-					base: '/themes/base/epiceditor.css',
-					preview: '/themes/preview/github.css',
-					editor: '/themes/editor/epic-light.css'
-				},
-				button: {
-					preview: true,
-					fullscreen: true,
-					bar: "auto"
-				},
-				focusOnLoad: false,
-				shortcut: {
-					modifier: 18,
-					fullscreen: 70,
-					preview: 80
-				},
-				string: {
-					togglePreview: 'Toggle Preview Mode',
-					toggleEdit: 'Toggle Edit Mode',
-					toggleFullscreen: 'Enter Fullscreen'
-				},
-				autogrow: true,
-			}
-				opts.autogrow.scroll =  false
-			var editor = new EpicEditor(opts).load();
-		</script>
 		<?php
 	}
 }

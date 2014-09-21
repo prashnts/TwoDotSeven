@@ -770,6 +770,7 @@ class Profile {
 			\TwoDot7\User\Status::Profile(\TwoDot7\User\Session::Data()['UserName'])['Response'] === 1) {
 			$Response->add("UserEMail", $this->UserEMail());
 			$Response->add("DOB", $this->DOB());
+			$Response->add("RollNumber", $this->RollNumber());
 			$Response->add("Mobile", $this->Mobile());
 			$Response->add("Address", $this->Address());
 		}
@@ -811,6 +812,9 @@ class Profile {
 	}
 	public function DOB($Data = False) {
 		return $this->MetaHandler("DOB", $Data);
+	}
+	public function RollNumber($Data = False) {
+		return $this->MetaHandler("RollNumber", $Data);
 	}
 	public function Mobile($Data = False) {
 		return $this->MetaHandler("Mobile", $Data);
