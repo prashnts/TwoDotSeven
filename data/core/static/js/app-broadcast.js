@@ -499,10 +499,11 @@ var ProfileUpdate = {
                 ProfileUpdate.FirstNameToggle = true;
                 ProfileUpdate.HighlightField(Hook, "blue");
             },
-            success: function() {
+            success: function(data) {
                 Hook.removeAttr("disabled");
                 ProfileUpdate.FirstNameToggle = false;
                 ProfileUpdate.HighlightField(Hook, "green");
+                console.log(data);
             },
             error: function(data) {
                 Hook.removeAttr("disabled");

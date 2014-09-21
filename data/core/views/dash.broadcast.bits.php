@@ -456,11 +456,11 @@ class Render {
 													<option <?php if (!$Data['Meta']['Gender']) echo "selected"; ?> value="" disabled >Gender</option>
 													<option <?php if (strcasecmp($Data['Meta']['Gender'], "Female") == 0) echo "selected"; ?> value="Female">Female</option>
 													<option <?php if (strcasecmp($Data['Meta']['Gender'], "Male") == 0) echo "selected"; ?> value="Male">Male</option>
-													<option <?php if (strcasecmp($Data['Meta']['Gender'], "Other") == 0) echo "selected"; ?> value="Third">Other</option>
+													<option <?php if (strcasecmp($Data['Meta']['Gender'], "Other") == 0) echo "selected"; ?> value="Other">Other</option>
 												</select>
 											</dd>
 											<dt class="m-t">Date of Birth</dt>
-											<dd class="m-t-sm"><input id="Profile-DOB" onchange="ProfileUpdate.DOB()"  class="input-sm input-s datepicker-input form-control" size="16" type="text" value="12-02-2013" data-date-format="dd-mm-yyyy"></dd>
+											<dd class="m-t-sm"><input id="Profile-DOB" onchange="ProfileUpdate.DOB()"  class="input-sm input-s datepicker-input form-control" size="16" type="text" value="<?php Util\_echo($Data['Meta']['DOB']); ?>" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy"></dd>
 											<dt class="m-t-sm">Address</dt>
 											<dd class="m-t-sm"><textarea id="Profile-Address" onchange="ProfileUpdate.Address()"  type="text" class="form-control m-b-sm" placeholder="Input your comment here"><?php Util\_echo($Data['Meta']['Address']); ?></textarea></dd>
 										</dl>
@@ -485,7 +485,6 @@ class Render {
 											<textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here" id="broadcast-post-area"></textarea>
 										</div>
 										<div class="clear row No-Margin-Padding-Override-Hack">
-											<!--button class="btn btn-success m-t-xs " type="button" id="lol">Tag People</button-->
 											<button class="btn btn-success m-t-xs pull-right" type="button" id="broadcast-post-btn" style="display:none;">Broadcast to Everyone</button>
 										</div>
 									</div>

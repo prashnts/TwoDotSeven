@@ -1,5 +1,6 @@
 <?php
 namespace TwoDot7\REST\User;
+use TwoDot7\Util as Util;
 #  _____                      _____   
 # /__   \__      _____       |___  |     ___  ______________
 #   / /\/\ \ /\ / / _ \         / /     / _ \/ __/ __/_  __/
@@ -44,15 +45,34 @@ function init() {
 					$Success = $UserProfile->LastName($_POST['ProfileUpdateValue']);
 					break;
 				case 'Gender':
-					if (!\TwoDot7\Validate\Alphanumeric($_POST['ProfileUpdateValue'])) $ERR_SHOW("ProfileUpdateValue for Gender is Invalid.");
+					if (!Util\arrayStrCaseCmp($_POST['ProfileUpdateValue'], array(
+							'Male',
+							'Female',
+							'Other'))
+						) $ERR_SHOW("ProfileUpdateValue for Gender is Invalid.");
 					$Success = $UserProfile->Gender($_POST['ProfileUpdateValue']);
 					break;
 				case 'Designation':
-					if (!\TwoDot7\Validate\Alphanumeric($_POST['ProfileUpdateValue'])) $ERR_SHOW("ProfileUpdateValue for Designation is Invalid.");
+					if (!Util\arrayStrCaseCmp($_POST['ProfileUpdateValue'], array(
+							'Student',
+							'Staff',
+							'Faculty',
+							'NA',
+							'Administrator',
+							'Coordinator',
+							'Director'))
+						) $ERR_SHOW("ProfileUpdateValue for Designation is Invalid.");
 					$Success = $UserProfile->Designation($_POST['ProfileUpdateValue']);
 					break;
 				case 'Course':
-					if (!\TwoDot7\Validate\Alphanumeric($_POST['ProfileUpdateValue'])) $ERR_SHOW("ProfileUpdateValue for Course is Invalid.");
+					if (!Util\arrayStrCaseCmp($_POST['ProfileUpdateValue'], array(
+							'B.Tech. (IT &amp; Mathematical Innovations)',
+							'B.Tech. (IT & Mathematical Innovations)',
+							'B.Tech. (IT and Mathematical Innovations)',
+							'B.A. Honours (Humanities)',
+							'M.Sc. (Mathematics Education)',
+							'NA'))
+						) $ERR_SHOW("ProfileUpdateValue for Course is Invalid.");
 					$Success = $UserProfile->Course($_POST['ProfileUpdateValue']);
 					break;
 				case 'Year':

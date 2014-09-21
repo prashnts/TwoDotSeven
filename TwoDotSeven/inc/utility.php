@@ -642,6 +642,13 @@ class Dictionary {
 	}
 }
 
+/**
+ * Macro (like) for echo() function, compensating for Failsafe checks.
+ * @internal Moved From \Template
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 20140921
+ * @version	0.1
+ */
 function _echo($Variable, $Default = "") {
 	echo isset($Variable) && $Variable ? $Variable : $Default;
 }
@@ -754,6 +761,14 @@ function Log($Message, $__Arg = "SILENT") {
 		die("Implicit Call by Util\\Log()");
 
 	return;
+}
+
+function arrayStrCaseCmp($String, $Array) {
+	$Success = False;
+	foreach ($Array as $key => $value) {
+		if (strcasecmp($String, $value) === 0) $Success = True;
+	}
+	return $Success;
 }
 
 ?>
