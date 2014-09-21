@@ -393,7 +393,7 @@ class Render {
 									<div class="row">
 										<img src="\data\core\images\generic\profilex128.png" class="pull-left m-r-sm m-l" height="32">
 										<span class="h3">@<?php Util\_echo($Data['Meta']['UserName']); ?></span>
-										<a href="#" class="btn btn-success pull-right m-r"><i class="fa fa-check-circle"></i>&nbsp; Save Changes</a>
+										<a href="#" class="btn btn-success pull-right m-r" id="profile-update-save"><i class="fa fa-globe"></i>&nbsp; Save Changes</a>
 									</div>
 									<hr class="m-t-sm m-b-sm">
 									<div class="clearfix m-b-sm">
@@ -403,15 +403,15 @@ class Render {
 										<div class="clear">
 											<div class="row padder">
 												<div class="col-lg-7 no-padder m-r-xs">
-													<input type="text" class="form-control" placeholder="First Name" value="<?php Util\_echo($Data['Meta']['FirstName']); ?>">
+													<input id="Profile-FirstName" onchange="ProfileUpdate.FirstName()" type="text" class="form-control has-success" placeholder="First Name" value="<?php Util\_echo($Data['Meta']['FirstName']); ?>">
 												</div>
 												<div class="col-lg-4 no-padder m-l-xs">
-													<input type="text" class="form-control" placeholder="Last Name" value="<?php Util\_echo($Data['Meta']['LastName']); ?>">
+													<input id="Profile-LastName" onchange="ProfileUpdate.LastName()" type="text" class="form-control" placeholder="Last Name" value="<?php Util\_echo($Data['Meta']['LastName']); ?>">
 												</div>
 											</div>
 											<div class="row padder m-t-sm">
 												<div class="col-lg-4 no-padder m-r-xs">
-													<select name="account" class="form-control input-sm col-lg-4">
+													<select id="Profile-Designation" onchange="ProfileUpdate.Designation()" name="account" class="form-control input-sm col-lg-4">
 														<option <?php if (!$Data['Meta']['Designation']) echo "selected"; ?> value="" disabled>Designation</option>
 														<option <?php if (strcasecmp($Data['Meta']['Designation'], "Student") == 0) echo "selected"; ?> value="Student">Student</option>
 														<option <?php if (strcasecmp($Data['Meta']['Designation'], "Faculty") == 0) echo "selected"; ?> value="Faculty">Faculty</option>
@@ -420,7 +420,7 @@ class Render {
 													</select>
 												</div>
 												<div class="col-lg-4 no-padder m-r-xs">
-													<select class="form-control input-sm" name="Course" required>
+													<select id="Profile-Course" onchange="ProfileUpdate.Course()" class="form-control input-sm" name="Course" required>
 														<option <?php if (!$Data['Meta']['Course']) echo "selected"; ?> value="" disabled>Course</option>
 														<option <?php if (strcasecmp($Data['Meta']['Course'], "B.Tech. (IT &amp; Mathematical Innovations)") == 0) echo "selected"; ?> value="B.Tech. (IT and Mathematical Innovations)">B.Tech. (IT &amp; Mathematical Innovations)</option>
 														<option <?php if (strcasecmp($Data['Meta']['Course'], "B.A. Honours (Humanities)") == 0) echo "selected"; ?> value="B.A. Honours (Humanities)">B.A. Honours (Humanities)</option>
@@ -428,7 +428,7 @@ class Render {
 													</select>
 												</div>
 												<div class="col-lg-3 no-padder">
-													<select name="account" class="form-control input-sm">
+													<select id="Profile-Year" onchange="ProfileUpdate.Year()" name="account" class="form-control input-sm">
 														<option <?php if (!$Data['Meta']['Year']) echo "selected"; ?> value="" disabled >Year</option>
 														<option <?php if (strcasecmp($Data['Meta']['Year'], "First") == 0) echo "selected"; ?> value="First">First</option>
 														<option <?php if (strcasecmp($Data['Meta']['Year'], "Second") == 0) echo "selected"; ?> value="Second">Second</option>
@@ -442,16 +442,17 @@ class Render {
 									</div>
 									<hr class="m-t-sm m-b-sm">
 									<div class="paffe">
-										<textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here" rows="10"></textarea>
+										<h3>Bio</h3>
+										<textarea id="Profile-Bio" onchange="ProfileUpdate.Bio()"  type="text" class="form-control m-b-sm" placeholder="Short Description, Bio. Supports Markdown." rows="8"><?php Util\_echo($Data['Meta']['Bio']); ?></textarea>
 										<h3>Personal Info</h3>
 										<dl class="dl-horizontal">
 											<dt class="m-t-sm">Mobile</dt>
-											<dd class="m-t-sm"><input type="text" class="form-control" placeholder="Mobile Number" value="<?php Util\_echo($Data['Meta']['Mobile']); ?>"></dd>
+											<dd class="m-t-sm"><input id="Profile-Mobile" onchange="ProfileUpdate.Mobile()" type="text" class="form-control" placeholder="Mobile Number" value="<?php Util\_echo($Data['Meta']['Mobile']); ?>"></dd>
 											<dt class="m-t">Roll Number</dt>
-											<dd class="m-t-sm"><input type="text" class="form-control" placeholder="Roll Number" value="<?php Util\_echo($Data['Meta']['RollNumber']); ?>"></dd>
+											<dd class="m-t-sm"><input id="Profile-RollNumber" onchange="ProfileUpdate.RollNumber()"  type="text" class="form-control" placeholder="Roll Number" value="<?php Util\_echo($Data['Meta']['RollNumber']); ?>"></dd>
 											<dt class="m-t">Gender</dt>
 											<dd class="m-t-sm">
-												<select name="account" class="form-control input-sm">
+												<select id="Profile-Gender" onchange="ProfileUpdate.Gender()"  name="account" class="form-control input-sm">
 													<option <?php if (!$Data['Meta']['Gender']) echo "selected"; ?> value="" disabled >Gender</option>
 													<option <?php if (strcasecmp($Data['Meta']['Gender'], "Female") == 0) echo "selected"; ?> value="Female">Female</option>
 													<option <?php if (strcasecmp($Data['Meta']['Gender'], "Male") == 0) echo "selected"; ?> value="Male">Male</option>
@@ -459,13 +460,13 @@ class Render {
 												</select>
 											</dd>
 											<dt class="m-t">Date of Birth</dt>
-											<dd class="m-t-sm"><input class="input-sm input-s datepicker-input form-control" size="16" type="text" value="12-02-2013" data-date-format="dd-mm-yyyy"></dd>
+											<dd class="m-t-sm"><input id="Profile-DOB" onchange="ProfileUpdate.DOB()"  class="input-sm input-s datepicker-input form-control" size="16" type="text" value="12-02-2013" data-date-format="dd-mm-yyyy"></dd>
 											<dt class="m-t-sm">Address</dt>
-											<dd class="m-t-sm"><textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here"><?php Util\_echo($Data['Meta']['Address']); ?></textarea></dd>
+											<dd class="m-t-sm"><textarea id="Profile-Address" onchange="ProfileUpdate.Address()"  type="text" class="form-control m-b-sm" placeholder="Input your comment here"><?php Util\_echo($Data['Meta']['Address']); ?></textarea></dd>
 										</dl>
 									<hr class="m-t-sm m-b-sm">
 									<div class="row">
-										<a href="#" class="btn btn-success pull-right m-r"><i class="fa fa-check-circle"></i>&nbsp; Save Changes</a>
+										<a href="#" class="btn btn-success pull-right m-r" id="profile-update-save-btm"><i class="fa fa-globe"></i>&nbsp; Save Changes</a>
 									</div>
 								</div>
 							</section>

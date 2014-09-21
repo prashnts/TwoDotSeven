@@ -449,3 +449,434 @@ BroadcastSvc.postFetch();
 BroadcastSvc.init();
 BroadcastPushSvc.init();
 Elapsed.init();
+
+var Cookie = {
+    create: function(name, value, days) {
+        var expires;
+
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toGMTString();
+        } else {
+            expires = "";
+        }
+        document.cookie = escape(name) + "=" + escape(value) + expires + "; path=/";
+    },
+    read: function(name) {
+        var nameEQ = escape(name) + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return unescape(c.substring(nameEQ.length, c.length));
+        }
+        return null;
+    },
+    erase: function(name) {
+        Cookie.create(name, "", -1);
+    }
+}
+
+var ProfileUpdate = {
+    SaveHook: "profile-update-save",
+    SaveBtmHook: "profile-update-save-btm",
+    PostURI: "/dev/user/"+Cookie.read("Two_7User")+"/updateMeta/",
+
+    FirstNameToggle: false,
+    FirstName: function() {
+        if (ProfileUpdate.FirstNameToggle) return;
+        var Hook = $("#Profile-FirstName");
+        $.ajax({
+            type: 'POST',
+            url: this.PostURI+"FirstName",
+            timeout: 30000,
+            data: {
+                ProfileUpdateValue: Hook.val()
+            },
+            beforeSend: function() {
+                Hook.attr("disabled", "true");
+                ProfileUpdate.FirstNameToggle = true;
+                ProfileUpdate.HighlightField(Hook, "blue");
+            },
+            success: function() {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.FirstNameToggle = false;
+                ProfileUpdate.HighlightField(Hook, "green");
+            },
+            error: function(data) {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.FirstNameToggle = false;
+                ProfileUpdate.HighlightField(Hook, "red");
+                console.log(data);
+            }
+        });
+    },
+    LastNameToggle: false,
+    LastName: function() {
+        if (ProfileUpdate.LastNameToggle) return;
+        var Hook = $("#Profile-LastName");
+        $.ajax({
+            type: 'POST',
+            url: this.PostURI+"LastName",
+            timeout: 30000,
+            data: {
+                ProfileUpdateValue: Hook.val()
+            },
+            beforeSend: function() {
+                Hook.attr("disabled", "true");
+                ProfileUpdate.LastNameToggle = true;
+                ProfileUpdate.HighlightField(Hook, "blue");
+            },
+            success: function() {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.LastNameToggle = false;
+                ProfileUpdate.HighlightField(Hook, "green");
+            },
+            error: function(data) {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.LastNameToggle = false;
+                ProfileUpdate.HighlightField(Hook, "red");
+                console.log(data);
+            }
+        });
+    },
+    DesignationToggle: false,
+    Designation: function() {
+        if (ProfileUpdate.DesignationToggle) return;
+        var Hook = $("#Profile-Designation");
+        $.ajax({
+            type: 'POST',
+            url: this.PostURI+"Designation",
+            timeout: 30000,
+            data: {
+                ProfileUpdateValue: Hook.val()
+            },
+            beforeSend: function() {
+                Hook.attr("disabled", "true");
+                ProfileUpdate.DesignationToggle = true;
+                ProfileUpdate.HighlightField(Hook, "blue");
+            },
+            success: function() {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.DesignationToggle = false;
+                ProfileUpdate.HighlightField(Hook, "green");
+            },
+            error: function(data) {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.DesignationToggle = false;
+                ProfileUpdate.HighlightField(Hook, "red");
+                console.log(data);
+            }
+        });
+    },
+    CourseToggle: false,
+    Course: function() {
+        if (ProfileUpdate.CourseToggle) return;
+        var Hook = $("#Profile-Course");
+        $.ajax({
+            type: 'POST',
+            url: this.PostURI+"Course",
+            timeout: 30000,
+            data: {
+                ProfileUpdateValue: Hook.val()
+            },
+            beforeSend: function() {
+                Hook.attr("disabled", "true");
+                ProfileUpdate.CourseToggle = true;
+                ProfileUpdate.HighlightField(Hook, "blue");
+            },
+            success: function() {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.CourseToggle = false;
+                ProfileUpdate.HighlightField(Hook, "green");
+            },
+            error: function(data) {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.CourseToggle = false;
+                ProfileUpdate.HighlightField(Hook, "red");
+                console.log(data);
+            }
+        });
+    },
+    YearToggle: false,
+    Year: function() {
+        if (ProfileUpdate.YearToggle) return;
+        var Hook = $("#Profile-Year");
+        $.ajax({
+            type: 'POST',
+            url: this.PostURI+"Year",
+            timeout: 30000,
+            data: {
+                ProfileUpdateValue: Hook.val()
+            },
+            beforeSend: function() {
+                Hook.attr("disabled", "true");
+                ProfileUpdate.YearToggle = true;
+                ProfileUpdate.HighlightField(Hook, "blue");
+            },
+            success: function() {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.YearToggle = false;
+                ProfileUpdate.HighlightField(Hook, "green");
+            },
+            error: function(data) {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.YearToggle = false;
+                ProfileUpdate.HighlightField(Hook, "red");
+                console.log(data);
+            }
+        });
+    },
+    BioToggle: false,
+    Bio: function() {
+        if (ProfileUpdate.BioToggle) return;
+        var Hook = $("#Profile-Bio");
+        $.ajax({
+            type: 'POST',
+            url: this.PostURI+"Bio",
+            timeout: 30000,
+            data: {
+                ProfileUpdateValue: Hook.val()
+            },
+            beforeSend: function() {
+                Hook.attr("disabled", "true");
+                ProfileUpdate.BioToggle = true;
+                ProfileUpdate.HighlightField(Hook, "blue");
+            },
+            success: function() {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.BioToggle = false;
+                ProfileUpdate.HighlightField(Hook, "green");
+            },
+            error: function(data) {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.BioToggle = false;
+                ProfileUpdate.HighlightField(Hook, "red");
+                console.log(data);
+            }
+        });
+    },
+    MobileToggle: false,
+    Mobile: function() {
+        if (ProfileUpdate.MobileToggle) return;
+        var Hook = $("#Profile-Mobile");
+        $.ajax({
+            type: 'POST',
+            url: this.PostURI+"Mobile",
+            timeout: 30000,
+            data: {
+                ProfileUpdateValue: Hook.val()
+            },
+            beforeSend: function() {
+                Hook.attr("disabled", "true");
+                ProfileUpdate.MobileToggle = true;
+                ProfileUpdate.HighlightField(Hook, "blue");
+            },
+            success: function() {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.MobileToggle = false;
+                ProfileUpdate.HighlightField(Hook, "green");
+            },
+            error: function(data) {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.MobileToggle = false;
+                ProfileUpdate.HighlightField(Hook, "red");
+                console.log(data);
+            }
+        });
+    },
+    RollNumberToggle: false,
+    RollNumber: function() {
+        if (ProfileUpdate.RollNumberToggle) return;
+        var Hook = $("#Profile-RollNumber");
+        $.ajax({
+            type: 'POST',
+            url: this.PostURI+"RollNumber",
+            timeout: 30000,
+            data: {
+                ProfileUpdateValue: Hook.val()
+            },
+            beforeSend: function() {
+                Hook.attr("disabled", "true");
+                ProfileUpdate.RollNumberToggle = true;
+                ProfileUpdate.HighlightField(Hook, "blue");
+            },
+            success: function() {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.RollNumberToggle = false;
+                ProfileUpdate.HighlightField(Hook, "green");
+            },
+            error: function(data) {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.RollNumberToggle = false;
+                ProfileUpdate.HighlightField(Hook, "red");
+                console.log(data);
+            }
+        });
+    },
+    GenderToggle: false,
+    Gender: function() {
+        if (ProfileUpdate.GenderToggle) return;
+        var Hook = $("#Profile-Gender");
+        $.ajax({
+            type: 'POST',
+            url: this.PostURI+"Gender",
+            timeout: 30000,
+            data: {
+                ProfileUpdateValue: Hook.val()
+            },
+            beforeSend: function() {
+                Hook.attr("disabled", "true");
+                ProfileUpdate.GenderToggle = true;
+                ProfileUpdate.HighlightField(Hook, "blue");
+            },
+            success: function() {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.GenderToggle = false;
+                ProfileUpdate.HighlightField(Hook, "green");
+            },
+            error: function(data) {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.GenderToggle = false;
+                ProfileUpdate.HighlightField(Hook, "red");
+                console.log(data);
+            }
+        });
+    },
+    DOBToggle: false,
+    DOB: function() {
+        if (ProfileUpdate.DOBToggle) return;
+        var Hook = $("#Profile-DOB");
+        $.ajax({
+            type: 'POST',
+            url: this.PostURI+"DOB",
+            timeout: 30000,
+            data: {
+                ProfileUpdateValue: Hook.val()
+            },
+            beforeSend: function() {
+                Hook.attr("disabled", "true");
+                ProfileUpdate.DOBToggle = true;
+                ProfileUpdate.HighlightField(Hook, "blue");
+            },
+            success: function() {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.DOBToggle = false;
+                ProfileUpdate.HighlightField(Hook, "green");
+            },
+            error: function(data) {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.DOBToggle = false;
+                ProfileUpdate.HighlightField(Hook, "red");
+                console.log(data);
+            }
+        });
+    },
+    AddressToggle: false,
+    Address: function() {
+        if (ProfileUpdate.AddressToggle) return;
+        var Hook = $("#Profile-Address");
+        $.ajax({
+            type: 'POST',
+            url: this.PostURI+"Address",
+            timeout: 30000,
+            data: {
+                ProfileUpdateValue: Hook.val()
+            },
+            beforeSend: function() {
+                Hook.attr("disabled", "true");
+                ProfileUpdate.AddressToggle = true;
+                ProfileUpdate.HighlightField(Hook, "blue");
+            },
+            success: function() {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.AddressToggle = false;
+                ProfileUpdate.HighlightField(Hook, "green");
+            },
+            error: function(data) {
+                Hook.removeAttr("disabled");
+                ProfileUpdate.AddressToggle = false;
+                ProfileUpdate.HighlightField(Hook, "red");
+                console.log(data);
+            }
+        });
+    },
+
+    HighlightField: function(hook, status) {
+        switch (status) {
+            case "green":
+                hook.css("border-color", "green");
+                window.setTimeout(function() {
+                    hook.css("border-color", "");
+                }, 2500);
+                break;
+            case "red":
+                hook.css("border-color", "red");
+                window.setTimeout(function() {
+                    hook.css("border-color", "");
+                }, 2500);
+                break;
+            case "blue":
+                hook.css("border-color", "blue");
+                window.setTimeout(function() {
+                    hook.css("border-color", "");
+                }, 2500);
+                break;
+            default:
+                hook.css("border-color", "");
+        }
+    },
+    SaveStatusToggle: false,
+    SaveStatus: function(status) {
+        if (this.SaveStatusToggle == status) return;
+        else this.SaveStatusToggle = status;
+        switch(status) {
+            case "saving":
+                $("#"+ProfileUpdate.SaveHook).html('<i class="fa fa-circle-o-notch fa-spin"></i> Saving');
+                $("#"+ProfileUpdate.SaveHook).attr("disabled", "true");
+                $("#"+ProfileUpdate.SaveHook).removeClass("btn-primary btn-success btn-danger");
+                $("#"+ProfileUpdate.SaveHook).addClass("btn-primary");
+                $("#"+ProfileUpdate.SaveBtmHook).html('<i class="fa fa-circle-o-notch fa-spin"></i> Saving');
+                $("#"+ProfileUpdate.SaveBtmHook).attr("disabled", "true");
+                $("#"+ProfileUpdate.SaveBtmHook).removeClass("btn-primary btn-success btn-danger");
+                $("#"+ProfileUpdate.SaveBtmHook).addClass("btn-primary");
+                break;
+            case "default":
+            default:
+                $("#"+ProfileUpdate.SaveHook).html('<i class="fa fa-globe"></i> Save Changes');
+                $("#"+ProfileUpdate.SaveHook).removeAttr("disabled");
+                $("#"+ProfileUpdate.SaveHook).removeClass("btn-primary btn-success btn-danger");
+                $("#"+ProfileUpdate.SaveHook).addClass("btn-success");
+                $("#"+ProfileUpdate.SaveBtmHook).html('<i class="fa fa-globe"></i> Save Changes');
+                $("#"+ProfileUpdate.SaveBtmHook).removeAttr("disabled");
+                $("#"+ProfileUpdate.SaveBtmHook).removeClass("btn-primary btn-success btn-danger");
+                $("#"+ProfileUpdate.SaveBtmHook).addClass("btn-success");
+        }
+    },
+    SaveListenerToggle: false,
+    SaveListener: function() {
+        _Aggregate =
+                this.FirstNameToggle ||
+            this.LastNameToggle ||
+            this.DesignationToggle ||
+            this.CourseToggle ||
+            this.YearToggle ||
+            this.BioToggle ||
+            this.MobileToggle ||
+            this.RollNumberToggle ||
+            this.GenderToggle ||
+            this.DOBToggle ||
+            this.AddressToggle;
+
+        if (_Aggregate) this.SaveStatus("saving");
+        else this.SaveStatus("defaultS");
+    },
+    init: function() {
+        window.setInterval(function() {
+            ProfileUpdate.SaveListener();
+        }, 250);
+    }
+};
+
+ProfileUpdate.init();

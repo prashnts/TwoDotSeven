@@ -735,12 +735,12 @@ class Profile {
 		}
 	}
 	private function PushMeta() {
-		return (bool)\TwoDot7\Database\Handler::Exec(
+		return (int)\TwoDot7\Database\Handler::Exec(
 			"UPDATE _user SET Meta = :Meta WHERE UserName = :UserName;",
 			array(
 				'Meta' => json_encode($this->Meta->get()),
 				'UserName' => $this->UserName
-			))->rowCount();
+			))->errorCode() === 0;
 	}
 	private function MetaHandler($Key, $Data = False) {
 		if (!is_string($Key)) throw new \TwoDot7\Exception\InvalidArgument("Key should be a valid string.");

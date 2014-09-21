@@ -63,6 +63,10 @@ function init() {
 					if (!\TwoDot7\Validate\Alphanumeric($_POST['ProfileUpdateValue'])) $ERR_SHOW("ProfileUpdateValue for DOB is Invalid.");
 					$Success = $UserProfile->DOB($_POST['ProfileUpdateValue']);
 					break;
+				case 'RollNumber':
+					if (!\TwoDot7\Validate\Alphanumeric($_POST['ProfileUpdateValue'])) $ERR_SHOW("ProfileUpdateValue for RollNumber is Invalid.");
+					$Success = $UserProfile->RollNumber($_POST['ProfileUpdateValue']);
+					break;
 				case 'Mobile':
 					if (!\TwoDot7\Validate\Alphanumeric($_POST['ProfileUpdateValue'])) $ERR_SHOW("ProfileUpdateValue for Mobile is Invalid.");
 					$Success = $UserProfile->Mobile($_POST['ProfileUpdateValue']);
@@ -79,9 +83,13 @@ function init() {
 					break;
 			}
 			if ($Success) {
-				//
+				header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+				header('Content-Type: application/json');
+				echo json_encode($Success);
+				die();
+				break;
 			} else {
-				//
+				$ERR_SHOW();
 			}
 			break;
 		case 'profile':
