@@ -54,10 +54,10 @@ function Head(&$Data) {
 
 	<title><?php echo (isset($Data['Title']) ? $Data['Title'].' | ' : '').('TwoDotSeven'); ?></title>
 
-	<link rel="shortcut icon" href="/TwoDotSeven/admin/assets/images/favicon.ico" type="image/x-icon" />
-	<link rel="apple-touch-icon-precomposed" href="/TwoDotSeven/admin/assets/images/2.7/apple-touch-icon-precomposed.png" type="image/png" />
+	<link rel="shortcut icon" href="/data/core/static/images/favicon.ico" type="image/x-icon" />
+	<link rel="apple-touch-icon-precomposed" href="/data/core/static/images/2.7/apple-touch-icon-precomposed.png" type="image/png" />
 
-	<meta name="msapplication-TileImage" content="/TwoDotSeven/admin/assets/images/2.7/icon-Windows8-tile.png"/>
+	<meta name="msapplication-TileImage" content="/data/core/static/images/2.7/icon-Windows8-tile.png"/>
 	<meta name="msapplication-TileColor" content="#343434"/>
 
 	<meta name="description" content="<?php echo (isset($Data['MetaDescription']) ? $Data['MetaDescription'] : 'TwoDotSeven'); ?>" />
@@ -75,12 +75,12 @@ function Head(&$Data) {
 	<link rel="stylesheet" href="/assetserver/css/backgroundstyles" type="text/css" />
 	<link rel="stylesheet" href="/data/core/static/css/style.css" type="text/css" />
 
-	<script src="/TwoDotSeven/admin/assets/js/jquery.js"></script>
+	<script src="/data/core/static/js/jquery.min.js"></script>
 
 	<!--[if lt IE 9]>	
-		<script src="/TwoDotSeven/admin/assets/js/ie/html5shiv.js"></script>
-		<script src="/TwoDotSeven/admin/assets/js/ie/respond.min.js"></script>
-		<script src="/TwoDotSeven/admin/assets/js/ie/excanvas.js"></script>
+		<script src="/data/core/static/js/ie/html5shiv.js"></script>
+		<script src="/data/core/static/js/ie/respond.min.js"></script>
+		<script src="/data/core/static/js/ie/excanvas.js"></script>
 	<![endif]-->
 	<?php
 }
@@ -198,7 +198,7 @@ class Render {
 		</style>
 		<div class="row error-autogen animated fadeIn">
 			<div class="col-sm-4">
-				<a href="/" title="TwoDotSeven Home"><img src="/TwoDotSeven/admin/assets/images/2.7/<?php echo $ImageDir(@$Data['Code']); ?>" alt="TwoDotSeven Admin" class="error-img-autogen"></a>
+				<a href="/" title="TwoDotSeven Home"><img src="/data/core/static/images/2.7<?php echo $ImageDir(@$Data['Code']); ?>" alt="TwoDotSeven Admin" class="error-img-autogen"></a>
 			</div>
 			<div class="col-sm-8 error-msg-autogen">
 				<h2>
@@ -219,7 +219,7 @@ class Render {
 			<div class="container aside-xl">
 				<div class="logo-container-35px">
 					<a href="/" title="Home">
-						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+						<img src="/data/core/static/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
 					</a>
 				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
@@ -273,7 +273,7 @@ class Render {
 				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
-		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<script src="/data/core/static/js/app/SignInUp.js"></script>
 		<?php
 	}
 
@@ -283,7 +283,7 @@ class Render {
 			<div class="container aside-xl">
 				<div class="logo-container-35px">
 					<a href="/" title="Home">
-						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+						<img src="/data/core/static/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
 					</a>
 				</div>
 				<section class="m-t-lg m-b-lg">
@@ -321,7 +321,7 @@ class Render {
 				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
-		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<script src="/data/core/static/js/app/SignInUp.js"></script>
 		<?php
 	}
 
@@ -331,7 +331,7 @@ class Render {
 			<div class="container aside-xl"> 
 				<div class="logo-container-35px">
 					<a href="/" title="Home">
-						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+						<img src="/data/core/static/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
 					</a>
 				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
@@ -385,7 +385,7 @@ class Render {
 				</section>
 				<section class="m-b-lg" id="SignUpLoader" style="display:none">
 					<div class="loader text-center m-t-lg">
-						<img src="/TwoDotSeven/admin/assets/images/loader.gif" alt="TwoDotSeven Admin">
+						<img src="/data/core/static/images/loader.gif" alt="TwoDotSeven Admin">
 					</div>
 					<h3 class="text-center litetxt m-t">
 						Please Wait
@@ -396,7 +396,7 @@ class Render {
 				</section>
 				<section class="m-b-lg" id="SignUpOK" style="display:none">
 					<div class="loader text-center m-t-lg">
-						<img src="/TwoDotSeven/admin/assets/images/tick.png" alt="TwoDotSeven Admin">
+						<img src="/data/core/static/images/tick.png" alt="TwoDotSeven Admin">
 					</div>
 					<h3 class="text-center litetxt m-t">
 						You're In! Redirecting.
@@ -412,7 +412,7 @@ class Render {
 				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
-		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<script src="/data/core/static/js/app/SignInUp.js"></script>
 		<?php
 	}
 
@@ -422,7 +422,7 @@ class Render {
 			<div class="container aside-xl"> 
 				<div class="logo-container-35px">
 					<a href="/" title="Home">
-						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+						<img src="/data/core/static/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
 					</a>
 				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
@@ -436,7 +436,7 @@ class Render {
 						<?php echo isset($Data['Trailer']) ? $Data['Trailer'] : ""; ?>
 					</h5>
 						<div class="text-center litetxt">
-							<img src="/TwoDotSeven/admin/assets/images/Okay.png" class="Img-Make-Responsive"><br>
+							<img src="/data/core/static/images/Okay.png" class="Img-Make-Responsive"><br>
 							<a href="/admin/login" class="btn btn-md btn-block btn-primary">Login</a>
 						</div>
 				</section>
@@ -447,7 +447,7 @@ class Render {
 				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
-		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<script src="/data/core/static/js/app/SignInUp.js"></script>
 		<?php
 	}
 
@@ -457,7 +457,7 @@ class Render {
 			<div class="container aside-xl"> 
 				<div class="logo-container-35px">
 					<a href="/" title="Home">
-						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+						<img src="/data/core/static/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
 					</a>
 				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
@@ -497,7 +497,7 @@ class Render {
 				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
-		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<script src="/data/core/static/js/app/SignInUp.js"></script>
 		<?php
 	}
 
@@ -507,7 +507,7 @@ class Render {
 			<div class="container aside-xl"> 
 				<div class="logo-container-35px">
 					<a href="/" title="Home">
-						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+						<img src="/data/core/static/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
 					</a>
 				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
@@ -547,7 +547,7 @@ class Render {
 				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
-		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<script src="/data/core/static/js/app/SignInUp.js"></script>
 		<?php
 	}
 
@@ -557,7 +557,7 @@ class Render {
 			<div class="container aside-xl"> 
 				<div class="logo-container-35px">
 					<a href="/" title="Home">
-						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+						<img src="/data/core/static/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
 					</a>
 				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
@@ -605,7 +605,7 @@ class Render {
 				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
-		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<script src="/data/core/static/js/app/SignInUp.js"></script>
 		<?php
 	}
 
@@ -615,7 +615,7 @@ class Render {
 			<div class="container aside-xl"> 
 				<div class="logo-container-35px">
 					<a href="/" title="Home">
-						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+						<img src="/data/core/static/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
 					</a>
 				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
@@ -656,7 +656,7 @@ class Render {
 				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
-		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<script src="/data/core/static/js/app/SignInUp.js"></script>
 		<?php
 	}
 
@@ -666,7 +666,7 @@ class Render {
 			<div class="container aside-xl"> 
 				<div class="logo-container-35px">
 					<a href="/" title="Home">
-						<img src="/TwoDotSeven/admin/assets/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
+						<img src="/data/core/static/images/2.7/logo-composed.png" alt="TwoDotSeven Admin" width="157px" height="70px">
 					</a>
 				</div>
 				<hr style="margin:9px 0 0 0; padding:0">
@@ -713,7 +713,7 @@ class Render {
 				<p><small>Developed in the <a href="http://ducic.ac.in/Hub-IT-Innovations-Lab">IT Innovations Lab</a> | <a href="http://ducic.ac.in/">Cluster Innovation Centre</a>, <a href="http://du.ac.in">University of Delhi</a></small></p>
 			</div>
 		</footer>
-		<script src="/TwoDotSeven/admin/assets/js/app/SignInUp.js"></script>
+		<script src="/data/core/static/js/app/SignInUp.js"></script>
 		<?php
 	}
 }

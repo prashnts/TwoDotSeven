@@ -138,7 +138,7 @@ class Setup {
 						)
 
 					),
-				'Target' => '/twodot7/register'
+				'Target' => '#'
 				),
 			'PRE_ADMIN' => array(
 				'Name' => 'Administration',

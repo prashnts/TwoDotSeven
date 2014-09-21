@@ -34,8 +34,7 @@ function _init($Data = False) {
 								<i class="fa fa-bars"></i> 
 							</a>
 							<a href="/" class="navbar-brand">
-								<!--img src="/TwoDotSeven/admin/assets/images/2.7/2.7-box.png" class="m-r-sm" height="25px"-->
-								<img src="/data/core/images/1/logo.png" class="m-r-sm" height="25px">
+								<img src="/data/core/static/images/1/logo.png" class="m-r-sm" height="25px">
 							</a>
 							<a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-user">
 								<i class="fa fa-cog"></i> 
