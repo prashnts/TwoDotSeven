@@ -16,4 +16,3 @@ RewriteRule ^admin TwoDotSeven/index.php
 RewriteRule ^admin/ TwoDotSeven/index.php
 RewriteRule ^twodot7 TwoDotSeven/index.php
 RewriteRule ^twodot7/ TwoDotSeven/index.php
-

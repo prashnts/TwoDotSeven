@@ -76,7 +76,13 @@ function init() {
 					$Success = $UserProfile->Course($_POST['ProfileUpdateValue']);
 					break;
 				case 'Year':
-					if (!\TwoDot7\Validate\Alphanumeric($_POST['ProfileUpdateValue'])) $ERR_SHOW("ProfileUpdateValue for Year is Invalid.");
+					if (!Util\arrayStrCaseCmp($_POST['ProfileUpdateValue'], array(
+							'First Year',
+							'Second Year',
+							'Third Year',
+							'Fourth Year',
+							'NA'))
+						) $ERR_SHOW("ProfileUpdateValue for Year is Invalid.");
 					$Success = $UserProfile->Year($_POST['ProfileUpdateValue']);
 					break;
 				case 'DOB':
@@ -92,8 +98,8 @@ function init() {
 					$Success = $UserProfile->Mobile($_POST['ProfileUpdateValue']);
 					break;
 				case 'Address':
-					if (!\TwoDot7\Validate\Alphanumeric($_POST['ProfileUpdateValue'])) $ERR_SHOW("ProfileUpdateValue for Address is Invalid.");
-					$Success = $UserProfile->Address($_POST['ProfileUpdateValue']);
+					// if (!\TwoDot7\Validate\Alphanumeric($_POST['ProfileUpdateValue'])) $ERR_SHOW("ProfileUpdateValue for Address is Invalid.");
+					$Success = $UserProfile->Address(strip_tags($_POST['ProfileUpdateValue']));
 					break;
 				case 'Bio':
 					$Success = $UserProfile->Bio(strip_tags($_POST['ProfileUpdateValue']));

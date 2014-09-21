@@ -112,7 +112,7 @@ var BroadcastSvc = {
             BroadcastSvc.postFetch();
         });
     }
-}
+};
 
 var BroadcastPushSvc = {
     TextboxHook: "broadcast-post-area",
@@ -240,7 +240,7 @@ var BroadcastPushSvc = {
             BroadcastPushSvc.BroadcastAreaInit();
         });
     }
-}
+};
 
 var Elapsed = {
 
@@ -445,11 +445,6 @@ var Elapsed = {
     }
 };
 
-BroadcastSvc.postFetch();
-BroadcastSvc.init();
-BroadcastPushSvc.init();
-Elapsed.init();
-
 var Cookie = {
     create: function(name, value, days) {
         var expires;
@@ -476,7 +471,7 @@ var Cookie = {
     erase: function(name) {
         Cookie.create(name, "", -1);
     }
-}
+};
 
 var ProfileUpdate = {
     SaveHook: "profile-update-save",
@@ -880,4 +875,8 @@ var ProfileUpdate = {
     }
 };
 
+BroadcastSvc.postFetch();
+BroadcastSvc.init();
+BroadcastPushSvc.init();
+Elapsed.init();
 ProfileUpdate.init();
