@@ -5,6 +5,7 @@
 #  \/      \_/\_/ \___/  (_)  /_/   
 
 Addhandler cgi-script .py .pl .cgi
+
 RewriteEngine On
 RewriteRule ^dev/ TwoDotSeven/rest/index.php
 RewriteRule ^dev TwoDotSeven/rest/index.php
@@ -16,3 +17,5 @@ RewriteRule ^admin TwoDotSeven/index.php
 RewriteRule ^admin/ TwoDotSeven/index.php
 RewriteRule ^twodot7 TwoDotSeven/index.php
 RewriteRule ^twodot7/ TwoDotSeven/index.php
+RewriteRule ^@(.*)$ /twodot7/profile/$1 [r=301,nc]
+RewriteRule ^@(.*)$/edit /twodot7/profile/$1/edit [r=301,nc]

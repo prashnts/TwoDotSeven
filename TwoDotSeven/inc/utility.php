@@ -643,6 +643,27 @@ class Dictionary {
 }
 
 /**
+ * Compares a String against several in an Array. Case insensitive.
+ * @param	String $String Required. The subject string.
+ * @param	Mixed $Array Required. The candidate array.
+ * @return	Boolean.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 20140921
+ * @version	0.1
+ */
+function arrayStrCaseCmp($String, $Array) {
+	$Success = False;
+	foreach ($Array as $key => $value) {
+		if (strcasecmp($String, $value) === 0) $Success = True;
+	}
+	return $Success;
+}
+
+function _concat($Variable, $Default = "") {
+	return isset($Variable) && $Variable ? $Variable : $Default;
+}
+
+/**
  * Macro (like) for echo() function, compensating for Failsafe checks.
  * @internal Moved From \Template
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
@@ -651,6 +672,23 @@ class Dictionary {
  */
 function _echo($Variable, $Default = "") {
 	echo isset($Variable) && $Variable ? $Variable : $Default;
+}
+
+/**
+ * Markdown derivative. TODO
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.0 20140921
+ * @version	0.1
+ */
+function Marker($Data) {
+	if (class_exists("\Parsedown")) {
+		$Parsedown = new \Parsedown;
+		return $Parsedown->text(strip_tags($Data));
+	} else {
+		_Import($_SERVER['DOCUMENT_ROOT']."/TwoDotSeven/inc/external/parsedown.php");
+		$Parsedown = new \Parsedown;
+		return $Parsedown->text(strip_tags($Data));
+	}
 }
 
 /**
@@ -762,13 +800,3 @@ function Log($Message, $__Arg = "SILENT") {
 
 	return;
 }
-
-function arrayStrCaseCmp($String, $Array) {
-	$Success = False;
-	foreach ($Array as $key => $value) {
-		if (strcasecmp($String, $value) === 0) $Success = True;
-	}
-	return $Success;
-}
-
-?>

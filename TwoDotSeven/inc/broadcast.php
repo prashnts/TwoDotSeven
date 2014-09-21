@@ -319,16 +319,13 @@ class Utils {
 
 	public static function Unpack(&$Data) {
 		// Unpacks a Packed broadcast data.
-		_Import($_SERVER['DOCUMENT_ROOT']."/TwoDotSeven/inc/external/parsedown.php");
-		$A = json_decode($Data, true);
-		$Parsedown = new \Parsedown();
-		return $Parsedown->text(strip_tags($A));
+		return \TwoDot7\Util\Marker(json_decode($Data, true));
 	}
 
 	public static function GetUserMeta($TagJSON) {
 		if (is_array($TagJSON) || !$TagJSON) return False;
 		$TaggedUsers = \TwoDot7\Util\Token::Get(array('JSON' => $TagJSON));
-		return \TwoDot7\User\Meta::Get($TaggedUsers);
+		return \TwoDot7\User\Profile::FetchProfiles($TaggedUsers);
 	}
 
 	/**

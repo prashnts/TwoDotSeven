@@ -56,15 +56,19 @@ var BroadcastSvc = {
         };
     },
     createPost : function(data) {
+        var _echo = function(data) {
+            if (data) return data;
+            else return "";
+        }
         var _Post = "";
         //console.log(data);
         _Post +=    '<li class="broadcast-card broadcast-default" id="BROADCAST_'+data.ID+'" data-timestamp="'+data.Timestamp+'">';
         _Post +=        '<a href="'+data.Meta.OP.URI+'" class="thumb pull-left m-r-sm">';
-        _Post +=            '<img src="'+data.Meta.OP.IMG+'" class="img-circle b-a b-3x b-white">';
+        _Post +=            '<img src="'+data.Meta.OP.ProfilePicture+'" class="img-circle b-a b-3x b-white">';
         _Post +=        '</a>';
         _Post +=        '<div class="clear">';
         _Post +=            '<a href="'+data.Meta.OP.URI+'">';
-        _Post +=                '<span class="text-dark h4">'+data.Meta.OP.Name+' </span>';
+        _Post +=                '<span class="text-dark h4">'+_echo(data.Meta.OP.FirstName)+' '+_echo(data.Meta.OP.LastName)+' </span>';
         _Post +=                '<span class="h5">';
         _Post +=                    '@'+data.Meta.OP.UserName+' ';
         _Post +=                    '&bullet; ';
@@ -77,7 +81,7 @@ var BroadcastSvc = {
         _Post +=                '</span>';
         _Post +=                '<br>'
         _Post +=                '<span class="h6 text-muted">';
-        _Post +=                    'Posted <span class="elapsedJS" data-elapseJS="'+data.Time+'"></span>';
+        _Post +=                    'Posted <span class="elapsedJS" data-elapseJS="'+data.Timestamp+'"></span>';
         _Post +=                    ' &bullet; ';
         _Post +=                    '<i class="fa '+data.VisibleClass+'"></i>';
         _Post +=                '</span>';

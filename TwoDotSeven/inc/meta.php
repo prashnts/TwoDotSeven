@@ -1,6 +1,6 @@
 <?php
 namespace TwoDot7\Meta;
-
+use TwoDot7\Util as Util;
 #  _____                      _____ 
 # /__   \__      _____       |___  |
 #   / /\/\ \ /\ / / _ \         / / 
@@ -360,27 +360,29 @@ class Navigation {
 			'UserName' => \TwoDot7\User\Session::Data()['UserName']
 			))->fetch();
 
-		$Badge = (\TwoDot7\User\Status::Profile($DBResponse['UserName'])['Response'] > 0) ? 'on' : 'off';
+		$User = new \TwoDot7\User\Profile(\TwoDot7\User\Session::Data()['UserName']);
+		$Info = $User->Get();
+
+		$Badge = ($Info['ProfileStatus'] == 1) ? 'on' : 'off';
 
 		$NavInfo = '<div class="clearfix wrapper dker nav-user hidden-xs spl-user-info">';
 		$NavInfo .= '	<div class="dropdown">';
 		$NavInfo .= '		<a href="#" class="dropdown-toggle" data-toggle="dropdown">';
 		$NavInfo .= '			<span class="thumb avatar pull-left m-r">';
-		$NavInfo .= '				<img src="/assetserver/userNameIcon/'.$DBResponse['UserName'][0].'">';
+		$NavInfo .= '				<img src="'.$Info['ProfilePicture'].'">';
 		$NavInfo .= '				<i class="'.$Badge.' md b-black"></i>';
 		$NavInfo .= '			</span>';
 		$NavInfo .= '			<span class="hidden-nav-xs clear">';
 		$NavInfo .= '				<span class="block m-t-xs">';
-		$NavInfo .= '					<strong class="font-bold text-lt">'.$DBResponse['UserName'].'</strong>';
-		$NavInfo .= '					<b class="caret"></b>';
+		$NavInfo .= '					<strong class="font-bold text-lt">'.Util\_concat($Info['FirstName']).' '.Util\_concat($Info['LastName'][0]).'</strong>';
 		$NavInfo .= '				</span> ';
-		$NavInfo .= '				<span class="text-muted text-xs block">'.$DBResponse['EMail'].'</span>';
+		$NavInfo .= '				<span class="text-muted text-xs block">@'.$Info['UserName'].' <b class="caret"></b></span>';
 		$NavInfo .= '			</span>';
 		$NavInfo .= '		</a>';
 		$NavInfo .= '		<ul class="dropdown-menu">';
 		$NavInfo .= '			<li> <a href="#">Settings</a> ';
 		$NavInfo .= '			</li>';
-		$NavInfo .= '			<li> <a href="profile.php">Profile</a> ';
+		$NavInfo .= '			<li> <a href="/twodot7/profile/">Profile</a> ';
 		$NavInfo .= '			</li>';
 		$NavInfo .= '			<li> <a href="#">Help/Support</a> ';
 		$NavInfo .= '			</li>';

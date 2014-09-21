@@ -15,6 +15,7 @@ namespace TwoDot7\Admin\Profile;
  * @version	0.0
  */
 function init() {
+	$_GET['UserName'] = $_GET['UserName'] ? $_GET['UserName'] : \TwoDot7\User\Session::Data()['UserName'];
 	$UserProfile = new \TwoDot7\User\Profile($_GET['UserName']);
 	if ($UserProfile->Success) switch ($_GET['Action']) {
 		case 'edit':
@@ -35,7 +36,7 @@ function init() {
 				'EditMode' => True,
 				'Meta' => $UserProfile->Get(),
 				'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
-					'Page' => 'PRE_BROADCAST'
+					'Page' => 'PRE_PROFILE'
 					))
 				));
 		case 'view':
@@ -45,7 +46,7 @@ function init() {
 				'Call' => 'Profile',
 				'Meta' => $UserProfile->Get(),
 				'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
-					'Page' => 'PRE_BROADCAST'
+					'Page' => 'PRE_PROFILE'
 					))
 				));
 	} else {

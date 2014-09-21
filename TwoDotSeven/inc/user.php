@@ -572,63 +572,6 @@ class Access {
 	}
 }
 
-class Meta {
-
-	public static function Get($UserName) {
-		$Response = array();
-
-		$GetMeta = function ($Data) {
-			$Data['Meta'] = json_decode($Data['Meta'], True);
-			$Data['Preferences'] = json_decode($Data['Preferences'], True);
-			return array(
-				'ID' => $Data['ID'],
-				'UserName' => $Data['UserName'],
-				'EMail' => $Data['EMail'],
-				'ProfileStatus' => \TwoDot7\User\Status::Profile(False, array(
-					'Action' => 'GET',
-					'TRANSLATEONLY' => True,
-					'Translation' => $Data['Status']
-					)
-				),
-				'Name' => isset($Data['Meta']['Name']) ? $Data['Meta']['Name'] : $Data['UserName'],
-				'IMG' => isset($Data['Meta']['IMG']) ? $Data['Meta']['IMG'] : '/assetserver/userNameIcon/'.$Data['UserName'],
-				'IMG_BG' => isset($Data['Meta']['IMG_BG']) ? $Data['Meta']['IMG_BG'] : False,
-				'EMailStatus' => \TwoDot7\User\Status::EMail(False, array(
-					'Action' => 'GET',
-					'TRANSLATEONLY' => True,
-					'Translation' => $Data['Status']
-					)
-				),
-				'URI' => isset($Data['Meta']['URI']) ? $Data['Meta']['URI'] : '/user/'.$Data['ID'],
-				//'ExtraInfo' => Preferences\ProfileApps('ProfileApps', 'GET', $Data['UserName']),
-			);
-		};
-
-		if (is_array($UserName)) {
-			$UserQuery = "SELECT ID, UserName, EMail, Status, Preferences, Meta FROM _user WHERE false ".str_repeat("OR UserName = ? ", count($UserName));
-			$MetaList = \TwoDot7\Database\Handler::Exec($UserQuery, $UserName)->fetchAll(\PDO::FETCH_ASSOC);
-
-			foreach ($MetaList as $Value) {
-				array_push($Response, $GetMeta($Value));
-			}
-
-		} elseif (is_string($UserName)) {
-			$UserQuery = "SELECT ID, UserName, EMail, Status, Preferences, Meta FROM _user WHERE UserName = :UserName;";
-			$Meta = \TwoDot7\Database\Handler::Exec($UserQuery, $UserName)->fetch(\PDO::FETCH_ASSOC);
-
-			$Response = $GetMeta($Meta);
-
-		} else throw new \TwoDot7\Exception\InvalidArgument("\$Username should be a list, or string.");
-		
-		return $Response;
-	}
-
-	public static function Put($UserName, $Data) {
-		// Only puts into the Meta
-	}
-
-}
-
 /**
  * Class wrapper for User specific Preferences.
  * @author	Prashant Sinha <firstname,lastname>@outlook.com
@@ -714,22 +657,27 @@ class Profile {
 	private $Meta;
 	public $Success = False;
 
-	function __construct($UserName) {
+	function __construct($UserName, $FetchOverride = False, $FetchSourceArray = False) {
 		$this->UserName = $UserName;
-		$this->FetchMeta();
+		$this->FetchMeta($FetchOverride, $FetchSourceArray);
 	}
 	public function GetAll() {
 		return $this->Meta->get();
 	}
-	private function FetchMeta() {
-		$Query = "SELECT ID as UserID, EMail as UserEMail, Meta FROM _user WHERE UserName = :UserName;";
-		$Response = \TwoDot7\Database\Handler::Exec($Query, array('UserName' => $this->UserName))->fetch(\PDO::FETCH_ASSOC);
+	private function FetchMeta($FetchOverride = False, $FetchSourceArray = False) {
+		$Response = False;
+		if ($FetchOverride) {
+			$Response = $FetchSourceArray;
+		} else {
+			$Query = "SELECT ID, EMail, Meta FROM _user WHERE UserName = :UserName;";
+			$Response = \TwoDot7\Database\Handler::Exec($Query, array('UserName' => $this->UserName))->fetch(\PDO::FETCH_ASSOC);
+		}
 		if ($Response) {
 			$this->Success = True;
 			$MetaJSON = json_decode($Response['Meta'], true);
 			$this->Meta = $MetaJSON ? new Util\Dictionary($MetaJSON) : new Util\Dictionary;
-			$this->UserID = $Response['UserID'];
-			$this->UserEMail = $Response['UserEMail'];
+			$this->UserID = $Response['ID'];
+			$this->UserEMail = $Response['EMail'];
 		} else {
 			$this->Success = False;
 		}
@@ -750,13 +698,32 @@ class Profile {
 			return $this->PushMeta();
 		}
 	}
+	public static function FetchProfiles($UserName) {
+		$Response = array();
+		if (is_array($UserName)) {
+			$UserQuery = "SELECT ID, UserName, EMail, Status, Preferences, Meta FROM _user WHERE false ".str_repeat("OR UserName = ? ", count($UserName));
+			$MetaList = \TwoDot7\Database\Handler::Exec($UserQuery, $UserName)->fetchAll(\PDO::FETCH_ASSOC);
+
+			foreach ($MetaList as $Value) {
+				$Profile = new Profile($Value['UserName'], True, $Value);
+				array_push($Response, $Profile->Get());
+			}
+		} elseif (is_string($UserName)) {
+			$Profile = new Profile($UserName);
+			$Response = $Profile->Get();
+		} else throw new \TwoDot7\Exception\InvalidArgument("\$Username should be a list, or string.");
+		
+		return $Response;
+	}
 
 	public function Get() {
 		$Response = new \TwoDot7\Util\Dictionary;
 		$Response->add("Self", $this->Self());
 		$Response->add("UserID", $this->UserID());
 		$Response->add("UserName", $this->UserName());
+		$Response->add("URI", $this->URI());
 		$Response->add("ProfileStatus", $this->ProfileStatus());
+		$Response->add("EMailStatus", $this->EMailStatus());
 		$Response->add("FirstName", $this->FirstName());
 		$Response->add("LastName", $this->LastName());
 		$Response->add("Gender", $this->Gender());
@@ -764,10 +731,12 @@ class Profile {
 		$Response->add("Course", $this->Course());
 		$Response->add("Year", $this->Year());
 		$Response->add("Bio", $this->Bio());
+		$Response->add("BioParsed", $this->BioParsed());
 		$Response->add("ProfilePicture", $this->ProfilePicture());
 		$Response->add("ProfileBackground", $this->ProfileBackground());
 		if (\TwoDot7\User\Session::Exists() &&
 			\TwoDot7\User\Status::Profile(\TwoDot7\User\Session::Data()['UserName'])['Response'] === 1) {
+			$Response->add("ShowExtraInfo", True);
 			$Response->add("UserEMail", $this->UserEMail());
 			$Response->add("DOB", $this->DOB());
 			$Response->add("RollNumber", $this->RollNumber());
@@ -789,8 +758,14 @@ class Profile {
 	public function UserName() {
 		return $this->UserName;
 	}
+	public function URI() {
+		return "/@/".$this->UserName;
+	}
 	public function ProfileStatus() {
 		return Status::Profile($this->UserName)['Response'];
+	}
+	public function EMailStatus() {
+		return Status::EMail($this->UserName)['Response'];
 	}
 	public function FirstName($Data = False) {
 		return $this->MetaHandler("FirstName", $Data);
@@ -821,6 +796,9 @@ class Profile {
 	}
 	public function Address($Data = False) {
 		return $this->MetaHandler("Address", $Data);
+	}
+	public function BioParsed() {
+		return \TwoDot7\Util\Marker($this->Meta->get("Bio"));
 	}
 	public function Bio($Data = False) {
 		return $this->MetaHandler("Bio", $Data);

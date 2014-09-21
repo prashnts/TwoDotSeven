@@ -359,14 +359,14 @@ class Render {
 									?>
 									<div class="panel-heading no-border">
 										<div class="clearfix m-b-sm">
-											<a href="#" class="pull-left thumb-md avatar b-3x m-r">
+											<span class="pull-left thumb-md avatar b-3x m-r">
 												<img src="<?php Util\_echo($Data['Meta']['ProfilePicture']); ?>">
-											</a>
+											</span>
 											<div class="clear">
 												<div class="h3 m-t-xs m-b-xs">
 												<?php echo $Data['Meta']['FirstName']." ".$Data['Meta']['LastName']." @".$Data['Meta']['UserName'];?>
 												</div>
-												<?php if (isset($Data['Meta']['Self']) && $Data['Meta']['Self']) echo '<a href="#" class="btn btn-small btn-default btn-sm pull-right">Edit Profile</a>'; ?>
+												<?php if (isset($Data['Meta']['Self']) && $Data['Meta']['Self']) echo '<a href="/twodot7/profile/'.$Data['Meta']['UserName'].'/edit" class="btn btn-small btn-default btn-sm pull-right">Edit Profile</a>'; ?>
 												<h5>
 													<?php Util\_echo($Data['Meta']['Designation'], "Unknown User"); ?> &bullet;
 													<?php Util\_echo($Data['Meta']['Course'], "Course Unspecified"); ?> &bullet;
@@ -376,18 +376,25 @@ class Render {
 										</div>
 										<hr class="m-t-sm m-b-sm">
 										<div class="paffe">
-												<?php Util\_echo($Data['Meta']['Bio']); ?>
-											<h3>Personal Info</h3>
-											<dl class="dl-horizontal">
-												<dt>Mobile</dt>
-												<dd><?php Util\_echo($Data['Meta']['Mobile'], "Unspecified"); ?></dd>
-												<dt>Public Email</dt>
-												<dd><?php Util\_echo($Data['Meta']['UserEMail'], "Unspecified"); ?></dd>
-												<dt>Date of Birth</dt>
-												<dd><?php Util\_echo($Data['Meta']['DOB'], "Unspecified"); ?></dd>
-												<dt>Address</dt>
-												<dd><?php Util\_echo($Data['Meta']['Address'], "Unspecified"); ?></dd>
-											</dl>
+											<h3>Bio</h3>
+												<div class="Marked">
+													<?php Util\_echo($Data['Meta']['BioParsed']); ?>
+												</div>
+											<?php if (isset($Data['Meta']['ShowExtraInfo']) && $Data['Meta']['ShowExtraInfo']) {
+												?>
+												<h3>Personal Info</h3>
+												<dl class="dl-horizontal">
+													<dt>Mobile</dt>
+													<dd><?php Util\_echo($Data['Meta']['Mobile'], "Unspecified"); ?></dd>
+													<dt>Public Email</dt>
+													<dd><?php Util\_echo($Data['Meta']['UserEMail'], "Unspecified"); ?></dd>
+													<dt>Date of Birth</dt>
+													<dd><?php Util\_echo($Data['Meta']['DOB'], "Unspecified"); ?></dd>
+													<dt>Address</dt>
+													<dd><?php Util\_echo($Data['Meta']['Address'], "Unspecified"); ?></dd>
+												</dl>
+												<?php }
+											?>
 										<hr class="m-t-sm m-b-sm">
 									</div>
 									<?php } else {
@@ -397,6 +404,7 @@ class Render {
 											<img src="\data\core\images\generic\profilex128.png" class="pull-left m-r-sm m-l" height="32">
 											<span class="h3">@<?php Util\_echo($Data['Meta']['UserName']); ?></span>
 											<a href="#" class="btn btn-success pull-right m-r" id="profile-update-save"><i class="fa fa-globe"></i>&nbsp; Save Changes</a>
+											<a href="/twodot7/profile" class="btn btn-primary pull-right m-r-xs"><i class="fa fa-arrow-left"></i></a>
 										</div>
 										<hr class="m-t-sm m-b-sm">
 										<div class="clearfix m-b-sm">
@@ -405,10 +413,10 @@ class Render {
 											</a>
 											<div class="clear">
 												<div class="row padder">
-													<div class="col-lg-7 no-padder m-r-xs">
+													<div class="col-lg-7 no-padder m-r-sm">
 														<input id="Profile-FirstName" onchange="ProfileUpdate.FirstName()" type="text" class="form-control has-success" placeholder="First Name" value="<?php Util\_echo($Data['Meta']['FirstName']); ?>">
 													</div>
-													<div class="col-lg-4 no-padder m-l-xs">
+													<div class="col-lg-4 no-padder m-r-sm">
 														<input id="Profile-LastName" onchange="ProfileUpdate.LastName()" type="text" class="form-control" placeholder="Last Name" value="<?php Util\_echo($Data['Meta']['LastName']); ?>">
 													</div>
 												</div>
@@ -431,7 +439,7 @@ class Render {
 															<option <?php if (strcasecmp($Data['Meta']['Course'], "NA") == 0) echo "selected"; ?> value="NA">NA</option>
 														</select>
 													</div>
-													<div class="col-lg-3 no-padder">
+													<div class="col-lg-3 no-padder m-r-xs">
 														<select id="Profile-Year" onchange="ProfileUpdate.Year()" name="account" class="form-control input-sm">
 															<option <?php if (!$Data['Meta']['Year']) echo "selected"; ?> value="" disabled >Year</option>
 															<option <?php if (strcasecmp($Data['Meta']['Year'], "First Year") == 0) echo "selected"; ?> value="First Year">First Year</option>
