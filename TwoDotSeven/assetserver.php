@@ -49,16 +49,16 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
         }
 	case 'usernameicon':
 		$Icon = isset($URI[BASE+1]) ? strtolower($URI[BASE+1])[0] : False;
-		if (file_exists($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/assets/images/generic/alphabet/'.$Icon.'.png')) {
+		if (file_exists($_SERVER['DOCUMENT_ROOT'].'/data/core/static//images/generic/alphabet/'.$Icon.'.png')) {
 			header('HTTP/1.0 200 OK', true, 200);
 			header('Content-Type: Image/PNG');
-			echo file_get_contents($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/assets/images/generic/alphabet/'.$Icon.'.png');
+			echo file_get_contents($_SERVER['DOCUMENT_ROOT'].'/data/core/static//images/generic/alphabet/'.$Icon.'.png');
 			die();
 		}
 		else {
 			header('HTTP/1.0 200 OK', true, 200);
 			header('Content-Type: Image/PNG');
-			echo file_get_contents($_SERVER['DOCUMENT_ROOT'].'/TwoDotSeven/admin/assets/images/generic/alphabet/!.png');
+			echo file_get_contents($_SERVER['DOCUMENT_ROOT'].'/data/core/static//images/generic/alphabet/!.png');
 			die();
 		}
 		break;

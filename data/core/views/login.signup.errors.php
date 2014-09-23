@@ -198,7 +198,7 @@ class Render {
 		</style>
 		<div class="row error-autogen animated fadeIn">
 			<div class="col-sm-4">
-				<a href="/" title="TwoDotSeven Home"><img src="/data/core/static/images/2.7<?php echo $ImageDir(@$Data['Code']); ?>" alt="TwoDotSeven Admin" class="error-img-autogen"></a>
+				<a href="/" title="TwoDotSeven Home"><img src="/data/core/static/images/2.7/<?php echo $ImageDir(@$Data['Code']); ?>" alt="TwoDotSeven Admin" class="error-img-autogen"></a>
 			</div>
 			<div class="col-sm-8 error-msg-autogen">
 				<h2>

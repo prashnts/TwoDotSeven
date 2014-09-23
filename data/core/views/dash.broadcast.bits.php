@@ -400,7 +400,7 @@ class Render {
 									?>
 									<div class="panel-heading no-border m-t">
 										<div class="row">
-											<img src="\data\core\images\generic\profilex128.png" class="pull-left m-r-sm m-l" height="32">
+											<img src="\data\core\static\images\generic\profilex128.png" class="pull-left m-r-sm m-l" height="32">
 											<span class="h3">@<?php Util\_echo($Data['Meta']['UserName']); ?></span>
 											<a href="#" class="btn btn-success pull-right m-r" id="profile-update-save"><i class="fa fa-globe"></i>&nbsp; Save Changes</a>
 											<a href="/twodot7/profile" class="btn btn-primary pull-right m-r-xs"><i class="fa fa-arrow-left"></i></a>

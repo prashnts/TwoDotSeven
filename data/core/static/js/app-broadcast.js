@@ -10,12 +10,12 @@ var BroadcastSvc = {
         return $("#"+this.HOOKID);
     },
     getPOSTFIX : function() {
-        _Candidate = Number($("#broadcast-container li:last").attr("data-timestamp"));
+        _Candidate = Number($(".broadcast-card:last").attr("data-timestamp"));
         if (_Candidate) return _Candidate;
         else return 0;
     },
     getPREFIX : function() {
-        _Candidate = Number($("#broadcast-container li:first").attr("data-timestamp"));
+        _Candidate = Number($(".broadcast-card:first").attr("data-timestamp"));
         if (_Candidate) return _Candidate;
         else return 0;
     },
@@ -29,6 +29,7 @@ var BroadcastSvc = {
     },
     postFetch : function() {
         if (BroadcastSvc.ActionToggle) return;
+        console.log("EXECUTED");
         BroadcastSvc.ActionToggle = true;
         $.getJSON(BroadcastSvc.POSTURI+BroadcastSvc.getPOSTFIX(), function(data) {
             BroadcastSvc.appendIntoHook(data);
@@ -51,6 +52,7 @@ var BroadcastSvc = {
         }
         for (var i = 0; i < data.length; i++) {
             var feed = BroadcastSvc.createPost(data[i]);
+            //console.log(data);
             $(feed).hide().appendTo("#"+BroadcastSvc.HOOKID).delay(90*i).slideDown(100);
             if (data.length-1 == i) BroadcastSvc.ActionToggle = false;
         };
@@ -105,11 +107,13 @@ var BroadcastSvc = {
         $('#broadcast').scroll(function() {
             if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
                 BroadcastSvc.postFetch();
+                console.log("FIRED TOP!");
             }
         })
         window.onscroll = function() {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-10) {
                 BroadcastSvc.postFetch();
+                console.log("FIRED!");
             }
         };
         $("#"+BroadcastSvc.BtnLoadHook).click(function() {

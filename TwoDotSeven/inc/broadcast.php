@@ -242,6 +242,7 @@ class Feed {
 									$Row['Target'] = \TwoDot7\Util\Token::Get(array('JSON' => $Row['Target']));
 									$Row['TargetType'] = $TranslateTargetType($Row['TargetType']);
 									
+									$Row['Time'] = $Row['Timestamp'];
 									$Row['TimeAgo'] = Utils::timeAgo($Row['Timestamp']);
 									$Row['VisibleClass'] = $TranslateVisibleClass($Row['Visible']);
 
@@ -280,6 +281,7 @@ class Feed {
 									$Row['TargetType'] = $TranslateTargetType($Row['TargetType']);
 									
 									$Row['Time'] = $Row['Timestamp'];
+									$Row['TimeAgo'] = Utils::timeAgo($Row['Timestamp']);
 									$Row['VisibleClass'] = $TranslateVisibleClass($Row['Visible']);
 
 									$Row['Data'] = Utils::Unpack($Row['Data']);

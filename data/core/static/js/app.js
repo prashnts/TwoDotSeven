@@ -103,7 +103,7 @@ Modernizr.addTest('ios',function(){return!!navigator.userAgent.match(/iPhone|iPa
 
   Bjax.prototype.backdrop = function(){
     this.$element.css('position','relative')
-    this.$backdrop = $('<img src="/data/core/static/images/generic/729.gif" class="backdrop-spin"><div class="backdrop fade"></div>')
+    this.$backdrop = $('<img src="/data/core/static/images/generic/teal-loader.gif" class="backdrop-spin"><div class="backdrop fade"></div>')
       .appendTo(this.$element);
 
     this.$backdrop[0].offsetWidth; // force reflow
