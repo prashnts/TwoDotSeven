@@ -11,5 +11,5 @@
  * @author Tarun Khajuria <tarunkhajuria42@gmail.com>
  * @since 0.0
  */
-header("Location: /twodot7/broadcast");
+header("Location: /twodot7/dash");
 ?>

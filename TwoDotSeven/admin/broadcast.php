@@ -15,13 +15,10 @@ namespace TwoDot7\Admin\Broadcast;
  * @version 0.0	
  */
 function init() {
-	//$installer = new \TwoDot7\Install\Setup;	
-	//$installer->Navigation();
-	//var_dump(\TwoDot7\Bit\Register::Install('in.ac.ducic.tabs'));	
+
 	\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
 		'Page' => 'PRE_BROADCAST',
 		'Call' => 'Broadcast',
-		'NaavbarMood' => 'bg-light dker',	
 		'BroadcastEnabled' => \TwoDot7\User\Status::Correlate(11, \TwoDot7\User\Status::Get(\TwoDot7\User\Session::Data()['UserName'])),
 		'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
 			'Page' => 'PRE_BROADCAST'	

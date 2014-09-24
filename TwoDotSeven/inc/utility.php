@@ -606,7 +606,7 @@ class Dictionary {
 			if ($Value) {
 				$this->DictionaryArray[$Key] = $Value;
 			} else {
-				$this->DictionaryArray[$Key] = False;
+				$this->DictionaryArray[$Key] = NULL;
 			}
 		}
 		return True;
@@ -637,7 +637,10 @@ class Dictionary {
 	 */
 	public function get($Key = False) {
 		if ($Key === False) return $this->DictionaryArray;
-		elseif (array_key_exists($Key, $this->DictionaryArray)) return $this->DictionaryArray[$Key];
+		elseif (array_key_exists($Key, $this->DictionaryArray)) {
+			if (is_null($this->DictionaryArray[$Key])) return True;
+			else return $this->DictionaryArray[$Key];
+		}
 		else return False;
 	}
 }

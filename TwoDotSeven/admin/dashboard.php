@@ -16,9 +16,18 @@ namespace TwoDot7\Admin\Dashboard;
  */
 function init() {
 
+	$Show = new \TwoDot7\Util\Dictionary;
+
+	if (\TwoDot7\User\Session::Exists()) {
+		$Show->add("LoggedIn");
+		if (\TwoDot7\User\Status::Profile(\TwoDot7\User\Session::Data()['UserName'])['Response']) $Show->add("ProfileVerified");
+		if (\TwoDot7\User\Status::EMail(\TwoDot7\User\Session::Data()['UserName'])['Response']) $Show->add("EMailVerified");
+	}
+
 	\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
 		'Page' => 'PRE_DASHBOARD',
 		'Call' => 'Dashboard',
+		'Show' => $Show,
 		'Navigation' => \TwoDot7\Meta\Navigation::Get(array(
 			'Page' => 'PRE_DASHBOARD'
 			))

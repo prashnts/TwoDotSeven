@@ -141,9 +141,10 @@ class Render {
 		?>
 		<section class="scrollable padder bg-light  fill" id="broadcast">
 			<div class="m-b-md row padder">
-				<div class="col-lg-6">
+				<div class="col-lg-8">
 				</div>
-				<div class="col-lg-6">
+				<div class="col-lg-4">
+					LOL?
 				</div>
 			</div>
 			<?php
@@ -153,7 +154,7 @@ class Render {
 					<div class="col-lg-8">
 						<div class="broadcast-post m-b-lg" id="p">
 							<div class="clear row No-Margin-Padding-Override-Hack">
-								<textarea type="text" class="form-control m-b-sm" placeholder="Input your comment here" id="broadcast-post-area"></textarea>
+								<textarea type="text" class="form-control m-b-sm" placeholder="Publish your Broadcast." id="broadcast-post-area"></textarea>
 							</div>
 							<div class="clear row No-Margin-Padding-Override-Hack">
 								<!--button class="btn btn-success m-t-xs " type="button" id="lol">Tag People</button-->
@@ -182,12 +183,70 @@ class Render {
 	public static function Dashboard($Data) {
 		?>
 		<section class="scrollable padder bg-dark  fill">
-			<div class="m-b-md row padder">
-				<div class="col-lg-6">
-					<h3 class="m-b-none">TwoDot7 Dashboard</h3>
+
+			<div class="row">
+		<article class="main-action">
+			<div class="container">
+				<div class="text-lt">
+					<div class="row m-b-sm padder text-center" style="background: url(/data/core/static/images/landing/download.png) repeat fixed;">
+						<h3 class="m-t-xl"><img src="/data/core/static/images/landing/logo.png" height="32px"></h3>
+						<span class="h3 text-lt m-t-lg">One, for all the CIC</span>
+						<br>
+						<br>
+						<br>
+						<?php echo !$Data['Show']->get("LoggedIn") ? '<h3><a href="/twodot7/login" class="btn btn-primary">Login</a> &nbsp; <a href="/twodot7/Signup" class="btn btn-success">Signup</a></h3>' : ""; ?>
+						<?php echo $Data['Show']->get("LoggedIn") ? '<h3><a href="/twodot7/broadcast" class="btn btn-dark">Go to Broadcast</a> &nbsp; <a href="/twodot7/profile" class="btn btn-success">View/Edit Your Profile</a></h3>' : ""; ?>
+						<h6 class="m-t-xl">(Alpha Version) Early Preview | Report bugs/issues at <a href="https://github.com/PrashntS/TwoDotSeven/issues/new">GitHub Issue Tracker</a> or, Mail at <a href="mailto:prashant@ducic.ac.in">prashant@ducic.ac.in</a></h6>
+					</div>
+					<div class="row text-center">
+						<div class="col-lg-4 padder">
+							<h1><img src="/data/core/static/images/landing/profile-1-256.png" width="128px"></h1>
+							<h3>Profile</h3>
+							<h4>Create your official Profile, which doubles as your CV. Add your Projects, Achievements, and your Areas of Interest.</h4>
+						</div>
+						
+						<div class="col-lg-4 padder">
+							<h1><img src="/data/core/static/images/landing/net-1-256.png" width="128px"></h1>
+							<h3>Broadcast</h3>
+							<h4>Connect and Share with your Classmates, Studymates, Teachers and Everyone at CIC. Broadcasts can be either public or targeted to another person.</h4>
+							<h5>Broadcasts require a verified student, faculty or staff account.</h5>
+						</div>
+						
+						<div class="col-lg-4 padder">
+							<h1><img src="/data/core/static/images/landing/cluster-1-256.png" width="128px"></h1>
+							<h3>Join Clusters</h3>
+							<h4>Be a part of a Cluster and Share ideas, news and files with everyone in it.</h4>
+							<h5>Clusters are moderated by the Admin.</h5>
+						</div>
+					</div>
+					<div class="row text-center bg-dark lt text-lt">
+						<div class="col-lg-4 padder col-lg-offset-2">
+							<h1><img src="/data/core/static/images/landing/git-1-256.png" width="128px"></h1>
+							<h3>Git</h3>
+							<h4>Develop and share your softwares, codes - The Right Way. With acces to the local Git network, you can have private repositories for your projects. Once ready, share it with the world via GitHub.</h4>
+							<h5>Git is available in CIC Intranet only.</h5>
+						</div>
+						
+						<div class="col-lg-4 padder">
+							<h1><img src="/data/core/static/images/landing/apps-1-256.png" width="128px"></h1>
+							<h3>Modules</h3>
+							<h4>Take benefits of many more modules, such as:</h4>
+							<h5>Attendance: View and manage your attendance, get quick alerts if you're lagging behind!</h5>
+							<h5>Forum: Broadcast doubles as a Forum post. Discuss and brainstorm over anything.</h5>
+						</div>
+					</div>
+					<div class="row m-b-sm padder text-center" style="background: url(/data/core/static/images/landing/download.png) repeat fixed;">
+						<h3>Proudly Open Source</h3>
+						<p>CIC One is built on TwoDot7 - A PHP framework for quick deployment.<br>TwoDot7 and its modules are Open Source, and were developed in the IT Innovations Lab, Cluster Innovation Centre.</p>
+						<a href="https://github.com/PrashntS/TwoDotSeven" target="_blank">
+							<h1><img src="/data/core/static/images/landing/octo-64.png"></h1>
+							<h4>View Project on Github.</h4>
+							<h5><kbd>github.com/Prashnts/TwoDotSeven</kbd></h5>
+						</a>
+					</div>
 				</div>
-				<div class="col-lg-6">
-				</div>
+			</div>
+		</article>
 			</div>
 		</section>
 		<?php
