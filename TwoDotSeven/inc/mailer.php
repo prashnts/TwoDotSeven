@@ -19,7 +19,7 @@ function Send($Data) {
 
 		if (\TwoDot7\Config\USE_SMTP) {
 			$Mailer->isSMTP();
-			$Mailer->SMTPDebug = 0;
+			$Mailer->SMTPDebug = 1;
 			$Mailer->Host = \TwoDot7\Config\SMTP_HOST;
 			$Mailer->Port = \TwoDot7\Config\SMTP_PORT;
 			$Mailer->SMTPSecure = \TwoDot7\Config\SMTP_SECURE;
