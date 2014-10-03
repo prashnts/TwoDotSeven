@@ -33,6 +33,10 @@ class InvalidBit extends \Exception {
 	// Empty class.
 }
 
+class GaveUp extends \Exception {
+	// Empty class.
+}
+
 function RenderError($Exception) {
 	require_once $_SERVER['DOCUMENT_ROOT'].'data/core/views/login.signup.errors.php';
 	\TwoDot7\Admin\Template\Login_SignUp_Error\_init(array(

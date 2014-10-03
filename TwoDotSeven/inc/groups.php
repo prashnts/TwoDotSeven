@@ -43,6 +43,10 @@ class Instance {
     public function GetBroadcast() {
         // Returns the Broadcasts targeted for this group.
     }
+
+    public static function ListAll() {
+        // Lists all the group.
+    }
 }
 
 class Setup {
@@ -68,7 +72,7 @@ class Setup {
             $Graph = new \TwoDot7\Util\_List;
 
             $Defaults = array(
-                'GroupID' => "_grp_".\TwoDot7\Util\Crypt::RandHash(),
+                'GroupID' => self::UniqueGroupID(),
                 'Meta' => $Meta->get(False, True),
                 'Admin' => \TwoDot7\User\Session::Data()['UserName'],
                 'Graph' => $Graph->get(True)
@@ -97,5 +101,15 @@ class Setup {
                 'GroupID' => $GroupID));
             return ((int) $Response->errorCode() === 0) && ((bool) $Response->rowCount());
         } else throw new \TwoDot7\Exception\AuthError("User not authenticated, or not authorized to perform this operation.");
+    }
+
+    private static $IterCount = 0;
+    private static function UniqueGroupID() {
+        self::$IterCount++;
+        if (self::$IterCount>32) throw new \TwoDot7\Exception\GaveUp("Cannot generate a Unique ID in given time");
+        $ID = "grp_".substr(\TwoDot7\Util\Crypt::RandHash(), 0, 16);
+        if (\TwoDot7\Util\Redundant::Group($ID)) {
+            return self::UniqueGroupID();
+        } else return $ID;
     }
 }
