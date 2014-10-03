@@ -12,9 +12,8 @@ use \TwoDot7\Database as Database;
 class Instance {
     private static $Count = 0;
     private $GroupID;
-    private $Name;
     private $Meta;
-    private $Type;
+    private $Admin;
     private $Graph;
 
     function __construct($GroupID) {
@@ -79,13 +78,24 @@ class Setup {
             $Response = (int) $DatabaseHandler->Query($Query, $Defaults)->errorCode() === 0;
             if ($Response) return $Defaults['GroupID'];
             else return $Response;
-        } else return False;
+        } else throw new \TwoDot7\Exception\AuthError("User not authenticated, or not authorized to perform this operation.");
     }
 
     public static function Delete($GroupID) {
-        $Query = "DELETE FROM _group WHERE GroupID = :GroupID;";
-        $Response = \TwoDot7\Database\Handler::Exec($Query, array(
-            'GroupID' => $GroupID))->errorCode() === 0;
-        return $Response;
+        if (\TwoDot7\User\Session::Exists() &&
+            \TwoDot7\User\Access::Check(array(
+                'UserName' => \TwoDot7\User\Session::Data()['UserName'],
+                'Domain' => array(
+                    'SYSADMIN',
+                    'ADMIN',
+                    'in.ac.ducic.grpadmin'
+                    )
+                )) &&
+            \TwoDot7\User\Status::Correlate(11, \TwoDot7\User\Status::Get(\TwoDot7\User\Session::Data()['UserName']))) {
+            $Query = "DELETE FROM _group WHERE GroupID = :GroupID;";
+            $Response = \TwoDot7\Database\Handler::Exec($Query, array(
+                'GroupID' => $GroupID));
+            return ((int) $Response->errorCode() === 0) && ((bool) $Response->rowCount());
+        } else throw new \TwoDot7\Exception\AuthError("User not authenticated, or not authorized to perform this operation.");
     }
 }
