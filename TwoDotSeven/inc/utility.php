@@ -8,19 +8,80 @@ namespace TwoDot7\Util;
 
 class _List {
     private $Array;
+    private $Strict;
     function __construct($Array = array()) {
+        // Fail-safe. Checks if it is JSON string.
+        if (is_string($Array)) $Array = json_decode($Array, True);
+
         if (!is_array($Array)) throw new \TwoDot7\Exception\InvalidArgument("Error in Arguments.");
+
         $this->Array = $Array;
+        $this->Strict = False;
     }
 
     public function add($Data = NULL) {
-        return array_push($this->Array, $Data);
+        $Routine = function($Data){
+            if ($this->exists($Data)) return True;
+            elseif (is_bool($Data) || is_numeric($Data) || is_string($Data)) {
+                return array_push($this->Array, $Data);
+            } else return False;
+        };
+
+        if (is_array($Data)) {
+            foreach ($Data as $Key => $Value) {
+                $Routine($Value);
+            }
+            return True;
+        } else {
+            return $Routine($Data);
+        }
     }
 
     public function exists($Needles) {
         if (is_array($Needles)) {
-            
+            $Found = False;
+            foreach ($Needles as $Key => $Needle) {
+                if (in_array($Needle, $this->Array)) $Found = True;
+                elseif ($this->Strict) return False;
+            }
+            return $Found;
+        } else {
+            return in_array($Needles, $this->Array);
         }
+    }
+
+    public function get($JSON = False) {
+        if ($JSON) return json_encode($this->Array);
+        else return $this->Array;
+    }
+
+    public function remove($Needle) {
+        $Routine = function($Needle) {
+            if (!(is_bool($Needle) || is_numeric($Needle) || is_string($Needle))) return False;
+            $this->Array = array_merge(array_diff(
+                $this->Array,
+                array($Needle)
+            ));
+            return True;
+        };
+        if (is_array($Needle)) {
+            $Success = True;
+            foreach ($Needle as $Key => $Value) {
+                $Success = $Success && $Routine($Value);
+            }
+            return $Success;
+        } else return $Routine($Needle);
+    }
+
+    public function update($Old, $New = NULL) {
+        $Success = $this->add($New);
+        $Success ? $this->remove($Old) : NULL;
+        return $Success;
+    }
+
+    public function strictToggle() {
+        $this->Strict = !$this->Strict;
+        return True;
     }
 }
 
