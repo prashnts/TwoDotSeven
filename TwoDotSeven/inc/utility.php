@@ -717,6 +717,8 @@ class Dictionary {
      * @version 0.1 
      */
     function __construct($Array = array(), $Strict = False) {
+        if (is_string($Array)) $Array = json_decode($Array, True);
+        
         if (!is_array($Array) || 
             !is_bool($Strict)) {
             throw new \TwoDot7\Exception\InvalidArgument("Error in Arguments.");
@@ -778,8 +780,8 @@ class Dictionary {
      * @since   v0.0 20140919
      * @version 0.1 
      */
-    public function get($Key = False) {
-        if ($Key === False) return $this->DictionaryArray;
+    public function get($Key = False, $JSON = False) {
+        if ($Key === False) return $JSON ? json_encode($this->DictionaryArray) : $this->DictionaryArray;
         elseif (array_key_exists($Key, $this->DictionaryArray)) {
             if (is_null($this->DictionaryArray[$Key])) return True;
             else return $this->DictionaryArray[$Key];

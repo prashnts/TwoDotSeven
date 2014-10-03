@@ -49,26 +49,43 @@ class Instance {
 class Setup {
     /**
      * Creates the Group, and returns the Generated GroupID.
-     * @param Mixed $Data Optional. Overrides default configuration:
-     *                    Mixed Meta, Specify the Default Meta Array.
-     *                    String Admin, The Group Admin. (By default, the logged-in user.)
-     *                    Mixed Graph, The User Graph, a 1D Matrix, generated through Util/Array.
      */
-    public static function Create($Data = array()) {
-        if (isset($Data['GroupID'])) throw new \TwoDot7\Exception\InvalidArgument("GroupID is generated automatically.");
-        $Defaults = array(
-            'GroupID' => "_grp_".\TwoDot7\Util\Crypt::RandHash(),
-            'Meta' => array(),
-            'Admin' => \TwoDot7\User\Session::Data()['UserName'],
-            'Graph' => array()
-        );
+    public static function Create() {
+        if (\TwoDot7\User\Session::Exists() &&
+            \TwoDot7\User\Access::Check(array(
+                'UserName' => \TwoDot7\User\Session::Data()['UserName'],
+                'Domain' => array(
+                    'SYSADMIN',
+                    'ADMIN',
+                    'in.ac.ducic.grpadmin'
+                    )
+                )) &&
+            \TwoDot7\User\Status::Correlate(11, \TwoDot7\User\Status::Get(\TwoDot7\User\Session::Data()['UserName']))) {
+            $DatabaseHandler = new \TwoDot7\Database\Handler;
 
-        $Data = array_replace($Defaults, $Data);
+            ########   TODO: Refactor to check the Generated GroupID for collisions.
 
-        echo json_encode($Data);
+            $Meta = new \TwoDot7\Util\Dictionary;
+            $Graph = new \TwoDot7\Util\_List;
+
+            $Defaults = array(
+                'GroupID' => "_grp_".\TwoDot7\Util\Crypt::RandHash(),
+                'Meta' => $Meta->get(False, True),
+                'Admin' => \TwoDot7\User\Session::Data()['UserName'],
+                'Graph' => $Graph->get(True)
+            );
+
+            $Query = "INSERT INTO _group (GroupID, Meta, Admin, Graph) VALUES (:GroupID, :Meta, :Admin, :Graph);";
+            $Response = (int) $DatabaseHandler->Query($Query, $Defaults)->errorCode() === 0;
+            if ($Response) return $Defaults['GroupID'];
+            else return $Response;
+        } else return False;
     }
 
     public static function Delete($GroupID) {
-        // Deletes the Group.
+        $Query = "DELETE FROM _group WHERE GroupID = :GroupID;";
+        $Response = \TwoDot7\Database\Handler::Exec($Query, array(
+            'GroupID' => $GroupID))->errorCode() === 0;
+        return $Response;
     }
 }
