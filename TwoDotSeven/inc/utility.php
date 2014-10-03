@@ -6,9 +6,32 @@ namespace TwoDot7\Util;
 #  / /    \ V  V / (_) |  _    / /  
 #  \/      \_/\_/ \___/  (_)  /_/   
 
+/**
+ * List Implementation over Native Array. Provides objectified data-structure for
+ * easier and manageable, Multiple, List Arrays.
+ * @author Prashant Sinha <firstname><lastname>@outlook.com
+ * @since v0.1 20141003
+ * @version 0.1
+ */
 class _List {
+
+    /**
+     * The List container.
+     * @var Array
+     */
     private $Array;
+
+    /**
+     * If true, it force checks all the elements for presence, while using "exists".
+     * @var Boolean
+     * @see exists
+     */
     private $Strict;
+
+    /**
+     * Constructs the List Object.
+     * @param array $Array Optional. Predefined array, or JSON Encoded array.
+     */
     function __construct($Array = array()) {
         // Fail-safe. Checks if it is JSON string.
         if (is_string($Array)) $Array = json_decode($Array, True);
@@ -19,6 +42,13 @@ class _List {
         $this->Strict = False;
     }
 
+    /**
+     * Adds a entry in the List.
+     * @param Mixed $Data Required. Can be either:
+     *                    1. String/Boolean/Number Will be pushed in the List.
+     *                    2. Array of multiple String/Boolean/Number Will be pushed in the list.
+     * @return Boolean Depicts if the Elements were pushed.
+     */
     public function add($Data = NULL) {
         $Routine = function($Data){
             if ($this->exists($Data)) return True;
@@ -37,6 +67,17 @@ class _List {
         }
     }
 
+    /**
+     * Checks if a particular entry or, a list of entries exists in the List.
+     * @param  Mixed $Needles Required. Can be either:
+     *                        1. String/Boolean/Number Will be checked for its existence in List.
+     *                        2. Array of Multiple String/Boolean/Number Will be checked for its
+     *                           existence in the List. However, if the Strict toggle is enabled,
+     *                           ALL the items in the Array MUST be present for a Tautology, otherwise
+     *                           it will return a Fallacy. In every other case, it is sufficient to
+     *                           have Just One matching element to result in a Tautology.
+     * @return Boolean
+     */
     public function exists($Needles) {
         if (is_array($Needles)) {
             $Found = False;
@@ -50,11 +91,23 @@ class _List {
         }
     }
 
+    /**
+     * Returns the List as Array or JSON encoded Array String.
+     * @param  boolean $JSON Optional. Toggles the Output of get(). If specified, returns a JSON encoded string.
+     * @return Mixed
+     */
     public function get($JSON = False) {
         if ($JSON) return json_encode($this->Array);
         else return $this->Array;
     }
 
+    /**
+     * Removes a particular entry, or, a list of entries from the list.
+     * @param  Mixed $Needle Required. Can be either:
+     *                       1. String/Boolean/Number Will be removed from the List if Present.
+     *                       2. Array of String/Boolean/Number All found elements will be removed from the List.
+     * @return Boolean
+     */
     public function remove($Needle) {
         $Routine = function($Needle) {
             if (!(is_bool($Needle) || is_numeric($Needle) || is_string($Needle))) return False;
@@ -73,12 +126,23 @@ class _List {
         } else return $Routine($Needle);
     }
 
+    /**
+     * Updates the particular named entry from the list.
+     * @param  Mixed $Old Required. The Old Entry, should be either of: String/Boolean/Number.
+     * @param  Mixed $New Optional. The new, replacing Entry. Should be either of: String/Boolean/Number.
+     * @return Boolean
+     */
     public function update($Old, $New = NULL) {
         $Success = $this->add($New);
         $Success ? $this->remove($Old) : NULL;
         return $Success;
     }
 
+    /**
+     * Toggles the Strict Flag. If enabled, will force "exists" to do an "eager" operation, and check ALL
+     * the elements in the Argument.
+     * @return Constant True
+     */
     public function strictToggle() {
         $this->Strict = !$this->Strict;
         return True;
