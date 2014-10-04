@@ -20,13 +20,12 @@ class Instance {
         // Constructs the Group Instance. Caches for faster execution.
         $Query = "SELECT * FROM _group WHERE GroupID = :GroupID";
         
-        $Response = Database\Handler::Exec($Query)->fetch();
+        $Response = Database\Handler::Exec($Query)->fetch(\PDO::FETCH_ASSOC);
 
-        if (count($Response)) {
+        if (is_array($Response)) {
             $this->GroupID = $Response['GroupID'];
-            $this->Name = $Response['Name'];
             $this->Meta = $Response['Meta'];
-            $this->Type = $Response['Type'];
+            $this->Admin = $Response['Admin'];
             $this->Graph = $Response['Graph'];
         }
     }
@@ -46,7 +45,14 @@ class Instance {
 
     public static function ListAll() {
         // Lists all the group.
+        
+        $Query = "SELECT ID, GroupID, Admin, Meta FROM _group;";
+        return \TwoDot7\Database\Handler::Exec($Query)->fetchAll(\PDO::FETCH_ASSOC);
     }
+}
+
+class Graph {
+    
 }
 
 class Setup {
@@ -66,8 +72,6 @@ class Setup {
             \TwoDot7\User\Status::Correlate(11, \TwoDot7\User\Status::Get(\TwoDot7\User\Session::Data()['UserName']))) {
             $DatabaseHandler = new \TwoDot7\Database\Handler;
 
-            ########   TODO: Refactor to check the Generated GroupID for collisions.
-
             $Meta = new \TwoDot7\Util\Dictionary;
             $Graph = new \TwoDot7\Util\_List;
 
@@ -85,6 +89,10 @@ class Setup {
         } else throw new \TwoDot7\Exception\AuthError("User not authenticated, or not authorized to perform this operation.");
     }
 
+    /**
+     * [Delete description]
+     * @param [type] $GroupID [description]
+     */
     public static function Delete($GroupID) {
         if (\TwoDot7\User\Session::Exists() &&
             \TwoDot7\User\Access::Check(array(
@@ -103,7 +111,15 @@ class Setup {
         } else throw new \TwoDot7\Exception\AuthError("User not authenticated, or not authorized to perform this operation.");
     }
 
+    /**
+     * [$IterCount description]
+     * @var integer
+     */
     private static $IterCount = 0;
+
+    /**
+     * [UniqueGroupID description]
+     */
     private static function UniqueGroupID() {
         self::$IterCount++;
         if (self::$IterCount>32) throw new \TwoDot7\Exception\GaveUp("Cannot generate a Unique ID in given time");
