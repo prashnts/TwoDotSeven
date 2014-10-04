@@ -53,8 +53,15 @@ class Instance {
 }
 
 class Meta {
-    function __construct($GroupID) {
-        //
+    private $GroupID;
+    private $Meta;
+    public  $Success;
+    function __construct($GroupID, $FetchOverride = False, $FetchSourceArray = NULL) {
+        $this->GroupID = $GroupID;
+    }
+
+    function FetchMeta($FetchOverride = False, $FetchSourceArray = NULL) {
+        
     }
 }
 
