@@ -58,10 +58,54 @@ class Meta {
     public  $Success;
     function __construct($GroupID, $FetchOverride = False, $FetchSourceArray = NULL) {
         $this->GroupID = $GroupID;
+        $this->FetchMeta($FetchOverride, $FetchSourceArray);
     }
 
     function FetchMeta($FetchOverride = False, $FetchSourceArray = NULL) {
-        
+        $Response = False;
+        if ($FetchOverride) {
+            $Response = $FetchSourceArray;
+        } else {
+            $Query = "SELECT Meta FROM _group WHERE GroupID = :GroupID;";
+            $Response = \TwoDot7\Database\Handler::Exec($Query, array('GroupID' => $this->GroupID))->fetch(\PDO::FETCH_ASSOC);
+        }
+        if ($Response) {
+            $this->Success = True;
+            $MetaJSON = json_decode($Response['Meta'], true);
+            $this->Meta = $MetaJSON ? new Util\Dictionary($MetaJSON) : new Util\Dictionary;
+        } else {
+            $this->Success = False;
+        }
+    }
+    private function PushMeta() {
+        return (int)\TwoDot7\Database\Handler::Exec(
+            "UPDATE _group SET Meta = :Meta WHERE GroupID = :GroupID;",
+            array(
+                'Meta' => json_encode($this->Meta->get()),
+                'GroupID' => $this->GroupID
+            ))->errorCode() === 0;
+    }
+    private function MetaHandler($Key, $Data = NULL) {
+        if (!is_string($Key)) throw new \TwoDot7\Exception\InvalidArgument("Key should be a valid string.");
+        if (is_null($Data)) return $this->Meta->get($Key);
+        else {
+            $this->Meta->add($Key, $Data);
+            return $this->PushMeta();
+        }
+    }
+
+    public function Get() {
+        $Response = new \TwoDot7\Util\Dictionary;
+        $Response->add("GroupID", $this->GroupID());
+        $Response->add("Description", $this->Description());
+        return $Response->get();
+    }
+
+    public function GroupID() {
+        return $this->GroupID;
+    }
+    public function Description($Data = NULL) {
+        return $this->MetaHandler("Description", $Data);
     }
 }
 
