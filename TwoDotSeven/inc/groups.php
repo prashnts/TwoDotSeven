@@ -49,10 +49,17 @@ class Instance {
         $Query = "SELECT ID, GroupID, Admin, Meta FROM _group;";
         return \TwoDot7\Database\Handler::Exec($Query)->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+}
+
+class Meta {
+    function __construct($GroupID) {
+        //
+    }
 }
 
 class Graph {
-    
+
 }
 
 class Setup {

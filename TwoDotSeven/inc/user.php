@@ -649,21 +649,77 @@ class Preferences {
 	}
 }
 
+/**
+ * Creates the User's Profile Instance object.
+ * Enables Creating/Updating the Profile Fields. Moreover, additional fields can be
+ * added easily, by creating: 1. Access Function, 2. Get() entry.
+ * @author	Prashant Sinha <firstname,lastname>@outlook.com
+ * @since	v0.1 20141003
+ * @version	0.1
+ */
 class Profile {
 
+	/**
+	 * Contains the UserName of the User whose profile instance has been created.
+	 * @var String
+	 */
 	private $UserName;
+
+	/**
+	 * Contains the UserID.
+	 * @var Number
+	 */
 	private $UserID;
+
+	/**
+	 * Contains the User Email.
+	 * @var String
+	 */
 	private $UserEMail;
+
+	/**
+	 * Contains Meta Array.
+	 * @var Mixed
+	 */
 	private $Meta;
+
+	/**
+	 * Contains Success variable, which can be accessed to check if the User whose
+	 * profile is being created, exists.
+	 * @var boolean
+	 */
 	public $Success = False;
 
-	function __construct($UserName, $FetchOverride = False, $FetchSourceArray = False) {
+	/**
+	 * Initializes the Profile Instance.
+	 * @param String  $UserName         The UserName of the profile whose instance is 
+	 *                                  being created.
+	 * @param boolean $FetchOverride    Optional. Default False. If set true, it skips the Database
+	 *                                  query to fetch the user meta. Rather, it expects the
+	 *                                  $FetchSourceArray to contain the UserMeta array, instead.
+	 *                                  This prevents additional Database overhead in case of intensive
+	 *                                  operations like creation of broadcast feeds.
+	 * @param Mixed   $FetchSourceArray Required, if $FetchOverride set to True. Should contain the User
+	 *                                  Profile Meta.
+	 */
+	function __construct($UserName, $FetchOverride = False, $FetchSourceArray = NULL) {
 		$this->UserName = $UserName;
 		$this->FetchMeta($FetchOverride, $FetchSourceArray);
 	}
+
+	/**
+	 * Gets all the User Meta in an Array.
+	 * @return Mixed The User Meta Array.
+	 */
 	public function GetAll() {
 		return $this->Meta->get();
 	}
+
+	/**
+	 * Fetches the Meta from the Database. Or, if specified by $FetchOverride, from $FetchSourceArray.
+	 * @param boolean $FetchOverride    See __construct.
+	 * @param Mixed   $FetchSourceArray See __construct.
+	 */
 	private function FetchMeta($FetchOverride = False, $FetchSourceArray = False) {
 		$Response = False;
 		if ($FetchOverride) {
@@ -682,6 +738,12 @@ class Profile {
 			$this->Success = False;
 		}
 	}
+
+	/**
+	 * Pushes the Changed Meta Field in the Database. Serializes the WHOLE meta, and replaces with
+	 * any changes made in the Fields.
+	 * @return boolean False, if any error occurred. True otherwise.
+	 */
 	private function PushMeta() {
 		return (int)\TwoDot7\Database\Handler::Exec(
 			"UPDATE _user SET Meta = :Meta WHERE UserName = :UserName;",
@@ -690,6 +752,16 @@ class Profile {
 				'UserName' => $this->UserName
 			))->errorCode() === 0;
 	}
+
+	/**
+	 * Handles the change/update/fetching of Meta properties from the Meta Array.
+	 * @param  String  $Key  The Field Name
+	 * @param  Mixed   $Data Optional. If specified, replaces the old Meta Value under this key,
+	 *                      and calls the PushMeta().
+	 * @return Mixed 1. Boolean, if the $Data was specified (that is, update request.) Specifies the
+	 *                  success status. See PushMeta().
+	 *               2. Field data, if $Data was not supplied, or is set to "False"
+	 */
 	private function MetaHandler($Key, $Data = False) {
 		if (!is_string($Key)) throw new \TwoDot7\Exception\InvalidArgument("Key should be a valid string.");
 		if (is_bool($Data)) return $this->Meta->get($Key);
@@ -698,6 +770,17 @@ class Profile {
 			return $this->PushMeta();
 		}
 	}
+
+	/**
+	 * Fetches Meta for Multiple UserNames. This is particularly helpful if Multiple User Meta has
+	 * to be fetched, because all of them are fetched through one Database Query only. This reduces
+	 * the database overhead, and improves performance considerably.
+	 * @param  Mixed $UserName Can be either, a String containing SINGLE UserName, or an array
+	 *                        containing multiple strings containing SINGLE UserName. Invalid UserNames,
+	 *                        or UserNames that don't exists would be simply ignored.
+	 * @return Mixed 1. If the $UserName field is an array, an array containing multiple User Meta array.
+	 *               2. If the $UserName field is an string, returns the User Meta array.
+	 */
 	public static function FetchProfiles($UserName) {
 		$Response = array();
 		if (is_array($UserName)) {
@@ -716,6 +799,10 @@ class Profile {
 		return $Response;
 	}
 
+	/**
+	 * Returns the curated User Meta.
+	 * @return Mixed User Meta.
+	 */
 	public function Get() {
 		$Response = new \TwoDot7\Util\Dictionary;
 		$Response->add("Self", $this->Self());
@@ -746,9 +833,16 @@ class Profile {
 		return $Response->get();
 	}
 
+	/**
+	 * Detects if the Logged In user, whose session is this, is same as the one whose
+	 * profile meta is being curated.
+	 * @return Boolean Read Above.
+	 */
 	public function Self() {
 		return strcasecmp($this->UserName, Session::Data()['UserName']) === 0;
 	}
+
+	// Custom User Meta Fields.
 	public function UserEMail() {
 		return $this->UserEMail;
 	}
