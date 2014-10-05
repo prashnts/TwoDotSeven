@@ -98,6 +98,8 @@ class Meta {
         $Response = new \TwoDot7\Util\Dictionary;
         $Response->add("GroupID", $this->GroupID());
         $Response->add("Description", $this->Description());
+        $Response->add("GroupPicture", $this->GroupPicture());
+        $Response->add("GroupBackground", $this->GroupBackground());
         return $Response->get();
     }
 
@@ -107,9 +109,28 @@ class Meta {
     public function Description($Data = NULL) {
         return $this->MetaHandler("Description", $Data);
     }
+    public function Name($Data = NULL) {
+        return $this->MetaHandler("Name", $Data);
+    }
+    public function GroupPicture($Data = NULL) {
+        $URI = $this->MetaHandler("GroupPicture", $Data);
+        return $URI ? $URI : "/assetserver/userNameIcon/".$this->Name();
+    }
+    public function GroupBackground($Data = NULL) {
+        $URI = $this->MetaHandler("GroupBackground", $Data);
+        return $URI ? $URI : "/assetserver/generic/profileBackground";
+    }
 }
 
 class Graph {
+    private $GroupID;
+    private $Graph;
+    public $Success;
+
+    function __construct($GroupID, $FetchOverride = False, $FetchSourceArray = NULL) {
+        $this->GroupID = $GroupID;
+        $this->FetchMeta($FetchOverride, $FetchSourceArray);
+    }
 
 }
 
