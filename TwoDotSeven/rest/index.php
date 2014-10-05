@@ -85,6 +85,19 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
             );
         Direction\init();
         break;
+    
+    case 'getGroups':
+        Group\initList();
+    break;
+    case 'group':
+        $_GET = array(
+            'GroupID' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+            'Action' => isset($URI[BASE+2]) ? $URI[BASE+2] : False,
+            'SubAction' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
+        );
+        Group\initRoutine();
+    break;
+
     case 'echo':
         $Response = array(
             '_POST' => $_POST,
@@ -113,7 +126,7 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
             'UserName' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
             'Function' => isset($URI[BASE+2]) ? $URI[BASE+2] : False,
             'SubAction' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
-            );
+        );
         User\init();
         break;
     default:                
