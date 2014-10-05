@@ -10,41 +10,39 @@ use \TwoDot7\Database as Database;
 #  \/      \_/\_/ \___/  (_)  /_/   
 
 class Instance {
-    private static $Count = 0;
+
     private $GroupID;
     private $Meta;
     private $Admin;
     private $Graph;
 
+    public $Success;
+
     function __construct($GroupID) {
         // Constructs the Group Instance. Caches for faster execution.
         $Query = "SELECT * FROM _group WHERE GroupID = :GroupID";
         
-        $Response = Database\Handler::Exec($Query)->fetch(\PDO::FETCH_ASSOC);
+        $Response = Database\Handler::Exec($Query, array('GroupID' => $GroupID))->fetch(\PDO::FETCH_ASSOC);
 
         if (is_array($Response)) {
             $this->GroupID = $Response['GroupID'];
-            $this->Meta = $Response['Meta'];
+            $this->Meta = new \TwoDot7\Group\Meta($this->GroupID, True, $Response);
             $this->Admin = $Response['Admin'];
-            $this->Graph = $Response['Graph'];
-        }
+            $this->Graph = new \TwoDot7\Group\Graph($this->GroupID, True, $Response);
+            $this->Success = True;
+        } else $this->Success = False;
     }
 
-    public function GetUser($UserName) {
-        // Returns user rights and checks if user is part of the group.
-        // Used to show the User in the Node.
+    public function Graph() {
+        return $this->Graph;
     }
 
-    public function GetGraph() {
-        // Returns user graph, including the Users in the Group.
-    }
-
-    public function GetBroadcast() {
-        // Returns the Broadcasts targeted for this group.
+    public function Meta() {
+        return $this->Meta;
     }
 
     public static function ListAll() {
-        // Lists all the group.
+        // Lists all the groups.
         
         $Query = "SELECT ID, GroupID, Admin, Meta FROM _group;";
         return \TwoDot7\Database\Handler::Exec($Query)->fetchAll(\PDO::FETCH_ASSOC);
@@ -156,6 +154,7 @@ class Graph {
             ))->errorCode() === 0;
     }
     public function AddUser($UserName) {
+        if (!userHasManipulationRights()) throw new \TwoDot7\Exception\AuthError("User not authenticated.");
         if ($this->CheckUser($UserName)) {
             return True;
         } else {
@@ -221,6 +220,10 @@ class Graph {
         return True;
     }
     public function RemoveUser($UserName) {
+        if (!userHasManipulationRights() &&
+            $UserName != \TwoDot7\User\Session::Data()['UserName']
+        ) throw new \TwoDot7\Exception\AuthError("User not authenticated.");
+
         $this->Graph->remove($UserName);
         \TwoDot7\User\Access::Revoke(array(
             'UserName' => $UserName,
