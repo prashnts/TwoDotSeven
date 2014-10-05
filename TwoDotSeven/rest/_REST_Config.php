@@ -21,13 +21,13 @@ namespace TwoDot7\REST\Config;
 //sleep(5);
 
 $ResponseHeaderMeta = array(
-	'Response-Served-By' => 'TwoDotSeven REST engine.',
-	'Request-Time' => time(),
-	'Author' => 'Prashant Sinha <prashantsinha@outlook.com>',
-	'Humans' => 'github.com/prashnts/TwoDotSeven'
-	);
+    'Response-Served-By' => 'TwoDotSeven REST engine.',
+    'Request-Time' => time(),
+    'Author' => 'Prashant Sinha <prashantsinha@outlook.com>',
+    'Humans' => 'github.com/prashnts/TwoDotSeven'
+    );
 
 foreach ($ResponseHeaderMeta as $key => $value) {
-	header("{$key}: {$value}");
+    header("{$key}: {$value}");
 }
 ?>
