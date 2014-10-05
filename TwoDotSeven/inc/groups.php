@@ -61,7 +61,7 @@ class Meta {
         $this->FetchMeta($FetchOverride, $FetchSourceArray);
     }
 
-    function FetchMeta($FetchOverride = False, $FetchSourceArray = NULL) {
+    private function FetchMeta($FetchOverride = False, $FetchSourceArray = NULL) {
         $Response = False;
         if ($FetchOverride) {
             $Response = $FetchSourceArray;
@@ -131,7 +131,103 @@ class Graph {
         $this->GroupID = $GroupID;
         $this->FetchMeta($FetchOverride, $FetchSourceArray);
     }
+    private function FetchMeta($FetchOverride = False, $FetchSourceArray = NULL) {
+        $Response = False;
+        if ($FetchOverride) {
+            $Response = $FetchSourceArray;
+        } else {
+            $Query = "SELECT Graph FROM _group WHERE GroupID = :GroupID;";
+            $Response = \TwoDot7\Database\Handler::Exec($Query, array('GroupID' => $this->GroupID))->fetch(\PDO::FETCH_ASSOC);
+        }
+        if ($Response) {
+            $this->Success = True;
+            $MetaJSON = json_decode($Response['Graph'], true);
+            $this->Graph = $MetaJSON ? new Util\_List($MetaJSON) : new Util\_List;
+        } else {
+            $this->Success = False;
+        }
+    }
+    private function PushGraph() {
+        return (int)\TwoDot7\Database\Handler::Exec(
+            "UPDATE _group SET Graph = :Graph WHERE GroupID = :GroupID;",
+            array(
+                'Graph' => json_encode($this->Graph->get()),
+                'GroupID' => $this->GroupID
+            ))->errorCode() === 0;
+    }
+    public function AddUser($UserName) {
+        if ($this->CheckUser($UserName)) {
+            return True;
+        } else {
+            // First check if user exists.
+            if (\TwoDot7\Util\Redundant::UserName($UserName)) {
+                // Exists. Add the user in graph, push the graph and if ok, add the token.
+                $this->Graph->add($UserName);
+                if ($this->PushGraph()) { // is successful.
+                    return \TwoDot7\User\Access::Add(array(
+                        'UserName' => $UserName,
+                        'Domain' => $this->GroupID
+                    ));
+                } else {
+                    \TwoDot7\Util\Log("Could not push the Graph.", "DEBUG");
+                    return False;
+                }
+            } else return False;
+        }
+    }
+    public function CheckUser($UserName) {
+        // Checks if a particular user exists in the Graph AND the User has the Group Token.
+        // This removes the User from Graph, if it doesn't have the Group Token.
+        
+        $Check1 = function () use ($UserName) {
+            return $this->Graph->exists($UserName);
+        };
+        $Check2 = function () use ($UserName) {
+            return \TwoDot7\User\Access::Check(array(
+                'UserName' => $UserName,
+                'Domain' => $this->GroupID
+            ));
+        };
 
+        $Result = $Check1() && $Check2();
+
+        if ($Result) return $Result;
+        else {
+            if ($Check1() && !$Check2()) {
+                // If user exists in graph, but not have the Token.
+                // Remove user from graph.
+                $this->RemoveUser($UserName);
+                return False;
+            } elseif (!$Check1() && $Check2()) {
+                // If user does not exists in group, but have the Token
+                // Remove user token.
+                \TwoDot7\User\Access::Revoke(array(
+                    'UserName' => $UserName,
+                    'Domain' => $this->GroupID
+                ));
+                return False;
+            } else return False;
+        }
+    }
+    public function ListAllUsers() {
+        // Lists all users.
+        return $this->Graph->get();
+    }
+    public function VerifyAndCleanUpGraph() {
+        $Graph = $this->Graph->get();
+        foreach ($Graph as $UserName) {
+            $this->CheckUser($UserName);
+        }
+        return True;
+    }
+    public function RemoveUser($UserName) {
+        $this->Graph->remove($UserName);
+        \TwoDot7\User\Access::Revoke(array(
+            'UserName' => $UserName,
+            'Domain' => $this->GroupID
+        ));
+        return $this->PushGraph();
+    }
 }
 
 class Setup {
@@ -139,16 +235,7 @@ class Setup {
      * Creates the Group, and returns the Generated GroupID.
      */
     public static function Create() {
-        if (\TwoDot7\User\Session::Exists() &&
-            \TwoDot7\User\Access::Check(array(
-                'UserName' => \TwoDot7\User\Session::Data()['UserName'],
-                'Domain' => array(
-                    'SYSADMIN',
-                    'ADMIN',
-                    'in.ac.ducic.grpadmin'
-                    )
-                )) &&
-            \TwoDot7\User\Status::Correlate(11, \TwoDot7\User\Status::Get(\TwoDot7\User\Session::Data()['UserName']))) {
+        if (userHasManipulationRights()) {
             $DatabaseHandler = new \TwoDot7\Database\Handler;
 
             $Meta = new \TwoDot7\Util\Dictionary;
@@ -163,6 +250,10 @@ class Setup {
 
             $Query = "INSERT INTO _group (GroupID, Meta, Admin, Graph) VALUES (:GroupID, :Meta, :Admin, :Graph);";
             $Response = (int) $DatabaseHandler->Query($Query, $Defaults)->errorCode() === 0;
+            $Response = $Response && \TwoDot7\User\Access::Add(array(
+                'UserName' => $Defaults['Admin'],
+                'Domain' => $Defaults['GroupID']
+            ));
             if ($Response) return $Defaults['GroupID'];
             else return $Response;
         } else throw new \TwoDot7\Exception\AuthError("User not authenticated, or not authorized to perform this operation.");
@@ -173,16 +264,7 @@ class Setup {
      * @param [type] $GroupID [description]
      */
     public static function Delete($GroupID) {
-        if (\TwoDot7\User\Session::Exists() &&
-            \TwoDot7\User\Access::Check(array(
-                'UserName' => \TwoDot7\User\Session::Data()['UserName'],
-                'Domain' => array(
-                    'SYSADMIN',
-                    'ADMIN',
-                    'in.ac.ducic.grpadmin'
-                    )
-                )) &&
-            \TwoDot7\User\Status::Correlate(11, \TwoDot7\User\Status::Get(\TwoDot7\User\Session::Data()['UserName']))) {
+        if (userHasManipulationRights()) {
             $Query = "DELETE FROM _group WHERE GroupID = :GroupID;";
             $Response = \TwoDot7\Database\Handler::Exec($Query, array(
                 'GroupID' => $GroupID));
@@ -202,9 +284,22 @@ class Setup {
     private static function UniqueGroupID() {
         self::$IterCount++;
         if (self::$IterCount>32) throw new \TwoDot7\Exception\GaveUp("Cannot generate a Unique ID in given time");
-        $ID = "grp_".substr(\TwoDot7\Util\Crypt::RandHash(), 0, 16);
+        $ID = "grp".substr(\TwoDot7\Util\Crypt::RandHash(), 0, 16);
         if (\TwoDot7\Util\Redundant::Group($ID)) {
             return self::UniqueGroupID();
         } else return $ID;
     }
+}
+
+function userHasManipulationRights() {
+    return (\TwoDot7\User\Session::Exists() &&
+            \TwoDot7\User\Access::Check(array(
+                'UserName' => \TwoDot7\User\Session::Data()['UserName'],
+                'Domain' => array(
+                    'SYSADMIN',
+                    'ADMIN',
+                    'in.ac.ducic.grpadmin'
+                    )
+                )) &&
+            \TwoDot7\User\Status::Correlate(11, \TwoDot7\User\Status::Get(\TwoDot7\User\Session::Data()['UserName'])));
 }

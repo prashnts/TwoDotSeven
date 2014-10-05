@@ -843,64 +843,127 @@ class Profile {
     }
 
     // Custom User Meta Fields.
+    // All the following functions carry same PHP Doc:
+    /**
+     * Returns <function name>
+     */
     public function UserEMail() {
         return $this->UserEMail;
     }
+    /**
+     * See UserEMail()
+     */
     public function UserID() {
         return $this->UserID;
     }
+    /**
+     * See UserEMail()
+     */
     public function UserName() {
         return $this->UserName;
     }
+    /**
+     * See UserEMail()
+     */
     public function URI() {
         return "/@/".$this->UserName;
     }
+    /**
+     * See UserEMail()
+     */
     public function ProfileStatus() {
         return Status::Profile($this->UserName)['Response'];
     }
+    /**
+     * See UserEMail()
+     */
     public function EMailStatus() {
         return Status::EMail($this->UserName)['Response'];
     }
+    /**
+     * Returns the <function name>. However, if $Data is specified, the 
+     * <function name> field is updated with the new value.
+     * @param Mixed $Data Optional. Replaces the <function name> field.
+     */
     public function FirstName($Data = False) {
         return $this->MetaHandler("FirstName", $Data);
     }
+    /**
+     * See FirstName()
+     */
     public function LastName($Data = False) {
         return $this->MetaHandler("LastName", $Data);
     }
+    /**
+     * See FirstName()
+     */
     public function Gender($Data = False) {
         return $this->MetaHandler("Gender", $Data);
     }
+    /**
+     * See FirstName()
+     */
     public function Designation($Data = False) {
         return $this->MetaHandler("Designation", $Data);
     }
+    /**
+     * See FirstName()
+     */
     public function Course($Data = False) {
         return $this->MetaHandler("Course", $Data);
     }
+    /**
+     * See FirstName()
+     */
     public function Year($Data = False) {
         return $this->MetaHandler("Year", $Data);
     }
+    /**
+     * See FirstName()
+     */
     public function DOB($Data = False) {
         return $this->MetaHandler("DOB", $Data);
     }
+    /**
+     * See FirstName()
+     */
     public function RollNumber($Data = False) {
         return $this->MetaHandler("RollNumber", $Data);
     }
+    /**
+     * See FirstName()
+     */
     public function Mobile($Data = False) {
         return $this->MetaHandler("Mobile", $Data);
     }
+    /**
+     * See FirstName()
+     */
     public function Address($Data = False) {
         return $this->MetaHandler("Address", $Data);
     }
+    /**
+     * See FirstName()
+     */
     public function BioParsed() {
         return \TwoDot7\Util\Marker($this->Meta->get("Bio"));
     }
+    /**
+     * See FirstName()
+     */
     public function Bio($Data = False) {
         return $this->MetaHandler("Bio", $Data);
     }
+    /**
+     * See FirstName()
+     */
     public function ProfilePicture($Data = False) {
         $URI = $this->MetaHandler("ProfilePicture", $Data);
         return $URI ? $URI : "/assetserver/userNameIcon/".$this->UserName;
     }
+    /**
+     * See FirstName()
+     */
     public function ProfileBackground($Data = False) {
         $URI = $this->MetaHandler("ProfileBackground", $Data);
         return $URI ? $URI : "/assetserver/generic/profileBackground";
