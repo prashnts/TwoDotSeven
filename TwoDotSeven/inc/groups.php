@@ -95,7 +95,9 @@ class Meta {
     public function Get() {
         $Response = new \TwoDot7\Util\Dictionary;
         $Response->add("GroupID", $this->GroupID());
+        $Response->add("Name", $this->Name());
         $Response->add("Description", $this->Description());
+        $Response->add("DescriptionParsed", $this->DescriptionParsed());
         $Response->add("GroupPicture", $this->GroupPicture());
         $Response->add("GroupBackground", $this->GroupBackground());
         return $Response->get();
@@ -106,6 +108,9 @@ class Meta {
     }
     public function Description($Data = NULL) {
         return $this->MetaHandler("Description", $Data);
+    }
+    public function DescriptionParsed() {
+        return \TwoDot7\Util\Marker($this->MetaHandler("Description"));
     }
     public function Name($Data = NULL) {
         return $this->MetaHandler("Name", $Data);
