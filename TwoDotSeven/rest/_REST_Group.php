@@ -28,23 +28,67 @@ function initRoutine() {
 
     if ($Grp->Success) switch ($_GET['Action']) {
         case 'meta':
+            if (!\TwoDot7\Group\userHasManipulationRights()) $ERR_SHOW("AUTH error. Either You aren't logged-in or you don't have enough Access Privilege to perform this action.");
             // Sets the Group Meta.
             break;
         case 'getMeta':
             // gets the Group Meta.
+            header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+            header('Content-Type: application/json');
+            echo json_encode($Grp->Meta()->Get());
+            die();
             break;
         case 'listUsers':
             // Returns the Username of everyone in the group.
             // Further meta can be fetched separately from another REST query.
+            header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+            header('Content-Type: application/json');
+            echo json_encode($Grp->Graph()->ListAllUsers());
+            die();
             break;
         case 'addUser':
+            if (!\TwoDot7\Group\userHasManipulationRights()) $ERR_SHOW("AUTH error. Either You aren't logged-in or you don't have enough Access Privilege to perform this action.");
             // Adds a new user in the graph.
+            if ($Grp->Graph()->AddUser($_GET['SubAction'])) {
+                header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+                header('Content-Type: application/json');
+                echo json_encode(True);
+                die();
+            } else {
+                header('HTTP/1.0 461 Error while Processing the Action.', true, 461);
+                header('Content-Type: application/json');
+                echo json_encode(False);
+                die();
+            }
             break;
         case 'removeUser':
+            if (!\TwoDot7\Group\userHasManipulationRights()) $ERR_SHOW("AUTH error. Either You aren't logged-in or you don't have enough Access Privilege to perform this action.");
             // Removes a user from the graph.
+            if ($Grp->Graph()->RemoveUser($_GET['SubAction'])) {
+                header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+                header('Content-Type: application/json');
+                echo json_encode(True);
+                die();
+            } else {
+                header('HTTP/1.0 461 Error while Processing the Action.', true, 461);
+                header('Content-Type: application/json');
+                echo json_encode(False);
+                die();
+            }
             break;
         case 'checkUser':
             // Checks if a user is part of group.
+            $Response = $Grp->Graph()->CheckUser($_GET['SubAction']);
+            if ($Response) {
+                header('HTTP/1.0 HTTP/1.0 253 User is a Part of Group.', true, 253);
+                header('Content-Type: application/json');
+                echo json_encode(True);
+            } else {
+                header('HTTP/1.0 HTTP/1.0 254 User is not a Part of Group.', true, 254);
+                header('Content-Type: application/json');
+                echo json_encode(False);
+            }
+            die();
             break;
     } else {
         $ERR_SHOW("The GroupID you specified doesn't exists.");
@@ -62,6 +106,10 @@ function initAdmin() {
         default:
         case 'list':
             // Lists all the users.
+            header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+            header('Content-Type: application/json');
+            echo json_encode(\TwoDot7\Group\Instance::ListAll());
+            die();
             break;
     }
 }

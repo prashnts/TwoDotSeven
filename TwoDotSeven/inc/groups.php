@@ -44,7 +44,7 @@ class Instance {
     public static function ListAll() {
         // Lists all the groups.
         
-        $Query = "SELECT ID, GroupID, Admin, Meta FROM _group;";
+        $Query = "SELECT ID, GroupID, Admin FROM _group;";
         return \TwoDot7\Database\Handler::Exec($Query)->fetchAll(\PDO::FETCH_ASSOC);
     }
 

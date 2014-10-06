@@ -18,6 +18,7 @@
  - 262: Error In User Input.
  - 252: * Already Exists.
  - 253: * Available.
+ - 254: * Doesn't exists in *.
  - 450: Invalid Request.
  - 406: Not Acceptable.
  - 461: Error while Processing the Action.

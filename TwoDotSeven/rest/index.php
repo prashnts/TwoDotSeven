@@ -87,7 +87,7 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
         Direction\init();
         break;
     
-    case 'groupAdmin':
+    case 'groupadmin':
         $_GET = array(
             'Action' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
             'SubAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : False
