@@ -27,12 +27,41 @@ function initRoutine() {
     };
 
     if ($Grp->Success) switch ($_GET['Action']) {
-        //
+        case 'meta':
+            // Sets the Group Meta.
+            break;
+        case 'getMeta':
+            // gets the Group Meta.
+            break;
+        case 'listUsers':
+            // Returns the Username of everyone in the group.
+            // Further meta can be fetched separately from another REST query.
+            break;
+        case 'addUser':
+            // Adds a new user in the graph.
+            break;
+        case 'removeUser':
+            // Removes a user from the graph.
+            break;
+        case 'checkUser':
+            // Checks if a user is part of group.
+            break;
     } else {
-        // Error time!
+        $ERR_SHOW("The GroupID you specified doesn't exists.");
     }
 }
 
-function initList() {
-
+function initAdmin() {
+    switch ($_GET['Action']) {
+        case 'create':
+            // Create the group, and returns the group ID, and URI.
+            break;
+        case 'delete':
+            // Delets the group.
+            break;
+        default:
+        case 'list':
+            // Lists all the users.
+            break;
+    }
 }

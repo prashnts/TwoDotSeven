@@ -18,6 +18,7 @@ _Import('../config.php');
 _Import('../inc/broadcast.php');
 _Import('../inc/database.php');
 _Import('../inc/exceptions.php');
+_Import('../inc/groups.php');
 _Import('../inc/validator.php');
 _Import('../inc/utility.php');
 _Import('../inc/install.php');
@@ -86,9 +87,13 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
         Direction\init();
         break;
     
-    case 'getGroups':
-        Group\initList();
-    break;
+    case 'groupAdmin':
+        $_GET = array(
+            'Action' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+            'SubAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : False
+        );
+        Group\initAdmin();
+        break;
     case 'group':
         $_GET = array(
             'GroupID' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
@@ -96,7 +101,7 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
             'SubAction' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
         );
         Group\initRoutine();
-    break;
+        break;
 
     case 'echo':
         $Response = array(

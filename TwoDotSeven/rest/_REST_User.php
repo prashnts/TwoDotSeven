@@ -120,36 +120,12 @@ function init() {
             break;
         case 'profile':
         default:
-            echo json_encode($UserProfile->Get());
+            header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+            header('Content-Type: application/json');
+            echo json_encode($UserProfile->Get(), JSON_PRETTY_PRINT);
             die();
     } else {
-        echo "No Such User Exists";
+        $ERR_SHOW("Specified User doesn't exists.");
         die();
-    }
-
-    switch ($_GET['Function']) {
-        case 'profile':
-            $Error = array(
-                'Params' => array(
-                    array("Action", "GET", \TwoDot7\Util\REST::PARAMREQUIRED),
-                    array("UserName", "POST", \TwoDot7\Util\REST::PARAMOPTIONAL),
-                    array("Password", "POST", \TwoDot7\Util\REST::PARAMDEPENDS),
-                    array("UserLegacyAuthHash", "POST", \TwoDot7\Util\REST::PARAMDEPENDS)
-                ),
-                'Usage' => "/dev/broadcast/post/[checkSession, login, logout]",
-                'SessionError' => !\TwoDot7\User\Session::Exists()
-            );
-            if ($_GET['ActionHook']) switch ($_GET['ActionHook']) {
-                //
-            }
-
-            break;
-
-        default:
-            header('HTTP/1.0 450 Invalid Request.', true, 450);
-            echo "<pre>";
-            echo "usage /dev/account/[add, remove, verify, confirmEmail]\n";
-            echo "Incomplete Request. Please read the Documentation.\n";
-            echo "</pre>";
     }
 }
