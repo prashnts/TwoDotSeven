@@ -9,17 +9,52 @@ use \TwoDot7\Database as Database;
 #  / /    \ V  V / (_) |  _    / /  
 #  \/      \_/\_/ \___/  (_)  /_/   
 
+/**
+ * Creates the Instance of a group. It automatically creates a Graph and Meta object internally.
+ * @see \TwoDot7\Group\Graph
+ * @see \TwoDot7\Group\Meta
+ * @author Prashant Sinha <firstname><lastname>@outlook.com
+ * @since v0.1 20141005
+ * @version 0.2
+ */
 class Instance {
 
+    /**
+     * Holds the (supplied) group ID.
+     * @var String
+     */
     private $GroupID;
+
+    /**
+     * Holds the Meta Class object.
+     * @var Object
+     */
     private $Meta;
+
+    /**
+     * Holds the Group Admin UserName.
+     * @var String
+     */
     private $Admin;
+
+    /**
+     * Holds the Graph Class object.
+     * @var Object
+     */
     private $Graph;
 
+    /**
+     * Reflects if the group, whose instance is being created, exists and the object has been
+     * created successfully.
+     * @var Boolean
+     */
     public $Success;
 
+    /**
+     * Constructs the Group Instance object.
+     * @param String $GroupID Required. The GroupID.
+     */
     function __construct($GroupID) {
-        // Constructs the Group Instance. Caches for faster execution.
         $Query = "SELECT * FROM _group WHERE GroupID = :GroupID";
         
         $Response = Database\Handler::Exec($Query, array('GroupID' => $GroupID))->fetch(\PDO::FETCH_ASSOC);
@@ -33,17 +68,24 @@ class Instance {
         } else $this->Success = False;
     }
 
+    /**
+     * Returns the Graph object.
+     */
     public function Graph() {
         return $this->Graph;
     }
 
+    /**
+     * Returns the Meta object.
+     */
     public function Meta() {
         return $this->Meta;
     }
 
+    /**
+     * Static function, returns all the Groups in the DB.
+     */
     public static function ListAll() {
-        // Lists all the groups.
-        
         $Query = "SELECT ID, GroupID, Admin FROM _group;";
         return \TwoDot7\Database\Handler::Exec($Query)->fetchAll(\PDO::FETCH_ASSOC);
     }
