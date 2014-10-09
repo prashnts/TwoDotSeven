@@ -89,18 +89,54 @@ class Instance {
         $Query = "SELECT ID, GroupID, Admin FROM _group;";
         return \TwoDot7\Database\Handler::Exec($Query)->fetchAll(\PDO::FETCH_ASSOC);
     }
-
 }
 
+/**
+ * Creates a Meta Object of a group. Facilitates Addition/Update of the Meta.
+ * @author Prashant Sinha <firstname><lastname>@outlook.com
+ * @since v0.1 20141005
+ * @version 0.2
+ */
 class Meta {
+
+    /**
+     * Holds the GroupID of the group whose meta it is holding.
+     * @var String
+     */
     private $GroupID;
+
+    /**
+     * Holds the Meta Array, fetched from the Database.
+     * @var /TwoDot7/Util/Dictionary
+     */
     private $Meta;
+
+    /**
+     * Contains the status of the Meta. Reflects if the Meta object was created or not.
+     * @var Boolean
+     */
     public  $Success;
+
+    /**
+     * Creates the Meta Object.
+     * @param String  $GroupID          Required. The GroupID.
+     * @param boolean $FetchOverride    Optional. Default False. If true, will require that the 
+     *                                  $FetchSourceArray be passed, too. Will skip the Database call
+     *                                  and save additional Database overhead.
+     * @param Mixed   $FetchSourceArray Required, if $FetchOverride is true. The Database Response for
+     *                                 the particular group ID.
+     */
     function __construct($GroupID, $FetchOverride = False, $FetchSourceArray = NULL) {
         $this->GroupID = $GroupID;
         $this->FetchMeta($FetchOverride, $FetchSourceArray);
     }
 
+    /**
+     * Fetches Meta from the Database. Optionally, it can skip the Database call, if an existing
+     * database response is passes to it.
+     * @param boolean $FetchOverride    See __construct.
+     * @param Mixed   $FetchSourceArray See __construct.
+     */
     private function FetchMeta($FetchOverride = False, $FetchSourceArray = NULL) {
         $Response = False;
         if ($FetchOverride) {
@@ -117,6 +153,10 @@ class Meta {
             $this->Success = False;
         }
     }
+
+    /**
+     * Pushes Meta in the Database.
+     */
     private function PushMeta() {
         return (int)\TwoDot7\Database\Handler::Exec(
             "UPDATE _group SET Meta = :Meta WHERE GroupID = :GroupID;",
@@ -125,6 +165,14 @@ class Meta {
                 'GroupID' => $this->GroupID
             ))->errorCode() === 0;
     }
+
+    /**
+     * Handles the Meta. If $Data is provided in the function call (that is, not NULL), then updates
+     * the particular $Key in the Meta. Else, returns the value contained in the $Meta.
+     * @param String $Key  The Meta Field.
+     * @param Mixed  $Data Optional, if specified, updates the Meta with the specifies value against
+     *                     given key.
+     */
     private function MetaHandler($Key, $Data = NULL) {
         if (!is_string($Key)) throw new \TwoDot7\Exception\InvalidArgument("Key should be a valid string.");
         if (is_null($Data)) return $this->Meta->get($Key);
@@ -134,6 +182,9 @@ class Meta {
         }
     }
 
+    /**
+     * Returns the Curated Meta in an Array.
+     */
     public function Get() {
         $Response = new \TwoDot7\Util\Dictionary;
         $Response->add("GroupID", $this->GroupID());
