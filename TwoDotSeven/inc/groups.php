@@ -218,6 +218,12 @@ class Meta {
     }
 }
 
+/**
+ * Creates a Graph Object of the group. Facilitates Addition/Update/Removal of Users in the Graph.
+ * @author Prashant Sinha <firstname><lastname>@outlook.com
+ * @since v0.1 20141005
+ * @version 0.2
+ */
 class Graph {
     private $GroupID;
     private $Graph;
