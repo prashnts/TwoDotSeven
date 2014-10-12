@@ -225,6 +225,11 @@ class Meta {
  * @version 0.2
  */
 class Graph {
+
+    /**
+     * The GroupID of the group whose Graph is being initialized.
+     * @var String
+     */
     private $GroupID;
     private $Graph;
     public $Success;

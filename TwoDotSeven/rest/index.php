@@ -39,6 +39,8 @@ $URI = preg_split('/[\/\?]/', preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI
 
 const BASE = 2;
 
+#Preprocessing 
+
 switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
     case 'account':
         /**

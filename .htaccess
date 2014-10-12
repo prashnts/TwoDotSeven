@@ -17,5 +17,6 @@ RewriteRule ^admin TwoDotSeven/index.php
 RewriteRule ^admin/ TwoDotSeven/index.php
 RewriteRule ^twodot7 TwoDotSeven/index.php
 RewriteRule ^twodot7/ TwoDotSeven/index.php
-RewriteRule ^@(.*)$ /twodot7/profile/$1 [r=301,nc]
+
+RewriteRule ^@(.*)$ TwoDotSeven/index.php/profile/$1
 RewriteRule ^@(.*)$/edit /twodot7/profile/$1/edit [r=301,nc]

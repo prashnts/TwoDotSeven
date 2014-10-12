@@ -103,4 +103,5 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
 		break;
 	default:
 		echo "404";
+		var_dump($URI);
 }
