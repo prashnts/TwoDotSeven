@@ -96,7 +96,8 @@ function init() {
                     if (\TwoDot7\User\Session::Exists()) $UserName = \TwoDot7\User\Session::Data()['UserName'];
                     if ($_GET['ActionHookData']) $Begin = $_GET['ActionHookData'];
                     if ($_GET['ActionHook'] == ">" || $_GET['ActionHook'] == "pre") $Direction = ">";
-                    elseif ($_GET['ActionHook'] == "<" || $_GET['ActionHook'] == "post") $Direction = "<";
+                    //elseif ($_GET['ActionHook'] == "<" || $_GET['ActionHook'] == "post") $Direction = "<";
+                    else $Direction = "<";
                     $Feeds = \TwoDot7\Broadcast\Feed::_User($UserName, $Begin, $Direction);
                     header('Content-Type: application/json');
                     echo json_encode($Feeds);
