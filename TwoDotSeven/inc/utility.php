@@ -21,6 +21,8 @@ class _List {
      */
     private $Array;
 
+    public  $Counter;
+
     /**
      * If set true, converts the list in a Add-Only Stack.
      * @var Boolean
@@ -45,9 +47,10 @@ class _List {
 
         if (!is_array($Array)) throw new \TwoDot7\Exception\InvalidArgument("Error in Arguments.");
 
-        $this->Array  = $Array;
-        $this->Linear = False;
-        $this->Strict = False;
+        $this->Array   = $Array;
+        $this->Counter = 0;
+        $this->Linear  = False;
+        $this->Strict  = False;
     }
 
     /**
@@ -62,9 +65,11 @@ class _List {
             if (!$this->Linear) {
                 if ($this->exists($Data)) return True;
                 elseif (is_bool($Data) || is_numeric($Data) || is_string($Data)) {
+                    ++$this->Counter;
                     return array_push($this->Array, $Data);
                 } else return False;
             } else {
+                ++$this->Counter;
                 return array_push($this->Array, $Data);
             }
         };

@@ -179,7 +179,7 @@ class Action {
     }
 }
 
-class Feed {
+class _For {
     public static function _User($UserName, $Begin = 0, $Direction = "<") {
         // Feed FOR a Particular User. Not, OF a user.
 
@@ -294,10 +294,8 @@ class Feed {
                         break;
                 }
                 $Begin = $Row['Timestamp'];
-                //$Direction = "<";
             }
-            //echo $Begin. "     ".count($Result)."     ";
-        } while ($Counter && count($Result) < \TwoDot7\Config\BROADCAST_FEED_UNIT);
+        } while ($Counter && $Result->Counter < \TwoDot7\Config\BROADCAST_FEED_UNIT);
 
         return $Result;
     }
