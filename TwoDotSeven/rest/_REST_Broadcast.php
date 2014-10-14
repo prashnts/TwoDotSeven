@@ -1,18 +1,17 @@
 <?php
 namespace TwoDot7\REST\Broadcast;
-#  _____                      _____   
-# /__   \__      _____       |___  |     ___  ______________
-#   / /\/\ \ /\ / / _ \         / /     / _ \/ __/ __/_  __/
-#  / /    \ V  V / (_) |  _    / /     / , _/ _/_\ \  / /   
-#  \/      \_/\_/ \___/  (_)  /_/     /_/|_/___/___/ /_/    
+# - .-- --- -.. --- - --... REST
 
 function init() {
     switch ($_GET['Action']) {
         case 'post':
 
-            $ToggleError =  False;
-            if (!isset($_POST['BroadcastText'])) $ToggleError = True;
-            if (!\TwoDot7\User\Session::Exists()) $ToggleError = True;
+            $ErrorToggle =  False;
+
+            if (!isset($_POST['BroadcastText'])) $ErrorToggle = True;
+
+            if (!\TwoDot7\User\Session::Exists()) $ErrorToggle = True;
+
             if (isset($_POST['TargetType'])) switch ($_POST['TargetType']) {
                 case 'user':
                 case 'group':
@@ -21,7 +20,7 @@ function init() {
                 case \TwoDot7\Broadcast\GROUP:
                 case \TwoDot7\Broadcast\CUSTOM:
                     # Normalize the Request Variables.
-                    if (!isset($_POST['Target'])) $ToggleError = True;
+                    if (!isset($_POST['Target'])) $ErrorToggle = True;
                     else $_POST['Target'] = preg_split("/[&]/", $_POST['Target']);
 
                     if ($_POST['TargetType'] === 'user') $_POST['TargetType'] = \TwoDot7\Broadcast\USER;
@@ -29,14 +28,15 @@ function init() {
                     else $_POST['TargetType'] = \TwoDot7\Broadcast\CUSTOM;
 
                     break;
-                
+
                 default:
-                    $ToggleError = True;
+                    $ErrorToggle = True;
                     break;
             } else {
                 $_POST['TargetType'] = \TwoDot7\Broadcast\_DEFAULT;
                 $_POST['Target'] = array();
             }
+            
             if (isset($_POST['Visible'])) switch ($_POST['Visible']) {
                 case 'private':
                     $_POST['Visible'] = \TwoDot7\Broadcast\_PRIVATE;
@@ -48,7 +48,7 @@ function init() {
                     $_POST['Visible'] = \TwoDot7\Broadcast\_PUBLIC;
             } else $_POST['Visible'] = \TwoDot7\Broadcast\_PUBLIC;
 
-            if ($ToggleError) {
+            if ($ErrorToggle) {
                 \TwoDot7\Util\REST::PutError(array(
                     'Params' => array(
                         array("BroadcastText", "POST", \TwoDot7\Util\REST::PARAMREQUIRED),
@@ -67,8 +67,8 @@ function init() {
                 'TargetType' => $_POST['TargetType'],
                 'Target' => $_POST['Target'],
                 'Visible' => $_POST['Visible'],
-                'Data' => array('BroadcastText' => $_POST['BroadcastText'])
-                );
+                'Data' => $_POST['BroadcastText']
+            );
 
             $Response = \TwoDot7\Broadcast\Action::Add($AddRequest);
 
@@ -108,6 +108,8 @@ function init() {
                     break;
             }
             break;
+        case 'test':
+
         default:
             header('HTTP/1.0 450 Invalid Request.', true, 450);
             echo "<pre>";

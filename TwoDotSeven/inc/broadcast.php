@@ -159,14 +159,11 @@ class Action {
                 $Data['Visible'] = \TwoDot7\Broadcast\_PUBLIC;
         } else $Data['Visible'] = \TwoDot7\Broadcast\_PUBLIC;
 
-        // Pack data.
-        $Response = Utils::Pack($Data['Data']);
-        // Set Datatype and Data.
-        $Data['Datatype'] = $Response['Datatype'];
-        $Data['Data'] = $Response['Data'];
+        $Data['Data'] = json_encode($Data['Data']);
+
         $Data['Timestamp'] = time();
 
-        $Query = "INSERT INTO _broadcast (OriginType, Origin, TargetType, Target, Visible, Datatype, Data, Timestamp) VALUES (:OriginType, :Origin, :TargetType, :Target, :Visible, :Datatype, :Data, :Timestamp)";
+        $Query = "INSERT INTO _broadcast (OriginType, Origin, TargetType, Target, Visible, Data, Timestamp) VALUES (:OriginType, :Origin, :TargetType, :Target, :Visible, :Data, :Timestamp)";
         
         $Response = \TwoDot7\Database\Handler::Exec($Query, $Data)->rowCount();
 
