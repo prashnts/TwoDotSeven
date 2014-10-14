@@ -839,6 +839,10 @@ function Marker($Data) {
     }
 }
 
+function CrustJS($Data) {
+    return Marker($Data);
+}
+
 /**
  * Returns the HTTP Request Headers.
  * @return array Contains all the Request Headers.
