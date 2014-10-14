@@ -22,6 +22,13 @@ class _List {
     private $Array;
 
     /**
+     * If set true, converts the list in a Add-Only Stack.
+     * @var Boolean
+     * @see linearToggle
+     */
+    private $Linear;
+
+    /**
      * If true, it force checks all the elements for presence, while using "exists".
      * @var Boolean
      * @see exists
@@ -38,7 +45,8 @@ class _List {
 
         if (!is_array($Array)) throw new \TwoDot7\Exception\InvalidArgument("Error in Arguments.");
 
-        $this->Array = $Array;
+        $this->Array  = $Array;
+        $this->Linear = False;
         $this->Strict = False;
     }
 
@@ -51,13 +59,17 @@ class _List {
      */
     public function add($Data = NULL) {
         $Routine = function($Data){
-            if ($this->exists($Data)) return True;
-            elseif (is_bool($Data) || is_numeric($Data) || is_string($Data)) {
+            if (!$this->Linear) {
+                if ($this->exists($Data)) return True;
+                elseif (is_bool($Data) || is_numeric($Data) || is_string($Data)) {
+                    return array_push($this->Array, $Data);
+                } else return False;
+            } else {
                 return array_push($this->Array, $Data);
-            } else return False;
+            }
         };
 
-        if (is_array($Data)) {
+        if (!$this->Linear && is_array($Data)) {
             foreach ($Data as $Key => $Value) {
                 $Routine($Value);
             }
@@ -79,6 +91,8 @@ class _List {
      * @return Boolean
      */
     public function exists($Needles) {
+        if ($this->Linear) throw new \TwoDot7\Exception\InvalidMethod("Method not applicable to this object.");
+
         if (is_array($Needles)) {
             $Found = False;
             foreach ($Needles as $Key => $Needle) {
@@ -102,6 +116,17 @@ class _List {
     }
 
     /**
+     * Toggles a Linear List. If enabled, the list will turn into a Add-Only stack.
+     * However. This will disable the "remove", "exists", and "update" methods.
+     * Attempts to call those methods will result in an InvalidMethod exception.
+     * @return Constant True
+     */
+    public function linearToggle() {
+        $this->Linear = !$this->Linear;
+        return True;
+    }
+
+    /**
      * Removes a particular entry, or, a list of entries from the list.
      * @param  Mixed $Needle Required. Can be either:
      *                       1. String/Boolean/Number Will be removed from the List if Present.
@@ -109,6 +134,8 @@ class _List {
      * @return Boolean
      */
     public function remove($Needle) {
+        if ($this->Linear) throw new \TwoDot7\Exception\InvalidMethod("Method not applicable to this object.");
+
         $Routine = function($Needle) {
             if (!(is_bool($Needle) || is_numeric($Needle) || is_string($Needle))) return False;
             $this->Array = array_merge(array_diff(
@@ -133,6 +160,8 @@ class _List {
      * @return Boolean
      */
     public function update($Old, $New = NULL) {
+        if ($this->Linear) throw new \TwoDot7\Exception\InvalidMethod("Method not applicable to this object.");
+
         $Success = $this->add($New);
         $Success ? $this->remove($Old) : NULL;
         return $Success;

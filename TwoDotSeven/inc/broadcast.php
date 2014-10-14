@@ -192,7 +192,8 @@ class Feed {
 
         $DatabaseHandle = new \TwoDot7\Database\Handler;
         
-        $Result = array();
+        $Result = new \TwoDot7\Util\_List;
+        $Result->linearToggle();
         $Counter = 0;
         do {
             $Counter = 0;
@@ -244,7 +245,7 @@ class Feed {
 
                                     $Row['Data'] = \TwoDot7\Util\CrustJS(json_decode($Row['Data'], true));
 
-                                    array_push($Result, $Row);
+                                    $Result->add($Row);
                                     break;
                                 } else break;
                             case GROUP:
@@ -282,7 +283,7 @@ class Feed {
 
                                     $Row['Data'] = \TwoDot7\Util\CrustJS(json_decode($Row['Data'], true));
 
-                                    array_push($Result, $Row);
+                                    $Result->add($Row);
                                     break;
                                 } else break;
                         }

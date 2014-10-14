@@ -98,7 +98,7 @@ function init() {
                     if ($_GET['ActionHook'] == ">" || $_GET['ActionHook'] == "pre") $Direction = ">";
                     //elseif ($_GET['ActionHook'] == "<" || $_GET['ActionHook'] == "post") $Direction = "<";
                     else $Direction = "<";
-                    $Feeds = \TwoDot7\Broadcast\Feed::_User($UserName, $Begin, $Direction);
+                    $Feeds = \TwoDot7\Broadcast\Feed::_User($UserName, $Begin, $Direction)->get();
                     header('Content-Type: application/json');
                     echo json_encode($Feeds);
                     die();

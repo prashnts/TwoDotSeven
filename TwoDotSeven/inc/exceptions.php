@@ -33,6 +33,10 @@ class InvalidBit extends \Exception {
     // Empty class.
 }
 
+class InvalidMethod extends \Exception {
+    // Empty class.
+}
+
 class GaveUp extends \Exception {
     // Empty class.
 }
