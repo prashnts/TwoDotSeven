@@ -21,6 +21,10 @@ class _List {
      */
     private $Array;
 
+    /**
+     * Keeps the count of number of elements added in the List.
+     * @var Integer
+     */
     public  $Counter;
 
     /**
