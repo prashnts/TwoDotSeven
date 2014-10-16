@@ -144,7 +144,6 @@ class Render {
                 <div class="col-lg-8">
                 </div>
                 <div class="col-lg-4">
-                    LOL?
                 </div>
             </div>
             <?php
