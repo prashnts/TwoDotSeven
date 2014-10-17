@@ -39,6 +39,8 @@ function init() {
 					'Page' => 'PRE_PROFILE'
 					))
 				));
+			die();
+			break;
 		case 'view':
 		default:
 			\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
