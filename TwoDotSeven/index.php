@@ -42,72 +42,76 @@ $URI = preg_split('/[\/\?]/', preg_replace("/[\/]+/", "/", $_SERVER['REQUEST_URI
 const BASE = 2;
 
 switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
-	case 'login':
-	case 'signin':
-	case 'signIn':
-		Login\init();
-		break;
+    case 'login':
+    case 'signin':
+    case 'signIn':
+        Login\init();
+        break;
 
-	case 'logout':
-		Logout\init();
-		break;
+    case 'logout':
+        Logout\init();
+        break;
 
-	case 'signup':
-	case 'signUp':
-	case 'register':
-		$_GET = array_merge($_GET, array(
-			'Action' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
-			'Target' => isset($URI[BASE+2]) ? $URI[BASE+2] : False,
-			'Data' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
-			));
-		Register\init();
-		break;
+    case 'signup':
+    case 'signUp':
+    case 'register':
+        $_GET = array_merge($_GET, array(
+            'Action' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+            'Target' => isset($URI[BASE+2]) ? $URI[BASE+2] : False,
+            'Data' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
+            ));
+        Register\init();
+        break;
 
-	case 'feed':
-	case 'news':
-	case 'broadcast':
-	case 'broadcasts':
-		Broadcast\init();
-		break;
+    case 'feed':
+    case 'news':
+    case 'broadcast':
+    case 'broadcasts':
+        Broadcast\init();
+        break;
 
-	case 'dash':
-	case 'dashboard':
-	case 'overview':
-		Dashboard\init();
-		break;
+    case 'dash':
+    case 'dashboard':
+    case 'overview':
+        Dashboard\init();
+        break;
 
-	case 'plugin':
-	case 'bit':
-	case 'bits':
-		$_GET = array_merge($_GET, array(
-			'Bit' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
-			'BitAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : 'init'
-			));
-		Bit\init();
-		break;
+    case 'plugin':
+    case 'bit':
+    case 'bits':
+        $_GET = array_merge($_GET, array(
+            'Bit' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+            'BitAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : 'init'
+            ));
+        Bit\init();
+        break;
 
-	case 'profile':
-	case 'userprofile':
-		$_GET = array_merge($_GET, array(
-			'UserName' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
-			'Action' => isset($URI[BASE+2]) ? $URI[BASE+2] : 'show'
-			));
-		Profile\init();
+    case 'profile':
+    case 'userprofile':
+        $_GET = array_merge($_GET, array(
+            'UserName' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+            'Action' => isset($URI[BASE+2]) ? $URI[BASE+2] : 'show'
+            ));
+        Profile\init();
 
-	case 'administration':
-	case 'management':
-		$_GET = array_merge($_GET, array(
-			'Action' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
-			'SubAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : False
-			));
-		Administration\init();
-		break;
+    case 'administration':
+    case 'management':
+        $_GET = array_merge($_GET, array(
+            'Action' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+            'SubAction' => isset($URI[BASE+2]) ? $URI[BASE+2] : False
+            ));
+        Administration\init();
+        break;
 
-	case 'group':
-		Group\init();
-		break;
+    case 'group':
+        $_GET = array_merge($_GET, array(
+            'GroupID' => isset($URI[BASE+1]) ? $URI[BASE+1] : False,
+            'Action' => isset($URI[BASE+2]) ? $URI[BASE+2] : 'show'
+            ));
+        Group\init();
+        break;
 
-	default:
-		echo "404";
-		var_dump($URI);
+    default:
+        echo "404";
+        var_dump($URI);
 }
