@@ -15,6 +15,7 @@ require "import.php";
 _Import('config.php');
 _Import('inc/database.php');
 _Import('inc/exceptions.php');
+_Import('inc/groups.php');
 _Import('inc/validator.php');
 _Import('inc/utility.php');
 _Import('inc/install.php');

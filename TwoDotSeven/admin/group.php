@@ -16,6 +16,15 @@ namespace TwoDot7\Admin\Group;
  */
 function init() {
 
+    $Group = new \TwoDot7\Group\Instance($_GET['GroupID']);
+
+    if ($Group->Success) {
+        echo "yes, init group.";
+    } else {
+        echo "nope.";
+    }
+    die();
+
     \TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
         'Page' => 'PRE_GROUP',
         'Call' => 'Group',
