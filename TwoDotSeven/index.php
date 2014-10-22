@@ -71,12 +71,6 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
         Broadcast\init();
         break;
 
-    case 'dash':
-    case 'dashboard':
-    case 'overview':
-        Dashboard\init();
-        break;
-
     case 'plugin':
     case 'bit':
     case 'bits':
@@ -112,7 +106,9 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
         Group\init();
         break;
 
+    case 'dash':
+    case 'dashboard':
+    case 'overview':
     default:
-        echo "404";
-        var_dump($URI);
+        Dashboard\init();
 }
