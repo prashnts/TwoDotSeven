@@ -582,19 +582,62 @@ class Render {
     }
     public static function Group($Data) {
         ?>
-        <section class="scrollable padder bg-light  fill" id="broadcast">
+        <section class="scrollable padder bg-dark  fill">
             <div class="m-b-md row padder">
-                <div class="col-lg-8">
-                    Groups
-                </div>
-                <div class="col-lg-4">
-                    
+                <div class="col-lg-6">
+                    <h3 class="m-b-none"><img src="/data/core/static/images/landing/cluster-1-256.png" class="pull-left m-r-sm" height="45px"> Clusters </h3>
+                    <small>View, Create, Remove, and Manage.</small>
                 </div>
             </div>
+            <div class="row bg-primary dk padder">
+                <div class="m-t-sm m-b-sm col-xs-6 padder">
+                    <span class="h4">Quick Stats</span><br>
+                    Coming.
+                </div>
+                <div class="m-t-sm m-b-sm padder col-xs-6">
+                    <a href="#" class="btn btn- btn-success">Create a New Cluster</a>
+                    <p class="h5">Created a New Cluster with GroupID <span class="label bg-dark">grp3293039</span>.</p>
+                    <a href="#" class="btn btn-xs btn-danger">Undo</a>
+                    <a href="#" class="btn btn-xs btn-success">Go to Group Page</a>
 
-            <div class="row">
-                <div class="col-lg-8">
-                LOL?
+                    <br>
+                </div>
+            </div>
+            <div class="row padder">
+                <div id="contains">
+                <?php
+                foreach ($Data['AddressBookData'] as $Card) {
+                    $ID = "CardData-".$Card['ID'];
+                    $Display = strlen($Card['DisplayName'])>1 ? $Card['DisplayName'] : "{$Card['FirstName']} {$Card['LastName']}";
+                    $Sub1 = 
+                        ($Card['SecondEmail']).
+                        ($Card['CellularNumber'] ? " &bull; {$Card['CellularNumber']}" : "").
+                        ($Card['_AimScreenName'] ? " &bull; {$Card['_AimScreenName']}" : "");
+                    $Sub2 =
+                        ($Card['JobTitle']).
+                        ($Card['Department'] ? " &bull; {$Card['Department']}" : "").
+                        ($Card['Company'] ? " &bull; {$Card['Company']}" : "").
+                        ($Card['WorkCity'] ? " &bull; {$Card['WorkCity']}" : "").
+                        ($Card['WorkCountry'] ? " &bull; {$Card['WorkCountry']}" : "");
+                    ?>
+                    <div class="item bg-light" id="<?php echo $ID; ?>">
+                        <div class="thumb avatar float">
+                            <img src="/assetserver/userNameIcon/<?php echo $Card['FirstName'];?>">
+                        </div>
+                        <div class="clear">
+                            <p class="h3"><?php echo $Display; ?></p>
+                            <p class="h4 m-b-sm"><?php echo $Card['PrimaryEmail']; ?></p>
+                            <p class="h5 m-t-sm"><?php echo $Sub1; ?></p>
+                            <p class="h5 m-t-sm"><?php echo $Sub2; ?></p>
+
+                            <span class="btn btn-xs btn-success m-t-sm" onclick="Utils.GetMoreDetails(<?php echo $Card['ID']; ?>);">More</span>
+                            <?php echo ($Data['Buttons']['Update']) ? "<span class=\"btn btn-xs btn-primary m-t-sm\" data-tabs-id=\"{$Card['ID']}\" id=\"CardUpdateI{$Card['ID']}\" onclick=\"ModalShowUpdateWindow(this.id);\">Update</span>" : ""; ?>
+                            <?php echo ($Data['Buttons']['Delete']) ? "<span class=\"btn btn-xs btn-default m-t-sm pull-right\" data-tabs-id=\"{$Card['ID']}\" id=\"CardDelI{$Card['ID']}\" onclick=\"Utils.DeleteCard(this.id);\">Delete</span>" : ""; ?>
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
                 </div>
             </div>
         </section>

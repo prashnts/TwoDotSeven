@@ -19,12 +19,18 @@ function init() {
     $Group = new \TwoDot7\Group\Instance($_GET['GroupID']);
 
     if ($Group->Success) {
-        echo "yes, init group.";
+        \TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
+            'Call' => 'Group'
+            ));
     } else {
         if ($_GET['GroupID']) {
-            echo "No, That group doesnt exists. Create new group?";
+            \TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
+                'Call' => 'Group'
+                ));
         } else {
-            echo "Show group list, admin options.";
+            \TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
+                'Call' => 'Group'
+                ));
         }
     }
     die();
