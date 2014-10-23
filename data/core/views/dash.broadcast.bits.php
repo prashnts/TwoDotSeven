@@ -586,13 +586,14 @@ class Render {
             <div class="m-b-md row padder">
                 <div class="col-lg-6">
                     <h3 class="m-b-none"><img src="/data/core/static/images/landing/cluster-1-256.png" class="pull-left m-r-sm" height="45px"> Clusters </h3>
-                    <small>View, Create, Remove, and Manage.</small>
+                    <small>Interact and Manage.</small>
                 </div>
             </div>
             <div class="row bg-dark dker padder">
                 <div class="m-t-sm m-b-sm col-xs-6 padder">
                     <span class="h4">Quick Stats</span><br>
-                    Coming.
+                    10 Clusters. 100 Unique Users. 50k Broadcasts.<br>
+                    Your Clusters: 10. Your Broadcasts in Clusters: 0.
                 </div>
                 <div class="m-t-sm m-b-sm padder col-xs-6">
                     <div id="Cluster-Add-Panel-Create" style="display:nosne">
@@ -624,24 +625,67 @@ class Render {
                     </div>
                 </div>
             </div>
-            <div class="row padder bg-dark lter">
+            <div class="row padder bg-dark m-t-sm">
                 <div id="contains">
-
-                    <div class="item bg-light" id="<?php echo $ID; ?>">
-                        <div class="thumb avatar float">
-                            <img src="/assetserver/userNameIcon/a">
-                        </div>
+                    <?php for($i=0; $i<10; $i++) {?>
+                    <div class="item bg-danger dker" id="">
                         <div class="clear">
-                            <p class="h3"><?php echo "LOL"; ?></p>
+                            <img src="/assetserver/userNameIcon/a" class="m-b">
+                            <p class="h4">2013 B.Tech. (IT &amp; Mathematical Innovations) All Students</p>
+                            <hr class="b-t b-dark">
                             <p class="h4 m-b-sm"><?php echo "LOL"; ?></p>
                             <p class="h5 m-t-sm"><?php echo "LOL"; ?></p>
                             <p class="h5 m-t-sm"><?php echo "LOL"; ?></p>
                             <span class="btn btn-xs btn-success m-t-sm" onclick="Utils.GetMoreDetails();">More</span>
                         </div>
                     </div>
+                    <?php } ?>
                 </div>
             </div>
         </section>
+        <style type="text/css">
+            @media (min-width: 767px) {
+                .item {
+                    width: 300px;
+                    margin: 20px;
+                    padding: 10px;
+                    border-radius: 2px;
+                    min-width: 200px;
+                    text-align: center;
+                }
+            }
+            @media (max-width: 768px) {
+                .item {
+                    width: 95%;
+                    margin: 10px;
+                    padding: 10px;
+                    border-radius: 5px;
+                    min-width: 200px;
+                    text-align: center;
+                }
+            }
+            .avatar.float {
+                float: right;
+            }
+            .item.w2 { width: 50%; }
+            .item hr {
+                border-color: #222733;
+                margin: 10px 0 10px 0;
+            }
+            .panel-default {
+                border-top: none;
+                margin: 0;
+            }
+        </style>
+        <script type="text/javascript" src="/data/core/static/js/masonry.pkgd.min.js"></script>
+        <script type="text/javascript">
+            //var $container = $('#contains');
+            // initialize
+            $container.masonry({
+                columnWidth: ".item",
+                itemSelector: '.item'
+            });
+        </script>
         <?php
     }
 }

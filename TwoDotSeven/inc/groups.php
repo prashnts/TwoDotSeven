@@ -193,6 +193,7 @@ class Meta {
         $Response->add("DescriptionParsed", $this->DescriptionParsed());
         $Response->add("GroupPicture", $this->GroupPicture());
         $Response->add("GroupBackground", $this->GroupBackground());
+        $Response->add("GroupPriority", $this->GroupPriority());
         return $Response->get();
     }
 
@@ -215,6 +216,14 @@ class Meta {
     public function GroupBackground($Data = NULL) {
         $URI = $this->MetaHandler("GroupBackground", $Data);
         return $URI ? $URI : "/assetserver/generic/profileBackground";
+    }
+    public function GroupPriority($Data = NULL) {
+        $Allowed = array("high", "idle", "low");
+        if (\TwoDot7\Util\arrayStrCaseCmp($Data, $Allowed)) {
+            return $this->MetaHandler("GroupPriority", $Data);
+        } else {
+            return $this->MetaHandler("GroupPriority", NULL);
+        }
     }
 }
 
