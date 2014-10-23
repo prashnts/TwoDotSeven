@@ -589,55 +589,56 @@ class Render {
                     <small>View, Create, Remove, and Manage.</small>
                 </div>
             </div>
-            <div class="row bg-primary dk padder">
+            <div class="row bg-dark dker padder">
                 <div class="m-t-sm m-b-sm col-xs-6 padder">
                     <span class="h4">Quick Stats</span><br>
                     Coming.
                 </div>
                 <div class="m-t-sm m-b-sm padder col-xs-6">
-                    <a href="#" class="btn btn- btn-success">Create a New Cluster</a>
-                    <p class="h5">Created a New Cluster with GroupID <span class="label bg-dark">grp3293039</span>.</p>
-                    <a href="#" class="btn btn-xs btn-danger">Undo</a>
-                    <a href="#" class="btn btn-xs btn-success">Go to Group Page</a>
-
-                    <br>
+                    <div id="Cluster-Add-Panel-Create" style="display:nosne">
+                        <img src="/data/core/static/images/generic/icons/cluster-badge-plus-red-64.png" class="pull-left m-r">
+                        <a href="#" class="btn btn- btn-success">Create a New Cluster</a>
+                        <p>Click the button to create a new Cluster. After a Cluster is created, you'll have options to fill-in the Meta, and add Users.</p>
+                    </div>
+                    <div id="Cluster-Add-Panel-Success" style="display:none">
+                        <img src="/data/core/static/images/generic/icons/cluster-badge-check-blue-64.png" class="pull-left m-r">
+                        <p class="h4">Success!</p>
+                        <p>
+                            Created a New Cluster with GroupID <span class="label bg-dark">grp3293039</span>.
+                            <br>
+                            Cluster URI: <a href="<?php echo BASEURI."/~"."grp3293039"; ?>"><?php echo BASEURI."/~"."grp3293039"; ?></a>
+                            <br>
+                            <a href="#" class="btn btn-sm btn-dark m-t-sm"><i class="fa fa-undo"></i> Undo <span class="badge bg-danger" id="Cluster-Add-Timer">5</span> </a>
+                            <a href="#" class="btn btn-sm btn-success m-t-sm"><i class="fa fa-external-link-square"></i> Go to Cluster</a>
+                            <br>
+                            <span class="small m-t-xs">You'll be automatically redirected after 5 seconds.</span>
+                        </p>
+                    </div>
+                    <div id="Cluster-Add-Panel-Error" style="display:none">
+                        <img src="/data/core/static/images/generic/icons/cluster-badge-times-red-64.png" class="pull-left m-r">
+                        <p class="h4">Error Creating Cluster.</p>
+                        <p>
+                            Sorry, the process failed. Possible causes are insufficient privileges, network problem or server error. You can try again, or contact the Sysadmin.<br>
+                            <a href="#" class="btn btn-sm btn-primary m-t-sm"><i class="fa fa-refresh"></i> Retry</a>
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="row padder">
+            <div class="row padder bg-dark lter">
                 <div id="contains">
-                <?php
-                foreach ($Data['AddressBookData'] as $Card) {
-                    $ID = "CardData-".$Card['ID'];
-                    $Display = strlen($Card['DisplayName'])>1 ? $Card['DisplayName'] : "{$Card['FirstName']} {$Card['LastName']}";
-                    $Sub1 = 
-                        ($Card['SecondEmail']).
-                        ($Card['CellularNumber'] ? " &bull; {$Card['CellularNumber']}" : "").
-                        ($Card['_AimScreenName'] ? " &bull; {$Card['_AimScreenName']}" : "");
-                    $Sub2 =
-                        ($Card['JobTitle']).
-                        ($Card['Department'] ? " &bull; {$Card['Department']}" : "").
-                        ($Card['Company'] ? " &bull; {$Card['Company']}" : "").
-                        ($Card['WorkCity'] ? " &bull; {$Card['WorkCity']}" : "").
-                        ($Card['WorkCountry'] ? " &bull; {$Card['WorkCountry']}" : "");
-                    ?>
+
                     <div class="item bg-light" id="<?php echo $ID; ?>">
                         <div class="thumb avatar float">
-                            <img src="/assetserver/userNameIcon/<?php echo $Card['FirstName'];?>">
+                            <img src="/assetserver/userNameIcon/a">
                         </div>
                         <div class="clear">
-                            <p class="h3"><?php echo $Display; ?></p>
-                            <p class="h4 m-b-sm"><?php echo $Card['PrimaryEmail']; ?></p>
-                            <p class="h5 m-t-sm"><?php echo $Sub1; ?></p>
-                            <p class="h5 m-t-sm"><?php echo $Sub2; ?></p>
-
-                            <span class="btn btn-xs btn-success m-t-sm" onclick="Utils.GetMoreDetails(<?php echo $Card['ID']; ?>);">More</span>
-                            <?php echo ($Data['Buttons']['Update']) ? "<span class=\"btn btn-xs btn-primary m-t-sm\" data-tabs-id=\"{$Card['ID']}\" id=\"CardUpdateI{$Card['ID']}\" onclick=\"ModalShowUpdateWindow(this.id);\">Update</span>" : ""; ?>
-                            <?php echo ($Data['Buttons']['Delete']) ? "<span class=\"btn btn-xs btn-default m-t-sm pull-right\" data-tabs-id=\"{$Card['ID']}\" id=\"CardDelI{$Card['ID']}\" onclick=\"Utils.DeleteCard(this.id);\">Delete</span>" : ""; ?>
+                            <p class="h3"><?php echo "LOL"; ?></p>
+                            <p class="h4 m-b-sm"><?php echo "LOL"; ?></p>
+                            <p class="h5 m-t-sm"><?php echo "LOL"; ?></p>
+                            <p class="h5 m-t-sm"><?php echo "LOL"; ?></p>
+                            <span class="btn btn-xs btn-success m-t-sm" onclick="Utils.GetMoreDetails();">More</span>
                         </div>
                     </div>
-                    <?php
-                }
-                ?>
                 </div>
             </div>
         </section>
