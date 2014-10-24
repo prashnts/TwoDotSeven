@@ -29,7 +29,8 @@ function init() {
                 ));
         } else {
             \TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
-                'Call' => 'Group'
+                'Call' => 'Group',
+                'Title' => 'Groups'
                 ));
         }
     }

@@ -628,14 +628,14 @@ class Render {
             <div class="row padder bg-dark m-t-sm">
                 <div id="contains">
                     <?php for($i=0; $i<10; $i++) {?>
-                    <div class="item bg-danger dker" id="">
+                    <div class="item bg-lt" id="">
                         <div class="clear">
                             <img src="/assetserver/userNameIcon/a" class="m-b">
                             <p class="h4">2013 B.Tech. (IT &amp; Mathematical Innovations) All Students</p>
                             <hr class="b-t b-dark">
-                            <p class="h4 m-b-sm"><?php echo "LOL"; ?></p>
+                            <p class="h4 m-b-sm">This is the group for all the 2013 batch of B.Tech. IT students.</p>
                             <p class="h5 m-t-sm"><?php echo "LOL"; ?></p>
-                            <p class="h5 m-t-sm"><?php echo "LOL"; ?></p>
+                            <p class="h5 m-t-sm">Moderated by: Prashant Sinha (@prashant)</p>
                             <span class="btn btn-xs btn-success m-t-sm" onclick="Utils.GetMoreDetails();">More</span>
                         </div>
                     </div>
@@ -679,10 +679,11 @@ class Render {
         </style>
         <script type="text/javascript" src="/data/core/static/js/masonry.pkgd.min.js"></script>
         <script type="text/javascript">
-            //var $container = $('#contains');
+            var $container = $('#contains');
             // initialize
             $container.masonry({
                 columnWidth: ".item",
+                columnHeight: ".item",
                 itemSelector: '.item'
             });
         </script>
