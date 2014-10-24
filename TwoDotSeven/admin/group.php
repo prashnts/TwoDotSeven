@@ -20,7 +20,8 @@ function init() {
 
     if ($Group->Success) {
         \TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
-            'Call' => 'Group'
+            'Call' => 'Group',
+            'Title' => $Group->Meta()->GroupID()
             ));
     } else {
         if ($_GET['GroupID']) {

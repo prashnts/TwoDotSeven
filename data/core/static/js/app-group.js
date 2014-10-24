@@ -22,7 +22,7 @@ var GroupGrid = {
         Card += '        <div class="padder">\n';
         Card += '            <img src="'+data.GroupPicture+'" class="m-b">\n';
         Card += '            <p class="title">'+ū.WCF(data.Name, data.GroupID, "-")+'</p>\n';
-        Card += '            <p class="subtitle">'+ū.WCF(data.DescriptionShort, "-")+'</p>\n';
+        Card += '            <p class="subtitle">'+ū.WCF(data.DescriptionShort, "")+'</p>\n';
         Card += '            <p class="border"></p>\n';
         Card += '            <p class="preview">Open</p>\n';
         Card += '        </div>\n';
