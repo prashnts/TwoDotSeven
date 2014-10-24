@@ -86,8 +86,15 @@ class Instance {
      * Static function, returns all the Groups in the DB.
      */
     public static function ListAll() {
-        $Query = "SELECT ID, GroupID, Admin FROM _group;";
-        return \TwoDot7\Database\Handler::Exec($Query)->fetchAll(\PDO::FETCH_ASSOC);
+        $Query = "SELECT ID, GroupID, Admin, Meta FROM _group;";
+        $Response = \TwoDot7\Database\Handler::Exec($Query)->fetchAll(\PDO::FETCH_ASSOC);
+        $Result = new \TwoDot7\Util\_List;
+        $Result->linearToggle();
+        foreach ($Response as $Key => $Instance) {
+            $Meta = new \TwoDot7\Group\Meta($Instance['GroupID'], True, $Instance);
+            $Result->add($Meta->Get());
+        }
+        return $Result->get();
     }
 }
 
@@ -193,7 +200,7 @@ class Meta {
         $Response->add("DescriptionParsed", $this->DescriptionParsed());
         $Response->add("GroupPicture", $this->GroupPicture());
         $Response->add("GroupBackground", $this->GroupBackground());
-        $Response->add("GroupPriority", $this->GroupPriority());
+        $Response->add("URI", $this->URI());
         return $Response->get();
     }
 
@@ -217,13 +224,8 @@ class Meta {
         $URI = $this->MetaHandler("GroupBackground", $Data);
         return $URI ? $URI : "/assetserver/generic/profileBackground";
     }
-    public function GroupPriority($Data = NULL) {
-        $Allowed = array("high", "idle", "low");
-        if (\TwoDot7\Util\arrayStrCaseCmp($Data, $Allowed)) {
-            return $this->MetaHandler("GroupPriority", $Data);
-        } else {
-            return $this->MetaHandler("GroupPriority", NULL);
-        }
+    public function URI() {
+        return BASEURI."/~/".$this->GroupID();
     }
 }
 

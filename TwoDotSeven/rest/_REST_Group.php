@@ -170,7 +170,7 @@ function initAdmin() {
             // Lists all the users.
             header('HTTP/1.0 251 Operation completed successfully.', true, 251);
             header('Content-Type: application/json');
-            echo json_encode(\TwoDot7\Group\Instance::ListAll());
+            echo json_encode(\TwoDot7\Group\Instance::ListAll(), JSON_PRETTY_PRINT);
             die();
             break;
     }
