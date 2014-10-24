@@ -76,7 +76,9 @@ function _init($Data = False) {
                 ?>
             </section>
         </section>
-        <?php JS(); ?>
+        <script src="/data/core/static/js/bootstrap.js"></script>
+        <script src="/data/core/static/js/app.js"></script>
+        <script src="/data/core/static/js/slimscroll/jquery.slimscroll.min.js"></script>
     </body>
     </html>
     <?php
@@ -116,24 +118,6 @@ function Head(&$Data) {
         <script src="/TwoDotSeven/admin/assets/js/ie/excanvas.js"></script>
     <![endif]-->
     <?php
-}
-
-function JS($Files = array()) {
-    $Defaults = array(
-        '/data/core/static/js/bootstrap.js',
-        '/data/core/static/js/app.js',
-        '/data/core/static/js/slimscroll/jquery.slimscroll.min.js'
-    );
-
-    foreach ( array_merge($Defaults, $Files) as $File) {
-        echo '<script src="'.$File.'"></script>';
-     } ;
-
-    echo '<script src="/data/core/static/js/app-direction.js"></script>';
-    echo '<script src="/data/core/static/js/app-broadcast.js"></script>';
-    echo '<script src="/data/core/static/js/datepicker/bootstrap-datepicker.js"></script>';
-    //echo '<script src="/data/core/static/js/app/SignInUp.js"></script>';
-    //echo '<script src="/data/core/static/js/charts/sparkline/jquery.sparkline.min.js"></script>';
 }
 
 class Render {
@@ -177,6 +161,7 @@ class Render {
                 </div>
             </div>
         </section>
+        <script src="/data/core/static/js/app-broadcast.js"></script>
         <?php
     }
     public static function Dashboard($Data) {
@@ -373,10 +358,10 @@ class Render {
                 </section>
             </section>
         </section>
-
         <style>
 
         </style>
+        <script src="/data/core/static/js/app-direction.js"></script>
         <?php
     }
     public static function Bit($Data) {
@@ -578,6 +563,7 @@ class Render {
                 </section>
             </aside>
         </section>
+        <script src="/data/core/static/js/app-broadcast.js"></script>
         <?php
     }
     public static function Group($Data) {
@@ -626,55 +612,78 @@ class Render {
                 </div>
             </div>
             <div class="row padder bg-dark m-t-sm">
-                <div id="contains">
+                <div id="contains" class="cards">
                     <?php for($i=0; $i<10; $i++) {?>
-                    <div class="item bg-lt" id="">
-                        <div class="clear">
-                            <img src="/assetserver/userNameIcon/a" class="m-b">
-                            <p class="h4">2013 B.Tech. (IT &amp; Mathematical Innovations) All Students</p>
-                            <hr class="b-t b-dark">
-                            <p class="h4 m-b-sm">This is the group for all the 2013 batch of B.Tech. IT students.</p>
-                            <p class="h5 m-t-sm"><?php echo "LOL"; ?></p>
-                            <p class="h5 m-t-sm">Moderated by: Prashant Sinha (@prashant)</p>
-                            <span class="btn btn-xs btn-success m-t-sm" onclick="Utils.GetMoreDetails();">More</span>
-                        </div>
+                    <div class="grp-card" id="">
+                        <a href=#>
+                            <div class="padder">
+                                <img src="/assetserver/userNameIcon/a" class="m-b">
+                                <p class="title">2013 B.Tech. (IT &amp; Mathematical Innovations) All Students</p>
+                                <p class="subtitle">This is the group for all the 2013 batch of B.Tech. IT students.</p>
+                                <p class="border"></p>
+                                <p class="preview">10 Members | 100 Broadcasts</p>
+                            </div>
+                        </a>
                     </div>
                     <?php } ?>
                 </div>
             </div>
         </section>
         <style type="text/css">
+            .cards {
+                margin: 0 auto;
+            }
             @media (min-width: 767px) {
-                .item {
-                    width: 300px;
+                .grp-card {
+                    width: 220px;
                     margin: 20px;
-                    padding: 10px;
                     border-radius: 2px;
-                    min-width: 200px;
-                    text-align: center;
                 }
             }
             @media (max-width: 768px) {
-                .item {
-                    width: 95%;
+                .grp-card {
+                    width: 220px;
                     margin: 10px;
-                    padding: 10px;
                     border-radius: 5px;
-                    min-width: 200px;
-                    text-align: center;
                 }
             }
-            .avatar.float {
-                float: right;
+            .grp-card {
+                background: #ECF0F1;
+                min-width: 200px;
+                text-align: center;
+                -webkit-transition: background .1s; /* For Safari 3.1 to 6.0 */
+                transition: background .1s;
             }
-            .item.w2 { width: 50%; }
-            .item hr {
-                border-color: #222733;
-                margin: 10px 0 10px 0;
+            .grp-card:hover, .grp-card:focus {
+                background: #8DC3E8;
             }
-            .panel-default {
-                border-top: none;
-                margin: 0;
+            .grp-card .border {
+                border-top: 1px solid #364A5D;
+                margin: 30px 0 5px 0;
+            }
+            .grp-card .title {
+                color: #161E26;
+                font-size: 1.4em;
+                line-height: 1.2em;
+            }
+            .grp-card .subtitle {
+                color: #364A5D;
+                font-size: 1em;
+            }
+            .grp-card .padder {
+                padding: 10px;
+            }
+            .grp-card .preview {
+                color: #182129;
+            }
+            .grp-card img {
+                border: 1px solid #161E26;
+                -webkit-box-sizing: border-box;
+                   -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+                border-radius: 50%;
+                width: 64px;
+                height: 64px;
             }
         </style>
         <script type="text/javascript" src="/data/core/static/js/masonry.pkgd.min.js"></script>
@@ -682,9 +691,10 @@ class Render {
             var $container = $('#contains');
             // initialize
             $container.masonry({
-                columnWidth: ".item",
-                columnHeight: ".item",
-                itemSelector: '.item'
+                columnWidth: ".grp-card",
+                columnHeight: ".grp-card",
+                itemSelector: '.grp-card',
+                isFitWidth: true
             });
         </script>
         <?php
