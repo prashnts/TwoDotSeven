@@ -38,6 +38,9 @@ function initRoutine() {
                 case 'Description':
                     $Success = $Grp->Meta()->Description(strip_tags($_POST['MetaUpdateValue']));
                     break;
+                case 'DescriptionShort':
+                    $Success = $Grp->Meta()->DescriptionShort(strip_tags($_POST['MetaUpdateValue']));
+                    break;
                 default:
                     $ERR_SHOW();
                     break;

@@ -612,20 +612,8 @@ class Render {
                 </div>
             </div>
             <div class="row padder bg-dark m-t-sm">
-                <div id="contains" class="cards">
-                    <?php for($i=0; $i<10; $i++) {?>
-                    <div class="grp-card" id="">
-                        <a href=#>
-                            <div class="padder">
-                                <img src="/assetserver/userNameIcon/a" class="m-b">
-                                <p class="title">2013 B.Tech. (IT &amp; Mathematical Innovations) All Students</p>
-                                <p class="subtitle">This is the group for all the 2013 batch of B.Tech. IT students.</p>
-                                <p class="border"></p>
-                                <p class="preview">10 Members | 100 Broadcasts</p>
-                            </div>
-                        </a>
-                    </div>
-                    <?php } ?>
+                <div id="group-grid" class="cards">
+
                 </div>
             </div>
         </section>
@@ -687,16 +675,8 @@ class Render {
             }
         </style>
         <script type="text/javascript" src="/data/core/static/js/masonry.pkgd.min.js"></script>
-        <script type="text/javascript">
-            var $container = $('#contains');
-            // initialize
-            $container.masonry({
-                columnWidth: ".grp-card",
-                columnHeight: ".grp-card",
-                itemSelector: '.grp-card',
-                isFitWidth: true
-            });
-        </script>
+
+        <script src="/data/core/static/js/app-group.js"></script>
         <?php
     }
 }

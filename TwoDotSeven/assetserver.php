@@ -48,7 +48,7 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
             die();
         }
 	case 'usernameicon':
-		$Icon = isset($URI[BASE+1]) ? strtolower($URI[BASE+1])[0] : False;
+        $Icon = isset($URI[BASE+1]) && strlen($URI[BASE+1]) ? strtolower($URI[BASE+1])[0] : "!";
 		if (file_exists($_SERVER['DOCUMENT_ROOT'].'/data/core/static//images/generic/alphabet/'.$Icon.'.png')) {
 			header('HTTP/1.0 200 OK', true, 200);
 			header('Content-Type: Image/PNG');

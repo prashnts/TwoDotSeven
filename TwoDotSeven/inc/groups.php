@@ -197,6 +197,7 @@ class Meta {
         $Response->add("GroupID", $this->GroupID());
         $Response->add("Name", $this->Name());
         $Response->add("Description", $this->Description());
+        $Response->add("DescriptionShort", $this->DescriptionShort());
         $Response->add("DescriptionParsed", $this->DescriptionParsed());
         $Response->add("GroupPicture", $this->GroupPicture());
         $Response->add("GroupBackground", $this->GroupBackground());
@@ -212,6 +213,9 @@ class Meta {
     }
     public function DescriptionParsed() {
         return \TwoDot7\Util\Marker($this->MetaHandler("Description"));
+    }
+    public function DescriptionShort($Data = NULL) {
+        return $this->MetaHandler("DescriptionShort", $Data);
     }
     public function Name($Data = NULL) {
         return $this->MetaHandler("Name", $Data);
