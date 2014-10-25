@@ -35,6 +35,7 @@ var GroupGrid = {
         for (var i = data.length - 1; i >= 0; i--) {
             GroupGrid.drawCard(data[i]);
         };
+        ū.unbindBusy();
     },
     masonry: {
         hook: function() {
@@ -50,22 +51,22 @@ var GroupGrid = {
         },
         add: function(string) {
             var Container = GroupGrid.masonry.hook();
-            $(Container).append( string );
-            $(Container).masonry( 'reloadItems' );
-            $(Container).masonry( 'layout' );
+            $(Container).prepend(string);
+            $(Container).masonry('reloadItems');
+            $(Container).masonry('layout');
         }
     },
     gridInit: function() {
         if (this.DONE) return;
         if (ū.IDExists(this.HOOKID)) {
             this.masonry.init();
+            ū.bindBusy();
             this.get(GroupGrid.drawRoutine);
         }
     }
 };
 
-var AddGroup = {
-    CREATEHOOK: "Cluster-Add-Panel-Create",
+var AddGroup = {CREATEHOOK: "Cluster-Add-Panel-Create",
     CREATESUCCESSHOOK: "Cluster-Add-Panel-Success",
     ADDURI: "/dev/groupadmin/create",
     ACTIVE: false,
@@ -76,6 +77,11 @@ var AddGroup = {
         SuccessPanelGroupID: "Cluster-Add-Panel-Success-GroupID",
         SuccessPanelURI: "Cluster-Add-Panel-Success-URI",
         SuccessPanelGoTo: "Cluster-Add-Panel-Success-GoTo",
+
+        CreatePanelButton: "Cluster-Add-Panel-Create-Button",
+
+        GlobalHideButton: "Cluster-Hide-Globals",
+        GlobalRetryButton: "Cluster-Retry-Globals"
     },
     createRequest: function(success, error) {
         this.ACTIVE = true;
@@ -94,10 +100,6 @@ var AddGroup = {
             });
     },
     success: function(data) {
-        // 1. Redraw Success Panel.
-        // 2. Show Success Panel.
-        // 3. Add Card.
-        // 4. Wait, and hide the Success Panel.
         $(ū.id(AddGroup.HOOKS.SuccessPanelGroupID)).html(ū.WCF(data.GroupID, "grpID"));
         $(ū.id(AddGroup.HOOKS.SuccessPanelURI)).html(ū.WCF(data.URI), "#");
         $(ū.id(AddGroup.HOOKS.SuccessPanelURI)).attr("href", ū.WCF(data.URI), "#");
@@ -106,12 +108,45 @@ var AddGroup = {
         $(ū.id(AddGroup.HOOKS.SuccessPanel)).slideDown();
         $(ū.id(AddGroup.HOOKS.ErrorPanel)).slideUp();
         $(ū.id(AddGroup.HOOKS.CreatePanel)).slideUp();
-        
+
         GroupGrid.drawCard(data);
+        ū.unbindBusy();
+    },
+    error: function() {
+        // Shows Retry Thingy.
+        $(ū.id(AddGroup.HOOKS.SuccessPanel)).slideUp();
+        $(ū.id(AddGroup.HOOKS.ErrorPanel)).slideDown();
+        $(ū.id(AddGroup.HOOKS.CreatePanel)).slideUp();
+    },
+    create: function() {
+        if (AddGroup.ACTIVE) return;
+        ū.bindBusy();
+        AddGroup.createRequest(AddGroup.success, AddGroup.error);
+    },
+    retry: function() {
+        AddGroup.create();
+    },
+    hide: function() {
+        $(ū.id(AddGroup.HOOKS.SuccessPanel)).slideUp();
+        $(ū.id(AddGroup.HOOKS.ErrorPanel)).slideUp();
+        $(ū.id(AddGroup.HOOKS.CreatePanel)).slideDown();
+    },
+    init: function() {
+        if (ū.IDExists(AddGroup.HOOKS.CreatePanel)) {
+            $(ū.id(AddGroup.HOOKS.CreatePanelButton)).click(function() {AddGroup.create();});
+            $(ū.cls(AddGroup.HOOKS.GlobalHideButton)).click(function() {AddGroup.hide();});
+            $(ū.cls(AddGroup.HOOKS.GlobalRetryButton)).click(function() {AddGroup.create();});
+        }
     }
 };
 
 var ū = {
+    bindBusy: function() {
+        $('*').css('cursor','wait');
+    },
+    unbindBusy: function() {
+        $('*').css('cursor','');
+    },
     isset: function(obj) {
         return !(typeof obj === "undefined" || obj === null);
     },
@@ -146,3 +181,4 @@ var ū = {
 }
 
 GroupGrid.gridInit();
+AddGroup.init();

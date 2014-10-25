@@ -584,7 +584,7 @@ class Render {
                 <div class="m-t-sm m-b-sm padder col-xs-6">
                     <div id="Cluster-Add-Panel-Create" style="display:nosne">
                         <img src="/data/core/static/images/generic/icons/cluster-badge-plus-red-64.png" class="pull-left m-r">
-                        <a href="#" class="btn btn- btn-success">Create a New Cluster</a>
+                        <a href="#" class="btn btn- btn-success" id="Cluster-Add-Panel-Create-Button">Create a New Cluster</a>
                         <p>Click the button to create a new Cluster. After a Cluster is created, you'll have options to fill-in the Meta, and add Users.</p>
                     </div>
                     <div id="Cluster-Add-Panel-Success" style="display:none">
@@ -597,7 +597,7 @@ class Render {
                             <br>
                             <a href="#" class="btn btn-sm btn-dark m-t-sm"><i class="fa fa-undo"></i> Undo</a>
                             <a href="#" class="btn btn-sm btn-success m-t-sm" id="Cluster-Add-Panel-Success-GoTo"><i class="fa fa-external-link-square"></i> Go to Cluster</a>
-                            <a href="#" class="btn btn-sm btn-dark m-t-sm"><i class="fa fa-undo"></i> Hide</a>
+                            <a href="#" class="btn btn-sm btn-dark m-t-sm Cluster-Hide-Globals">Hide</a>
                         </p>
                     </div>
                     <div id="Cluster-Add-Panel-Error" style="display:none">
@@ -605,7 +605,8 @@ class Render {
                         <p class="h4">Error Creating Cluster.</p>
                         <p>
                             Sorry, the process failed. Possible causes are insufficient privileges, network problem or server error. You can try again, or contact the Sysadmin.<br>
-                            <a href="#" class="btn btn-sm btn-primary m-t-sm"><i class="fa fa-refresh"></i> Retry</a>
+                            <a href="#" class="btn btn-sm btn-primary m-t-sm Cluster-Retry-Globals"><i class="fa fa-refresh"></i> Retry</a>
+                            <a href="#" class="btn btn-sm btn-dark m-t-sm Cluster-Hide-Globals">Hide</a>
                         </p>
                     </div>
                 </div>
