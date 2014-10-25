@@ -87,16 +87,16 @@ var AddGroup = {CREATEHOOK: "Cluster-Add-Panel-Create",
         this.ACTIVE = true;
         $.getJSON(this.ADDURI)
             .done(function(data) {
+                AddGroup.ACTIVE = false;
                 if (success) {
                     success(data);
                 }
-                this.ACTIVE = false;
             })
             .fail(function(data) {
+                AddGroup.ACTIVE = false;
                 if (error) {
                     error(data);
                 }
-                this.ACTIVE = false;
             });
     },
     success: function(data) {
