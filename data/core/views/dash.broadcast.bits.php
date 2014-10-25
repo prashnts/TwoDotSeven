@@ -613,7 +613,6 @@ class Render {
             </div>
             <div class="row padder bg-dark m-t-sm">
                 <div id="group-grid" class="cards">
-
                 </div>
             </div>
         </section>

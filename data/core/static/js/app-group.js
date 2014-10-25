@@ -58,11 +58,16 @@ var GroupGrid = {
     gridInit: function() {
         if (this.DONE) return;
         if (ū.IDExists(this.HOOKID)) {
-
             this.masonry.init();
             this.get(GroupGrid.drawRoutine);
         }
     }
+}
+
+var AddGroup = {
+    CREATEHOOK: "Cluster-Add-Panel-Create",
+    CREATESUCCESSHOOK: "Cluster-Add-Panel-Success",
+    ADDURI: ""
 }
 
 var ū = {

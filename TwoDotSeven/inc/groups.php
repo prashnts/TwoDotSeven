@@ -229,7 +229,7 @@ class Meta {
         return $URI ? $URI : "/assetserver/generic/profileBackground";
     }
     public function URI() {
-        return BASEURI."/~/".$this->GroupID();
+        return BASEURI."/~".$this->GroupID();
     }
 }
 
@@ -381,7 +381,10 @@ class Setup {
                 'UserName' => $Defaults['Admin'],
                 'Domain' => $Defaults['GroupID']
             ));
-            if ($Response) return $Defaults['GroupID'];
+            if ($Response) {
+                $NewGroupMeta = new \TwoDot7\Group\Meta($Defaults['GroupID'], True, $Defaults);
+                return $NewGroupMeta->Get();
+            }
             else return $Response;
         } else throw new \TwoDot7\Exception\AuthError("User not authenticated, or not authorized to perform this operation.");
     }
