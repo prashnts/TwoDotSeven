@@ -62,13 +62,54 @@ var GroupGrid = {
             this.get(GroupGrid.drawRoutine);
         }
     }
-}
+};
 
 var AddGroup = {
     CREATEHOOK: "Cluster-Add-Panel-Create",
     CREATESUCCESSHOOK: "Cluster-Add-Panel-Success",
-    ADDURI: ""
-}
+    ADDURI: "/dev/groupadmin/create",
+    ACTIVE: false,
+    HOOKS: {
+        SuccessPanel: "Cluster-Add-Panel-Success",
+        CreatePanel: "Cluster-Add-Panel-Create",
+        ErrorPanel: "Cluster-Add-Panel-Error",
+        SuccessPanelGroupID: "Cluster-Add-Panel-Success-GroupID",
+        SuccessPanelURI: "Cluster-Add-Panel-Success-URI",
+        SuccessPanelGoTo: "Cluster-Add-Panel-Success-GoTo",
+    },
+    createRequest: function(success, error) {
+        this.ACTIVE = true;
+        $.getJSON(this.ADDURI)
+            .done(function(data) {
+                if (success) {
+                    success(data);
+                }
+                this.ACTIVE = false;
+            })
+            .fail(function(data) {
+                if (error) {
+                    error(data);
+                }
+                this.ACTIVE = false;
+            });
+    },
+    success: function(data) {
+        // 1. Redraw Success Panel.
+        // 2. Show Success Panel.
+        // 3. Add Card.
+        // 4. Wait, and hide the Success Panel.
+        $(ū.id(AddGroup.HOOKS.SuccessPanelGroupID)).html(ū.WCF(data.GroupID, "grpID"));
+        $(ū.id(AddGroup.HOOKS.SuccessPanelURI)).html(ū.WCF(data.URI), "#");
+        $(ū.id(AddGroup.HOOKS.SuccessPanelURI)).attr("href", ū.WCF(data.URI), "#");
+        $(ū.id(AddGroup.HOOKS.SuccessPanelGoTo)).attr("href", ū.WCF(data.URI), "#");
+        
+        $(ū.id(AddGroup.HOOKS.SuccessPanel)).slideDown();
+        $(ū.id(AddGroup.HOOKS.ErrorPanel)).slideUp();
+        $(ū.id(AddGroup.HOOKS.CreatePanel)).slideUp();
+        
+        GroupGrid.drawCard(data);
+    }
+};
 
 var ū = {
     isset: function(obj) {
@@ -78,6 +119,14 @@ var ū = {
     IDExists: function(id) {
         if (document.getElementById(id)) return true;
         else return false;
+    },
+
+    id: function(id) {
+        return "#"+id;
+    },
+
+    cls: function(cls) {
+        return "."+cls;
     },
 
     /**

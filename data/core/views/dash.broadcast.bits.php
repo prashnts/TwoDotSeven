@@ -591,14 +591,13 @@ class Render {
                         <img src="/data/core/static/images/generic/icons/cluster-badge-check-blue-64.png" class="pull-left m-r">
                         <p class="h4">Success!</p>
                         <p>
-                            Created a New Cluster with GroupID <span class="label bg-dark">grp3293039</span>.
+                            Created a New Cluster with GroupID <span class="label bg-dark" id="Cluster-Add-Panel-Success-GroupID"></span>.
                             <br>
-                            Cluster URI: <a href="<?php echo BASEURI."/~"."grp3293039"; ?>"><?php echo BASEURI."/~"."grp3293039"; ?></a>
+                            Cluster URI: <a href="" id="Cluster-Add-Panel-Success-URI" ></a>
                             <br>
-                            <a href="#" class="btn btn-sm btn-dark m-t-sm"><i class="fa fa-undo"></i> Undo <span class="badge bg-danger" id="Cluster-Add-Timer">5</span> </a>
-                            <a href="#" class="btn btn-sm btn-success m-t-sm"><i class="fa fa-external-link-square"></i> Go to Cluster</a>
-                            <br>
-                            <span class="small m-t-xs">You'll be automatically redirected after 5 seconds.</span>
+                            <a href="#" class="btn btn-sm btn-dark m-t-sm"><i class="fa fa-undo"></i> Undo</a>
+                            <a href="#" class="btn btn-sm btn-success m-t-sm" id="Cluster-Add-Panel-Success-GoTo"><i class="fa fa-external-link-square"></i> Go to Cluster</a>
+                            <a href="#" class="btn btn-sm btn-dark m-t-sm"><i class="fa fa-undo"></i> Hide</a>
                         </p>
                     </div>
                     <div id="Cluster-Add-Panel-Error" style="display:none">
