@@ -31,6 +31,7 @@ var GroupGrid = {
         GroupGrid.masonry.add(Card);
     },
     drawRoutine: function(data) {
+        $("#"+GroupGrid.HOOKID).html("");
         for (var i = data.length - 1; i >= 0; i--) {
             GroupGrid.drawCard(data[i]);
         };
@@ -57,6 +58,7 @@ var GroupGrid = {
     gridInit: function() {
         if (this.DONE) return;
         if (ū.IDExists(this.HOOKID)) {
+
             this.masonry.init();
             this.get(GroupGrid.drawRoutine);
         }
