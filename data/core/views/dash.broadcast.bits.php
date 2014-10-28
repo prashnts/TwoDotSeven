@@ -678,4 +678,116 @@ class Render {
         <script src="/data/core/static/js/app-group.js"></script>
         <?php
     }
+    public static function GroupMeta($Data) {
+        ?>
+        <section class="scrollable padder bg-dark  fill">
+            <div class="m-b-md row padder">
+                <div class="col-lg-6">
+                    <h3 class="m-b-none"><img src="/data/core/static/images/landing/cluster-1-256.png" class="pull-left m-r-sm" height="45px"> Clusters </h3>
+                    <small>Interact and Manage.</small>
+                </div>
+            </div>
+            <div class="row bg-dark dker padder">
+                <div class="m-t-sm m-b-sm col-xs-6 padder">
+                    <span class="h4">Quick Stats</span><br>
+                    10 Clusters. 100 Unique Users. 50k Broadcasts.<br>
+                    Your Clusters: 10. Your Broadcasts in Clusters: 0.
+                </div>
+                <div class="m-t-sm m-b-sm padder col-xs-6">
+                    <div id="Cluster-Add-Panel-Create" style="display:nosne">
+                        <img src="/data/core/static/images/generic/icons/cluster-badge-plus-red-64.png" class="pull-left m-r">
+                        <a href="#" class="btn btn- btn-success" id="Cluster-Add-Panel-Create-Button">Create a New Cluster</a>
+                        <p>Click the button to create a new Cluster. After a Cluster is created, you'll have options to fill-in the Meta, and add Users.</p>
+                    </div>
+                    <div id="Cluster-Add-Panel-Success" style="display:none">
+                        <img src="/data/core/static/images/generic/icons/cluster-badge-check-blue-64.png" class="pull-left m-r">
+                        <p class="h4">Success!</p>
+                        <p>
+                            Created a New Cluster with GroupID <span class="label bg-dark" id="Cluster-Add-Panel-Success-GroupID"></span>.
+                            <br>
+                            Cluster URI: <a href="" id="Cluster-Add-Panel-Success-URI" ></a>
+                            <br>
+                            <a href="#" class="btn btn-sm btn-dark m-t-sm"><i class="fa fa-undo"></i> Undo</a>
+                            <a href="#" class="btn btn-sm btn-success m-t-sm" id="Cluster-Add-Panel-Success-GoTo"><i class="fa fa-external-link-square"></i> Go to Cluster</a>
+                            <a href="#" class="btn btn-sm btn-dark m-t-sm Cluster-Hide-Globals">Hide</a>
+                        </p>
+                    </div>
+                    <div id="Cluster-Add-Panel-Error" style="display:none">
+                        <img src="/data/core/static/images/generic/icons/cluster-badge-times-red-64.png" class="pull-left m-r">
+                        <p class="h4">Error Creating Cluster.</p>
+                        <p>
+                            Sorry, the process failed. Possible causes are insufficient privileges, network problem or server error. You can try again, or contact the Sysadmin.<br>
+                            <a href="#" class="btn btn-sm btn-primary m-t-sm Cluster-Retry-Globals"><i class="fa fa-refresh"></i> Retry</a>
+                            <a href="#" class="btn btn-sm btn-dark m-t-sm Cluster-Hide-Globals">Hide</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row padder bg-dark m-t-sm">
+                <div id="group-grid" class="cards">
+                </div>
+            </div>
+        </section>
+        <style type="text/css">
+            .cards {
+                margin: 0 auto;
+            }
+            @media (min-width: 767px) {
+                .grp-card {
+                    width: 220px;
+                    margin: 20px;
+                    border-radius: 2px;
+                }
+            }
+            @media (max-width: 768px) {
+                .grp-card {
+                    width: 220px;
+                    margin: 10px;
+                    border-radius: 5px;
+                }
+            }
+            .grp-card {
+                background: #ECF0F1;
+                min-width: 200px;
+                text-align: center;
+                -webkit-transition: background .1s; /* For Safari 3.1 to 6.0 */
+                transition: background .1s;
+            }
+            .grp-card:hover, .grp-card:focus {
+                background: #8DC3E8;
+            }
+            .grp-card .border {
+                border-top: 1px solid #364A5D;
+                margin: 30px 0 5px 0;
+            }
+            .grp-card .title {
+                color: #161E26;
+                font-size: 1.4em;
+                line-height: 1.2em;
+            }
+            .grp-card .subtitle {
+                color: #364A5D;
+                font-size: 1em;
+            }
+            .grp-card .padder {
+                padding: 10px;
+            }
+            .grp-card .preview {
+                color: #182129;
+            }
+            .grp-card img {
+                border: 1px solid #161E26;
+                -webkit-box-sizing: border-box;
+                   -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+                border-radius: 50%;
+                width: 64px;
+                height: 64px;
+            }
+        </style>
+        <script type="text/javascript" src="/data/core/static/js/masonry.pkgd.min.js"></script>
+
+        <script src="/data/core/static/js/app-group.js"></script>
+        <?php
+    }
 }

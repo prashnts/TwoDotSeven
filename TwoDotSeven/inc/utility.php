@@ -860,6 +860,10 @@ function _echo($Variable, $Default = "") {
     echo isset($Variable) && $Variable ? $Variable : $Default;
 }
 
+function _wcf() {
+    //
+}
+
 /**
  * Markdown derivative. TODO
  * @author  Prashant Sinha <firstname,lastname>@outlook.com
