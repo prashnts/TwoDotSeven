@@ -19,9 +19,16 @@ function init() {
     $Group = new \TwoDot7\Group\Instance($_GET['GroupID']);
 
     if ($Group->Success) {
+
+        $UserListArray = $Group->Graph()->ListAllUsers(); 
+
+        if (count($UserListArray) > 8) {
+
+        }
+
         \TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
             'Call' => 'GroupMeta',
-            'Title' => $Group->Meta()->Name()
+            'Meta' => $Group->Meta()->get()
             ));
     } else {
         if ($_GET['GroupID']) {

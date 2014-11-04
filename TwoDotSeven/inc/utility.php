@@ -861,7 +861,11 @@ function _echo($Variable, $Default = "") {
 }
 
 function _wcf() {
-    //
+    foreach (func_get_args() as $item) {
+        if (!is_null($item)) {
+            return $item;
+        }
+    }
 }
 
 /**

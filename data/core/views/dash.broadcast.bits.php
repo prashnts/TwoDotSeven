@@ -683,48 +683,30 @@ class Render {
         <section class="scrollable padder bg-dark  fill">
             <div class="m-b-md row padder">
                 <div class="col-lg-6">
-                    <h3 class="m-b-none"><img src="/data/core/static/images/landing/cluster-1-256.png" class="pull-left m-r-sm" height="45px"> Clusters </h3>
-                    <small>Interact and Manage.</small>
+                    <h3 class="m-b-none"><img src="<?php echo $Data['Meta']['GroupPicture']; ?>" class="pull-left m-r-sm" height="45px"> <?php echo Util\_wcf($Data['Meta']['Name'], $Data['Meta']['GroupID'], "Group ID Error"); ?> </h3>
+                    <small><?php echo Util\_wcf($Data['Meta']['DescriptionShort'], ""); ?></small>
                 </div>
             </div>
             <div class="row bg-dark dker padder">
                 <div class="m-t-sm m-b-sm col-xs-6 padder">
-                    <span class="h4">Quick Stats</span><br>
-                    10 Clusters. 100 Unique Users. 50k Broadcasts.<br>
-                    Your Clusters: 10. Your Broadcasts in Clusters: 0.
+
                 </div>
                 <div class="m-t-sm m-b-sm padder col-xs-6">
-                    <div id="Cluster-Add-Panel-Create" style="display:nosne">
-                        <img src="/data/core/static/images/generic/icons/cluster-badge-plus-red-64.png" class="pull-left m-r">
-                        <a href="#" class="btn btn- btn-success" id="Cluster-Add-Panel-Create-Button">Create a New Cluster</a>
-                        <p>Click the button to create a new Cluster. After a Cluster is created, you'll have options to fill-in the Meta, and add Users.</p>
-                    </div>
-                    <div id="Cluster-Add-Panel-Success" style="display:none">
-                        <img src="/data/core/static/images/generic/icons/cluster-badge-check-blue-64.png" class="pull-left m-r">
-                        <p class="h4">Success!</p>
-                        <p>
-                            Created a New Cluster with GroupID <span class="label bg-dark" id="Cluster-Add-Panel-Success-GroupID"></span>.
-                            <br>
-                            Cluster URI: <a href="" id="Cluster-Add-Panel-Success-URI" ></a>
-                            <br>
-                            <a href="#" class="btn btn-sm btn-dark m-t-sm"><i class="fa fa-undo"></i> Undo</a>
-                            <a href="#" class="btn btn-sm btn-success m-t-sm" id="Cluster-Add-Panel-Success-GoTo"><i class="fa fa-external-link-square"></i> Go to Cluster</a>
-                            <a href="#" class="btn btn-sm btn-dark m-t-sm Cluster-Hide-Globals">Hide</a>
-                        </p>
-                    </div>
-                    <div id="Cluster-Add-Panel-Error" style="display:none">
-                        <img src="/data/core/static/images/generic/icons/cluster-badge-times-red-64.png" class="pull-left m-r">
-                        <p class="h4">Error Creating Cluster.</p>
-                        <p>
-                            Sorry, the process failed. Possible causes are insufficient privileges, network problem or server error. You can try again, or contact the Sysadmin.<br>
-                            <a href="#" class="btn btn-sm btn-primary m-t-sm Cluster-Retry-Globals"><i class="fa fa-refresh"></i> Retry</a>
-                            <a href="#" class="btn btn-sm btn-dark m-t-sm Cluster-Hide-Globals">Hide</a>
-                        </p>
-                    </div>
+
                 </div>
             </div>
             <div class="row padder bg-dark m-t-sm">
-                <div id="group-grid" class="cards">
+                <div class="col-lg-8">
+                    <section class="panel broadcast-clear">
+                        <ul class="list-group" id="broadcast-container">
+                        </ul>
+                    </section>
+                    <div class="loadMore text-center">
+                        <a href="#" class="btn btn-success" id="broadcast-load-post">Load more Broadcasts</a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    LOL
                 </div>
             </div>
         </section>
@@ -788,6 +770,7 @@ class Render {
         <script type="text/javascript" src="/data/core/static/js/masonry.pkgd.min.js"></script>
 
         <script src="/data/core/static/js/app-group.js"></script>
+        <script src="/data/core/static/js/app-broadcast.js"></script>
         <?php
     }
 }
