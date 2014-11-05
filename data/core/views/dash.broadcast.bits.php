@@ -687,14 +687,6 @@ class Render {
                     <small><?php echo Util\_wcf($Data['Meta']['DescriptionShort'], ""); ?></small>
                 </div>
             </div>
-            <div class="row bg-dark dker padder">
-                <div class="m-t-sm m-b-sm col-xs-6 padder">
-
-                </div>
-                <div class="m-t-sm m-b-sm padder col-xs-6">
-
-                </div>
-            </div>
             <div class="row padder bg-dark m-t-sm">
                 <div class="col-lg-8">
                     <section class="panel broadcast-clear">
@@ -706,7 +698,7 @@ class Render {
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    LOL
+
                 </div>
             </div>
         </section>
