@@ -2,7 +2,7 @@
 namespace TwoDot7\Broadcast;
 use \TwoDot7\Mailer as Mailer;
 use \TwoDot7\Database as Database;
-#  _____                      _____ 
+#   _____                      _____ 
 # /__   \__      _____       |___  |
 #   / /\/\ \ /\ / / _ \         / / 
 #  / /    \ V  V / (_) |  _    / /  
@@ -168,10 +168,31 @@ class Action {
         $Response = \TwoDot7\Database\Handler::Exec($Query, $Data)->rowCount();
 
         return array( 'Success' => (bool)$Response );
-    }
 
-    public static function Remove($BroadcastID) {
+    public static function Remove($BroadcastID, $IDOverride = False) {
         $DatabaseHandle = new \TwoDot7\Database\Handler;
+
+        $UserDetails = $DatabaseHandle->Query("SELECT OriginType, Origin FROM _broadcast WHERE BroadcastID = :BroadcastID", array(
+            'BroadcastID' => BroadcastID
+            ))->fetch();
+
+        switch ($UserDetails['OriginType']) {
+            case USER:
+                if ($UserDetails['OriginType'] === \TwoDot7\User\Session::Data['UserName'] ||
+                    \TwoDot7\User\Access::Check(array(
+                        'UserName' => \TwoDot7\User\Session::Data['UserName'],
+                        'Domain' => array('SYSADMIN', 'ADMIN')
+                        ))) {
+                    break;
+                } else throw new \TwoDot7\Exception\AuthError("User not authorized to perform this action.");
+                break;
+
+            case BIT:
+            case SYSTEM:
+            default:
+                return False;
+        }
+
         $DBResponse = $DatabaseHandle->Query("DELETE FROM _broadcast WHERE BroadcastID = :BroadcastID;", array(
             'BroadcastID' =>$BroadcastID
             ))->rowCount();
@@ -188,7 +209,6 @@ class Action {
     }
 
     public static function UpdateVisibility($BroadcastID, $Visibility) {
-
         switch ($Visibility) {
             case \TwoDot7\Broadcast\_PRIVATE:
             case \TwoDot7\Broadcast\_PUBLIC:

@@ -107,7 +107,9 @@ function init() {
                     break;
             }
             break;
-        case 'test':
+
+        case 'delete':
+            
 
         default:
             header('HTTP/1.0 450 Invalid Request.', true, 450);
