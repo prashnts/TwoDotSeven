@@ -70,11 +70,11 @@ var BroadcastSvc = {
         _Post +=        '</a>';
 
         _Post +=        '<div class="btn-group right card-dropdown">';
-        _Post +=            '<button class="btn" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>';
+        _Post +=            '<button class="angle-btn" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>';
         _Post +=            '<ul class="dropdown-menu">';
         if (data.ShowOptions) {
         _Post +=                '<li><a href="#"><i class="fa fa-edit"></i> Edit</a></li>';
-        _Post +=                '<li><a href="#"><i class="fa fa-trash"></i> Delete</a></li>';
+        _Post +=                '<li><a href="#" onclick="BroadcastActions.deletePost.init(\''+data.ID+'\')"><i class="fa fa-trash"></i> Delete</a></li>';
         }
         _Post +=                '<li><a href="#"><i class="fa fa-flag"></i> Flag this Post</a></li>';
         _Post +=            '</ul>';
@@ -101,10 +101,9 @@ var BroadcastSvc = {
         _Post +=                '</span>';
         _Post +=            '</a>';
         _Post +=            '<hr class="m-t-xs m-b-xs">';
-        _Post +=            '<p>'+data.Data+'</p>';
+        _Post +=            '<div class="broadcast-card-data">'+data.Data+'</div>';
         _Post +=        '</div>';
-        _Post +=        '<div class="broadcast-card-actions">';
-        _Post +=        '</div>';
+        _Post +=        '<div class="broadcast-card-overlay"><div class="data"></div></div>';
         _Post +=    '</li>';
 
         return _Post;
@@ -131,6 +130,35 @@ var BroadcastSvc = {
         $("#"+BroadcastSvc.BtnLoadHook).click(function() {
             BroadcastSvc.postFetch();
         });
+    }
+};
+
+var BroadcastActions = {
+    deleteURI : "/dev/broadcast/delete/",
+    deletePost : {
+        init: function(ID) {
+            "use strict";
+            var PushStr = '<button class="btn btn-success" onclick="BroadcastActions.deletePost.cancel('+ID+')">Cancel</button> &nbsp; <button class="btn btn-primary" onclick="BroadcastActions.deletePost.confirmDelete('+ID+')">Confirm Delete</button>';
+            $("#BROADCAST_"+ID+" .broadcast-card-overlay .data").html(PushStr);
+            $("#BROADCAST_"+ID+" .broadcast-card-overlay").slideDown();
+        },
+        cancel: function(ID) {
+            $("#BROADCAST_"+ID+" .broadcast-card-overlay").slideUp();
+        },
+        confirmDelete: function(ID) {
+            $("#BROADCAST_"+ID+" .broadcast-card-overlay .data").html("Processing, please wait.");
+            $.getJSON(BroadcastActions.deleteURI + ID)
+                .success(function() {
+                    $("#BROADCAST_"+ID+" .broadcast-card-overlay .data").html("Done!");
+                    $("#BROADCAST_"+ID).slideUp();
+                })
+                .fail (function() {
+                    $("#BROADCAST_"+ID+" .broadcast-card-overlay .data").html("Some error occurred, and the process could not be completed. Please try again in a few seconds.");
+                    window.setTimeout(function() {
+                        $("#BROADCAST_"+ID+" .broadcast-card-overlay").slideUp();
+                    }, 5000);
+                });
+        }
     }
 };
 
