@@ -278,25 +278,19 @@ class Account {
      * @version 0.0
      */
     public static function Remove($UserName) {
-        if (isset($UserName)) {
-
-            if (Access::Check(array(
-                'UserName' => $UserName,
-                'Domain' => 'SYSADMIN'
-                ))) {
-                return False;
-            }
-
-            $DatabaseHandle = new \TwoDot7\Database\Handler;
-            $DBResponse = $DatabaseHandle->Query("DELETE FROM _user WHERE UserName=:UserName", array(
-                'UserName' =>$UserName
-                ))->rowCount();
-
-            return (bool)$DBResponse;
+        if (Access::Check(array(
+            'UserName' => $UserName,
+            'Domain' => 'SYSADMIN'
+            ))) {
+            return False;
         }
-        else {
-            throw new \TwoDot7\Exception\IncompleteArgument("Invalid Argument in Function \\User\\Account::Remove");
-        }
+
+        $DatabaseHandle = new \TwoDot7\Database\Handler;
+        $DBResponse = $DatabaseHandle->Query("DELETE FROM _user WHERE UserName=:UserName", array(
+            'UserName' =>$UserName
+            ))->rowCount();
+
+        return (bool)$DBResponse;
     }
 }
 

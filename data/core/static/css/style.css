@@ -537,3 +537,53 @@
 .broadcast-card.broadcast-yellow {
 	background: #FFFCB6;
 }
+
+.broadcast-card .right {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.broadcast-card .card-dropdown .btn {
+    background: transparent;
+    border: none;
+    color: #a1a8ac;
+    font-size: 1.8em;
+    padding: 0 10px;
+    transition: transform .2s;
+}
+
+.broadcast-card .card-dropdown .btn:focus, .broadcast-card .card-dropdown .btn:hover {
+    color: #444444;
+    border: none;
+    outline: none;
+}
+
+.broadcast-card .card-dropdown .btn:focus{
+    transform: rotate(180deg);
+}
+
+.card-dropdown .dropdown-menu, .card-dropdown .dropdown-menu:hover {
+    right: -1px;
+    left: auto;
+    padding: 5px;
+    top: 25px;
+    z-index: 1000;
+}
+
+.card-dropdown.open>.dropdown-menu {
+    display: flex;
+}
+
+.card-dropdown .dropdown-menu li>a {
+    padding: 10px;
+    font-size: 1em;
+    transition: color 0.2s;
+}
+
+.card-dropdown .dropdown-menu li>a:hover,
+.card-dropdown .dropdown-menu li>a:focus {
+    background-color: transparent !important;
+    background: transparent !important;
+    color: #1aae88;
+}

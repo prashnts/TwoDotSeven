@@ -68,6 +68,16 @@ var BroadcastSvc = {
         _Post +=        '<a href="'+data.Meta.OP.URI+'" class="thumb pull-left m-r-sm">';
         _Post +=            '<img src="'+data.Meta.OP.ProfilePicture+'" class="img-circle b-a b-3x b-white">';
         _Post +=        '</a>';
+
+        _Post +=        '<div class="btn-group right card-dropdown">';
+        _Post +=            '<button class="btn" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>';
+        _Post +=            '<ul class="dropdown-menu">';
+        _Post +=                '<li><a href="#"><i class="fa fa-edit"></i> Edit</a></li>';
+        _Post +=                '<li><a href="#"><i class="fa fa-trash"></i> Delete</a></li>';
+        _Post +=                '<li><a href="#"><i class="fa fa-flag"></i> Flag this Post</a></li>';
+        _Post +=            '</ul>';
+        _Post +=        '</div>';
+
         _Post +=        '<div class="clear">';
         _Post +=            '<a href="'+data.Meta.OP.URI+'">';
         _Post +=                '<span class="text-dark h4">'+_echo(data.Meta.OP.FirstName)+' '+_echo(data.Meta.OP.LastName)+' </span>';

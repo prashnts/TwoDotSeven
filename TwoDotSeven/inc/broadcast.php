@@ -171,7 +171,7 @@ class Action {
     }
 
     public static function Remove($BroadcastID) {
-        // Deletes a broadcast
+        $Query = "DELETE FROM _broadcast WHERE ";
     }
 
     public static function Update() {
