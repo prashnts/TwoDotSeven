@@ -168,19 +168,20 @@ class Action {
         $Response = \TwoDot7\Database\Handler::Exec($Query, $Data)->rowCount();
 
         return array( 'Success' => (bool)$Response );
+    }
 
     public static function Remove($BroadcastID, $IDOverride = False) {
         $DatabaseHandle = new \TwoDot7\Database\Handler;
 
-        $UserDetails = $DatabaseHandle->Query("SELECT OriginType, Origin FROM _broadcast WHERE BroadcastID = :BroadcastID", array(
-            'BroadcastID' => BroadcastID
+        $UserDetails = $DatabaseHandle->Query("SELECT OriginType, Origin FROM _broadcast WHERE ID = :BroadcastID", array(
+            'BroadcastID' => $BroadcastID
             ))->fetch();
 
         switch ($UserDetails['OriginType']) {
             case USER:
-                if ($UserDetails['OriginType'] === \TwoDot7\User\Session::Data['UserName'] ||
+                if ($UserDetails['Origin'] === \TwoDot7\User\Session::Data()['UserName'] ||
                     \TwoDot7\User\Access::Check(array(
-                        'UserName' => \TwoDot7\User\Session::Data['UserName'],
+                        'UserName' => \TwoDot7\User\Session::Data()['UserName'],
                         'Domain' => array('SYSADMIN', 'ADMIN')
                         ))) {
                     break;
@@ -193,7 +194,7 @@ class Action {
                 return False;
         }
 
-        $DBResponse = $DatabaseHandle->Query("DELETE FROM _broadcast WHERE BroadcastID = :BroadcastID;", array(
+        $DBResponse = $DatabaseHandle->Query("DELETE FROM _broadcast WHERE ID = :BroadcastID;", array(
             'BroadcastID' =>$BroadcastID
             ))->rowCount();
         return (bool)$DBResponse;
@@ -240,6 +241,11 @@ class _For {
 
         $DatabaseHandle = new \TwoDot7\Database\Handler;
         
+        $ShowOptions = \TwoDot7\User\Access::Check(array(
+            'UserName' => \TwoDot7\User\Session::Data()['UserName'],
+            'Domain' => array('SYSADMIN', 'ADMIN')
+        ));
+
         $Result = new \TwoDot7\Util\_List;
         $Result->linearToggle();
         $Counter = 0;
@@ -293,6 +299,8 @@ class _For {
 
                                     $Row['Data'] = \TwoDot7\Util\CrustJS(json_decode($Row['Data'], true));
 
+                                    $Row['ShowOptions'] = $ShowOptions || $Row['Origin'] === \TwoDot7\User\Session::Data()['UserName'];
+
                                     $Result->add($Row);
                                     break;
                                 } else break;
@@ -330,6 +338,8 @@ class _For {
                                     $Row['VisibleClass'] = $TranslateVisibleClass($Row['Visible']);
 
                                     $Row['Data'] = \TwoDot7\Util\CrustJS(json_decode($Row['Data'], true));
+
+                                    $Row['ShowOptions'] = $ShowOptions || $Row['Origin'] === \TwoDot7\User\Session::Data()['UserName'];
 
                                     $Result->add($Row);
                                     break;

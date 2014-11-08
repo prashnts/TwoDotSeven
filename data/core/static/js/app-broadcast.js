@@ -72,8 +72,10 @@ var BroadcastSvc = {
         _Post +=        '<div class="btn-group right card-dropdown">';
         _Post +=            '<button class="btn" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>';
         _Post +=            '<ul class="dropdown-menu">';
+        if (data.ShowOptions) {
         _Post +=                '<li><a href="#"><i class="fa fa-edit"></i> Edit</a></li>';
         _Post +=                '<li><a href="#"><i class="fa fa-trash"></i> Delete</a></li>';
+        }
         _Post +=                '<li><a href="#"><i class="fa fa-flag"></i> Flag this Post</a></li>';
         _Post +=            '</ul>';
         _Post +=        '</div>';

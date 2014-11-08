@@ -109,12 +109,42 @@ function init() {
             break;
 
         case 'delete':
-            
+            $ERR_SHOW = function ($Message = False) {
+                header('HTTP/1.0 450 Invalid Request.', true, 450);
+                echo "<pre>";
+                echo " ______            ____\n";
+                echo "/_  __/    _____  /_  /\n";
+                echo " / / | |/|/ / _ \_ / / \n";
+                echo "/_/  |__,__/\___(_)_/  \n\n";
+                echo "usage <strong>/dev/broadcast/delete/[BroadcastID]</strong>\n";
+                echo "ERROR: ".($Message ? $Message."\n" : "None\n");
+                echo "<strong>Response Headers:</strong>\n";
+                echo "\t<span style=\"color: #A60\">HTTP/1.0 Status: 450 Invalid Request</span>\n";
+                foreach (headers_list() as $key => $value) {
+                    echo "\t$value\n";
+                }
+                die();
+            };
+            try {
+                if (\TwoDot7\Broadcast\Action::Remove($_GET['ActionHook'])) {
+                    header('HTTP/1.0 251 Operation completed successfully.', true, 251);
+                    header('Content-Type: application/json');
+                    echo json_encode(True);
+                    die();
+                } else {
+                    header('HTTP/1.0 461 Error while Processing the Action.', true, 461);
+                    header('Content-Type: application/json');
+                    echo json_encode(False);
+                    die();
+                }
+            } catch (\TwoDot7\Exception\AuthError $E) {
+                $ERR_SHOW("Unauthorized user making out-of-bound request.");
+            }
 
         default:
             header('HTTP/1.0 450 Invalid Request.', true, 450);
             echo "<pre>";
-            echo "usage /dev/broadcast/[add]\n";
+            echo "usage /dev/broadcast/[add, delete, feed]\n";
             echo "Incomplete Request. Please read the Documentation.\n";
             echo "</pre>";
     }
