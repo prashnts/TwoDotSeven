@@ -147,7 +147,7 @@ var BroadcastActions = {
         },
         confirmDelete: function(ID) {
             $("#BROADCAST_"+ID+" .broadcast-card-overlay .data").html("Processing, please wait.");
-            $.getJSON(BroadcastActions.deleteURI + ID)
+            $.getJSON(BroadcastActions.deleteURI + ID + "/" + new Date().getTime())
                 .success(function() {
                     $("#BROADCAST_"+ID+" .broadcast-card-overlay .data").html("Done!");
                     $("#BROADCAST_"+ID).slideUp();
