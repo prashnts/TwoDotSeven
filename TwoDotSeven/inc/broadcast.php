@@ -171,11 +171,39 @@ class Action {
     }
 
     public static function Remove($BroadcastID) {
-        $Query = "DELETE FROM _broadcast WHERE ";
+        $DatabaseHandle = new \TwoDot7\Database\Handler;
+        $DBResponse = $DatabaseHandle->Query("DELETE FROM _broadcast WHERE BroadcastID = :BroadcastID;", array(
+            'BroadcastID' =>$BroadcastID
+            ))->rowCount();
+        return (bool)$DBResponse;
     }
 
-    public static function Update() {
-        // Updates a broadcast
+    public static function UpdateData($BroadcastID, $Data) {
+        $DatabaseHandle = new \TwoDot7\Database\Handler;
+        $DBResponse = $DatabaseHandle->Query("UPDATE _broadcast SET Data = :Data WHERE BroadcastID = :BroadcastID;", array(
+            'Data' => json_encode($Data),
+            'BroadcastID' =>$BroadcastID
+            ))->rowCount();
+        return (bool)$DBResponse;
+    }
+
+    public static function UpdateVisibility($BroadcastID, $Visibility) {
+
+        switch ($Visibility) {
+            case \TwoDot7\Broadcast\_PRIVATE:
+            case \TwoDot7\Broadcast\_PUBLIC:
+                break;
+
+            default:
+                $Visibility = \TwoDot7\Broadcast\_PUBLIC;
+        }
+
+        $DatabaseHandle = new \TwoDot7\Database\Handler;
+        $DBResponse = $DatabaseHandle->Query("UPDATE _broadcast SET Data = :Data WHERE BroadcastID = :BroadcastID;", array(
+            'Visible' => $Visibility,
+            'BroadcastID' =>$BroadcastID
+            ))->rowCount();
+        return (bool)$DBResponse;
     }
 }
 
