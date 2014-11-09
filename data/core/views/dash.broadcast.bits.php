@@ -109,7 +109,6 @@ function Head(&$Data) {
     <link rel="stylesheet" href="/data/core/static/css/app.css" type="text/css" />
     <link rel="stylesheet" href="/assetserver/css/backgroundstyles" type="text/css" />
     <link rel="stylesheet" href="/data/core/static/css/style.css" type="text/css" />
-    <link rel="stylesheet" href="/data/core/static/js/datepicker/datepicker.css" type="text/css" />
 
     <script src="/data/core/static/js/jquery.min.js"></script>
     <!--[if lt IE 9]>   
