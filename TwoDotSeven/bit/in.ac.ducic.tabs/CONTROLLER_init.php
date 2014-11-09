@@ -1,6 +1,6 @@
 <?php
-namespace TwoDOt7\Bit\in_ac_ducic_tabs\Controller;
-use \TwoDOt7\Bit\in_ac_ducic_tabs as Node;
+namespace TwoDot7\Bit\in_ac_ducic_tabs\Controller;
+use \TwoDot7\Bit\in_ac_ducic_tabs as Node;
 function init() {
 	switch ($_GET['BitAction']) {
 		case 'interface':

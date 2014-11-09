@@ -1,0 +1,44 @@
+{
+    "bitMeta" : {
+        "name" : "Courses",
+        "description" : "Manage the Courses, Build time-tables, and manage Attendance.",
+        "icon" : "fa fa-graduation-cap",
+        "tileColor" : "#FFF",
+        "author" : "Tarun Khajuria, Prashant Sinha, Pragya Jaiswal"
+        },
+    "bitInfo" : {
+        "id" : "in.ac.ducic.courses",
+        "adminToken" : "in.ac.ducic.courses.admin",
+        "userToken" : "in.ac.ducic.courses.user",
+        "autoToken" : "in.ac.ducic.courses.user",
+        "autoTokenUserLevel" : 11
+    },
+    "registerIntoBroadcast" : true,
+    "registerIntoDashboard" : true,
+    "navigation" : {
+        "in.ac.ducic.courses" : {
+            "Name" : "Courses",
+            "Icon" : "fa fa-graduation-cap",
+            "Badge" : false,
+            "Visible" : {
+                "LOGGEDIN" : true,
+                "NOTLOGGEDIN" : false
+            },
+            "Tokens" : ["in.ac.ducic.courses.user"],
+            "Children" : false,
+            "Target" : "/twodot7/bit/in.ac.ducic.courses/landing"
+        },
+        "in.ac.ducic.courses.attendance" : {
+            "Name" : "Schedules",
+            "Icon" : "fa fa-calendar-o",
+            "Badge" : false,
+            "Visible" : {
+                "LOGGEDIN" : true,
+                "NOTLOGGEDIN" : false
+            },
+            "Tokens" : false,
+            "Children" : false,
+            "Target" : "/twodot7/bit/in.ac.ducic.courses/schedule"
+        }
+    }
+}

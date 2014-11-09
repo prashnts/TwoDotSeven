@@ -656,5 +656,25 @@
 .broadcast-card-data code {
     font-size: 1em;
     background: transparent;
+    color: #000000;
     border: none;
+}
+
+.broadcast-card-data blockquote {
+    font-size: 1.1em;
+    padding: 0 15px;
+}
+
+.broadcast-card-data a {
+    color: #3b5998;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.broadcast-card-data a:hover,
+.broadcast-card-data a:focus,
+.broadcast-card-data a:visited {
+    color: #3b5998;
+    text-decoration: underline;
+
 }

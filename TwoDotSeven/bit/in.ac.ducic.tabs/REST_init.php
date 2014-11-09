@@ -1,13 +1,13 @@
 <?php
-namespace TwoDOt7\Bit\in_ac_ducic_tabs\REST;
-use \TwoDOt7\Bit\in_ac_ducic_tabs\Controller as Controller;
+namespace TwoDot7\Bit\in_ac_ducic_tabs\REST;
+use \TwoDot7\Bit\in_ac_ducic_tabs\Controller as Controller;
 require in_ac_ducic_tabs."/CONTROLLER_init.php";
 
 function init() {
 	switch ($_GET['BitAction']) {
 		case 'addIntoAddressBook';
 
-			\TwoDOt7\User\REST::AUTH(array(
+			\TwoDot7\User\REST::AUTH(array(
 				'Token' => array('in.ac.ducic.tabs.admin', 'in.ac.ducic.tabs.superuser')
 				));
 

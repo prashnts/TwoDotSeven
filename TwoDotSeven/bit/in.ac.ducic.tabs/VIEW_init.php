@@ -1,5 +1,5 @@
 <?php
-namespace TwoDOt7\Bit\in_ac_ducic_tabs\View;
+namespace TwoDot7\Bit\in_ac_ducic_tabs\View;
 
 function _Interface($Data = False) {
 	?>
