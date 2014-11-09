@@ -249,7 +249,7 @@ class Init {
                 'Code' => 500,
                 'Title' => '500 Bit Dependencies Invalid',
                 'Mood' => 'RED'));
-            
+
             die();
         }
 

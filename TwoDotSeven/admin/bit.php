@@ -26,15 +26,18 @@ function init() {
 	$BitID = $_GET['Bit'];
 	try {
 		$Bit = new \TwoDot7\Bit\Init($BitID);
+
 		$AutoTokenResponse = $Bit->AutoToken();
 		$BiTControllerResponse = $Bit->InterFaceController();
 		$ViewVar = $Bit->CreateView($BiTControllerResponse);
 
+		$Page = isset($BiTControllerResponse['Page']) ? $BiTControllerResponse['Page'] : $BitID; 
+
 		\TwoDot7\Admin\Template\Dash_Broadcasts_Bits\_init(array(
 			'Title' => $Bit->Name,
-			'Page' => $BitID,
+			'Page' => $Page,
 			'Call' => 'Bit',
-			'Navigation' => \TwoDot7\Meta\Navigation::Get(array('Page' => $BitID)),
+			'Navigation' => \TwoDot7\Meta\Navigation::Get(array('Page' => $Page)),
 			'ViewData' => $BiTControllerResponse,
 			'View' => $ViewVar
 			));

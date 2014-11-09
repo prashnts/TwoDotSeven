@@ -862,7 +862,7 @@ function _echo($Variable, $Default = "") {
 
 function _wcf() {
     foreach (func_get_args() as $item) {
-        if (!is_null($item)) {
+        if (!is_null($item) && $item) {
             return $item;
         }
     }

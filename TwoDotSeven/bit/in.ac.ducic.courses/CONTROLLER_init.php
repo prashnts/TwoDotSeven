@@ -8,7 +8,15 @@ function init() {
         case 'landing':
             return array(
                 'Call' => '_Interface',
+                'Page' => 'in.ac.ducic.courses',
                 'Greet' => "Test Success!"
+                );
+
+        case 'schedule':
+            return array(
+                'Call' => '_Interface',
+                'Page' => 'in.ac.ducic.courses.attendance',
+                'Greet' => 'You can change this!'
                 );
 
         default:
@@ -32,7 +40,7 @@ function Install() {
                 "  `Duration` varchar(16) NOT NULL,".
                 "  `CourseID` varchar(256) NOT NULL,".
                 "  `Extra` longtext NOT NULL".
-                ") ENGINE=InnoDB DEFAULT CHARSET=latin1;"
+                ") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 
     $Step3 =    "ALTER TABLE `_bit_in.ac.ducic.courses.course`".
                 " ADD PRIMARY KEY (`CourseID`), ADD UNIQUE KEY `CourseID` (`CourseID`);";
@@ -43,9 +51,9 @@ function Install() {
     $DB = new \TwoDot7\Database\Handler;
 
     return  ((int)$DB->Query($Step1)->errorInfo()[0] === 0) &&
-            ((int)$DB->Query($Step1)->errorInfo()[0] === 0) &&
-            ((int)$DB->Query($Step1)->errorInfo()[0] === 0) &&
-            ((int)$DB->Query($Step1)->errorInfo()[0] === 0);
+            ((int)$DB->Query($Step2)->errorInfo()[0] === 0) &&
+            ((int)$DB->Query($Step3)->errorInfo()[0] === 0) &&
+            ((int)$DB->Query($Step4)->errorInfo()[0] === 0);
 }
 
 ?>
