@@ -610,3 +610,51 @@
     font-size: 1.2em;
     font-weight: 900;
 }
+
+.broadcast-card-data {
+    color: #000000;
+    font-size: 1em;
+}
+
+.broadcast-card-data img {
+    max-width: 100%;
+}
+
+.broadcast-card-data h1,
+.broadcast-card-data h2,
+.broadcast-card-data h3,
+.broadcast-card-data h4,
+.broadcast-card-data h5,
+.broadcast-card-data h6,
+.broadcast-card-data p {
+    margin: 0 0 5px 0;
+}
+
+.broadcast-card-data h1 {
+    font-size: 2em;
+}
+.broadcast-card-data h2 {
+    font-size: 1.9em;
+}
+.broadcast-card-data h3 {
+    font-size: 1.8em;
+}
+.broadcast-card-data h4 {
+    font-size: 1.7em;
+}
+.broadcast-card-data h5 {
+    font-size: 1.6em;
+}
+.broadcast-card-data h6 {
+    font-size: 1.5em;
+}
+.broadcast-card-data p {
+    font-size: 1em;
+}
+
+.broadcast-card-data pre,
+.broadcast-card-data code {
+    font-size: 1em;
+    background: transparent;
+    border: none;
+}
