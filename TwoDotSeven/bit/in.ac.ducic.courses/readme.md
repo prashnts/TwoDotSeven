@@ -7,7 +7,7 @@ Step 1. Unzip the bit in bits directory. This is already done, if you're using `
 
 Step 2. Open `index.php` in directory TwoDotSeven. Paste this line of code before comment: `# Parse incoming URI and then process it.`.
 
-    var_dump(\\TwoDot7\\Bit\\Register::Install("in.ac.ducic.courses")); die();
+    var_dump(\TwoDot7\Bit\Register::Install("in.ac.ducic.courses")); die();
 
 Step 3. Visit the web app once to execute this code.
 
