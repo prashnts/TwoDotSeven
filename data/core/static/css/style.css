@@ -650,6 +650,7 @@
 }
 .broadcast-card-data p {
     font-size: 1em;
+    margin: 0 0 2px 0;
 }
 
 .broadcast-card-data pre,
@@ -662,7 +663,9 @@
 
 .broadcast-card-data blockquote {
     font-size: 1.1em;
-    padding: 0 15px;
+    padding: 0 10px;
+    margin-left: 5px;
+    border-left-width: 2px;
 }
 
 .broadcast-card-data a {
@@ -676,5 +679,8 @@
 .broadcast-card-data a:visited {
     color: #3b5998;
     text-decoration: underline;
+}
 
+.broadcast-card-data a::before {
+    content: url('/data/core/static/images/generic/icons/external-link-10.png');
 }

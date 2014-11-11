@@ -163,6 +163,28 @@ class Render {
         <script src="/data/core/static/js/app-broadcast.js"></script>
         <?php
     }
+    public static function BroadcastCard($Data) {
+        ?>
+        <section class="scrollable padder bg-light fill" id="broadcast">
+            <div class="m-b-md row padder">
+                <div class="col-lg-8">
+                </div>
+                <div class="col-lg-4">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+<li class="broadcast-card broadcast-default" id="BROADCAST_148" data-timestamp="1415523753"><a href="/@/prashant" class="thumb pull-left m-r-sm"><img src="https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-xfa1/v/t1.0-9/1623571_946248492068776_701300619295765708_n.jpg?oh=c9c3152610aa3198e34207837f45c2c9&amp;oe=54C6D582&amp;__gda__=1422140727_2c42725d9876536ade83677fe52e3c75" class="img-circle b-a b-3x b-white"></a><div class="btn-group right card-dropdown"><button class="angle-btn" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button><ul class="dropdown-menu"><li><a href="#"><i class="fa fa-edit"></i> Edit</a></li><li><a href="#" onclick="BroadcastActions.deletePost.init('148')"><i class="fa fa-trash"></i> Delete</a></li><li><a href="#"><i class="fa fa-flag"></i> Flag this Post</a></li></ul></div><div class="clear"><a href="/@/prashant"><span class="text-dark h4">Prashant Sinha </span><span class="h5">@prashant • </span><span class="h5"> </span><br><span class="h6 text-muted">Posted <span class="elapsedJS" data-elapsejs="1415523753">today, at 2:32PM</span> • <i class="fa fa fa-globe"></i></span></a><hr class="m-t-xs m-b-xs"><div class="broadcast-card-data"><ol>
+<li>Bird</li>
+<li>McHale</li>
+<li>Parish</li>
+</ol></div></div><div class="broadcast-card-overlay"><div class="data"></div></div></li>
+                </div>
+            </div>
+        </section>
+        <script src="/data/core/static/js/app-broadcast.js"></script>
+        <?php
+    }
     public static function Dashboard($Data) {
         ?>
         <section class="scrollable padder bg-dark  fill">
