@@ -92,6 +92,8 @@ class Notification {
     function __construct($Hook, $OriginType = NULL, $Origin = NULL, $Target = NULL, $Active = NULL, $Data = NULL) {
         if (is_bool($Hook) || is_null($Hook)) {
 
+            if (!$Data instanceof \TwoDot7\Util\Dictionary) throw new \TwoDot7\Exception\InvalidArgument("\$Data is not a valid argument of type Dictionary.");
+
             $this->Mode = True;
 
             $this->OriginType = $OriginType;
@@ -101,6 +103,7 @@ class Notification {
             $this->Data = $Data;
             $this->Timestamp = time();
             $this->Error = False;
+
         } elseif (is_numeric($Hook)) {
             $Response = \TwoDot7\Database\Handler::Exec("SELECT * FROM _activity WHERE ID=:ID;", array("ID" => $Hook));
             if ((int)$Response->errorCode() === 0) {
@@ -114,10 +117,11 @@ class Notification {
                 $this->Origin = $ResponseData['Origin'];
                 $this->Target = $ResponseData['Target'];
                 $this->Active = $ResponseData['Active'];
-                $this->Data = $ResponseData['Data'];
+                $this->Data = new \TwoDot7\Util\Dictionary($ResponseData['Data']);
                 $this->Timestamp = $ResponseData['Timestamp'];
 
                 $this->Error = False;
+
             } else $this->Error = True;
         } else throw new \TwoDot7\Exception\InvalidArgument("ID is not a valid argument.");
     }
@@ -131,9 +135,21 @@ class Notification {
                 'Origin' => $this->Origin,
                 'Target' => $this->Target,
                 'Active' => $this->Active,
-                'Data' => $this->Data,
+                'Data' => $this->Data->get(False, True),
                 'Timestamp' => $this->Timestamp
             ))->errorInfo() === 0;
+    }
+
+    public function Get() {
+        return new \TwoDot7\Util\Dictionary(array(
+                'ID' => $this->ID,
+                'OriginType' => $this->OriginType,
+                'Origin' => $this->Origin,
+                'Target' => $this->Target,
+                'Active' => $this->Active,
+                'Data' => $this->Data,
+                'Timestamp' => $this->Timestamp
+            ));
     }
 }
 
@@ -156,7 +172,14 @@ class Create {
         if (!$Origin) return False;
 
         foreach ($Target->get() as $Target) {
-            $Notification = new Notification();
+            $Notification = new Notification(
+                True,
+                $OriginType,
+                $Origin,
+                $Target,
+                UNREAD,
+                $Data
+            );
         }
 
         return True;

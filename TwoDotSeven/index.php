@@ -17,6 +17,7 @@ _Import('inc/database.php');
 _Import('inc/exceptions.php');
 _Import('inc/groups.php');
 _Import('inc/validator.php');
+_Import('inc/notification.php');
 _Import('inc/utility.php');
 _Import('inc/install.php');
 _Import('inc/user.php');
