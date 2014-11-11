@@ -233,3 +233,37 @@ class Create {
         return $Response;
     }
 }
+
+class Service {
+    function GetAll() {
+        //
+    }
+
+    function GetNew() {
+        //
+    }
+
+    function Get() {
+        //
+    }
+
+    function SetRead() {
+        //
+    }
+
+    function SetUnread() {
+        //
+    }
+
+    function Delete() {
+        //
+    }
+
+    function DeleteAll() {
+        //
+    }
+
+    function EMail() {
+        // PROPOSED. Not to be implemented anytime soon.
+    }
+}
