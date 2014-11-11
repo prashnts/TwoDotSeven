@@ -159,29 +159,77 @@ class Notification {
 class Create {
 
     /**
-     * Creates a notification originating from the User.
+     * Creates a notification ORIGINATING from the User.
      * @param \TwoDot7\Util\_List       $Target TwoDot7 list of UserNames.
      * @param \TwoDot7\Util\Dictionary  $Data   TwoDot7 dictionary containing fields, 
      *                                          and the relevant data. Cannot be HTML.
      * @return Boolean
      */
     public static function User($Target, $Data) {
-        $OriginType = USER;
         $Origin = \TwoDot7\User\Session\Data()['UserName'];
 
         if (!$Origin) return False;
 
+        $Response = False;
         foreach ($Target->get() as $Target) {
             $Notification = new Notification(
                 True,
-                $OriginType,
+                USER,
                 $Origin,
                 $Target,
                 UNREAD,
                 $Data
             );
+            $Response = $Response && $Notification->Push();
         }
+        return $Response;
+    }
 
-        return True;
+    public static function Bit($Target, $BitID, $Data) {
+        $Response = False;
+        foreach ($Target->get() as $Target) {
+            $Notification = new Notification(
+                True,
+                BIT,
+                $BitID,
+                $Target,
+                UNREAD,
+                $Data
+            );
+            $Response = $Response && $Notification->Push();
+        }
+        return $Response;
+    }
+
+    public static function Group($Target, $GroupID, $Data) {
+        $Response = False;
+        foreach ($Target->get() as $Target) {
+            $Notification = new Notification(
+                True,
+                GROUP,
+                $GroupID,
+                $Target,
+                UNREAD,
+                $Data
+            );
+            $Response = $Response && $Notification->Push();
+        }
+        return $Response;
+    }
+
+    public static function System($Target, $SystemName, $Data) {
+        $Response = False;
+        foreach ($Target->get() as $Target) {
+            $Notification = new Notification(
+                True,
+                SYSTEM,
+                $SystemName,
+                $Target,
+                UNREAD,
+                $Data
+            );
+            $Response = $Response && $Notification->Push();
+        }
+        return $Response;
     }
 }
