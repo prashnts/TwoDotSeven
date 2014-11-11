@@ -39,11 +39,101 @@ const READ = 1;
 const UNREAD = 2;
 
 class Notification {
+    /**
+     * Notification Field
+     * @var Integer
+     */
     private $ID;
+
+    /**
+     * Notification Field
+     * @var Integer
+     */
     private $OriginType;
 
-    function __construct() {
-        //
+    /**
+     * Notification Field
+     * @var Mixed
+     */
+    private $Origin;
+
+    /**
+     * Notification Field
+     * @var String
+     */
+    private $Target;
+
+    /**
+     * Notification Field
+     * @var Integer
+     */
+    private $Active;
+
+    /**
+     * Notification Field
+     * @var Mixed
+     */
+    private $Data;
+
+    /**
+     * Notification Field
+     * @var Integer
+     */
+    private $Timestamp;
+
+    /**
+     * The mode of the Object created. Can be either a pre-existing Notification, or a New Notification.
+     * In case of New Notification, it is True, else, it is False.
+     * @var Boolean
+     */
+    private $Mode;
+    public $Error = False;
+
+    function __construct($Hook, $OriginType = NULL, $Origin = NULL, $Target = NULL, $Active = NULL, $Data = NULL) {
+        if (is_bool($Hook) || is_null($Hook)) {
+
+            $this->Mode = True;
+
+            $this->OriginType = $OriginType;
+            $this->Origin = $Origin;
+            $this->Target = $Target;
+            $this->Active = $Active;
+            $this->Data = $Data;
+            $this->Timestamp = time();
+            $this->Error = False;
+        } elseif (is_numeric($Hook)) {
+            $Response = \TwoDot7\Database\Handler::Exec("SELECT * FROM _activity WHERE ID=:ID;", array("ID" => $Hook));
+            if ((int)$Response->errorCode() === 0) {
+
+                $this->Mode = False;
+
+                $ResponseData = $Response->fetch(\PDO::FETCH_ASSOC);
+
+                $this->ID = $ResponseData['ID'];
+                $this->OriginType = $ResponseData['OriginType'];
+                $this->Origin = $ResponseData['Origin'];
+                $this->Target = $ResponseData['Target'];
+                $this->Active = $ResponseData['Active'];
+                $this->Data = $ResponseData['Data'];
+                $this->Timestamp = $ResponseData['Timestamp'];
+
+                $this->Error = False;
+            } else $this->Error = True;
+        } else throw new \TwoDot7\Exception\InvalidArgument("ID is not a valid argument.");
+    }
+
+    public function Push() {
+        if (!$this->Mode) throw new \TwoDot7\Exception\InvalidMethod("Push is not a valid Method for objects of this type.");
+        return (int)\TwoDot7\Database\Handler::Exec(
+            "INSERT INTO _activity (OriginType, Origin, Target, Active, Data, Timestamp) VALUES (:OriginType, :Origin, :Target, :Active, :Data, :Timestamp)",
+            array(
+                'OriginType' => $this->OriginType,
+                'Origin' => $this->Origin,
+                'Target' => $this->Target,
+                'Active' => $this->Active,
+                'Data' => $this->Data,
+                'Timestamp' => $this->Timestamp
+            ))->errorInfo() === 0;
     }
 }
 
