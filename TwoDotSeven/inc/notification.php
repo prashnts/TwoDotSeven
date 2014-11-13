@@ -300,15 +300,11 @@ class Create {
 }
 
 class Service {
-    public static function GetAll() {
-        //
+    public static function GetPast($UserName, $Active, $Timestamp) {
+        $Query = "SELECT * FROM _activity WHERE Target=:Target AND Timestamp<=:Timestamp;";
     }
 
-    public static function GetNew() {
-        //
-    }
-
-    public static function Get() {
+    public static function GetNew($UserName, $Timestamp) {
         //
     }
 
