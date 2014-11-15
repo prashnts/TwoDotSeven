@@ -300,8 +300,26 @@ class Create {
 }
 
 class Service {
-    public static function GetPast($UserName, $Active, $Timestamp) {
-        $Query = "SELECT * FROM _activity WHERE Target=:Target AND Timestamp<=:Timestamp;";
+
+    /**
+     * Returns the Past 10 (\Config\BROADCAST_FEED_UNIT), or less Notifications 
+     * for User. UserName should be provided at runtime.
+     * @param String   $UserName    The UserName. Default value is the Logged-In
+     *                              UserName. Invalid UserNames are not processed.
+     * @param Boolean  $Active      Return Read or Unread, or both notifications.
+     *                              Default: NULL. Which means, both are returned.
+     * @param Integer  $Timestamp   Time Stamp of the last Notification. Default
+     *                              value is Current Server time, hence, when
+     *                              the notifications are fetched the first time,
+     *                              this function SHOULD be used. Using the ::GetNew
+     *                              function would ALWAYS return bad value.
+     */
+    public static function GetPast($UserName = NULL, $Active = NULL, $Timestamp = time()) {
+        if (is_null($UserName)) $UserName = \TwoDot7\User\Session::Data()['UserName'];
+        $Query  = "SELECT * FROM _activity WHERE Target=:Target AND Timestamp<=:Timestamp";
+        $Query .= is_null($Active) ? ";" : " AND Active:Active;";
+
+        // TODO.
     }
 
     public static function GetNew($UserName, $Timestamp) {
