@@ -120,7 +120,13 @@ class Notification {
      * @return  Boolean
      * @throws  \TwoDot7\Exception\InvalidArgument If $Hook is not either (int, bool, null).
      */
-    function __construct($Hook, $OriginType = NULL, $Origin = NULL, $Target = NULL, $Active = NULL, $Data = NULL) {
+    function __construct(
+        $Hook,
+        $OriginType = NULL,
+        $Origin = NULL,
+        $Target = NULL,
+        $Active = NULL,
+        $Data = NULL) {
         if (is_bool($Hook) || is_null($Hook)) {
 
             if (!$Data instanceof \TwoDot7\Util\Dictionary) throw new \TwoDot7\Exception\InvalidArgument("\$Data is not a valid argument of type Dictionary.");
@@ -181,16 +187,21 @@ class Notification {
      * Returns the Notification object as a TwoDot7 dictionary.
      * @return \TwoDot7\Util\Dictionary
      */
-    public function Get() {
-        return new \TwoDot7\Util\Dictionary(array(
-                'ID' => $this->ID,
-                'OriginType' => $this->OriginType,
-                'Origin' => $this->Origin,
-                'Target' => $this->Target,
-                'Active' => $this->Active,
-                'Data' => $this->Data,
-                'Timestamp' => $this->Timestamp
-            ));
+    public function Get($JSON = False) {
+        $Response = new \TwoDot7\Util\Dictionary(array(
+            'ID' => $this->ID,
+            'OriginType' => $this->OriginType,
+            'Origin' => $this->Origin,
+            'Target' => $this->Target,
+            'Active' => $this->Active,
+            'Data' => $this->Data,
+            'Timestamp' => $this->Timestamp
+        ));
+
+        if ($JSON) {
+            $Response->add('Data', $this->Data->get());
+            return $Response->get(False, True);
+        } else return $Response;
     }
 }
 
@@ -303,7 +314,7 @@ class Service {
 
     /**
      * Returns the Past 10 (\Config\BROADCAST_FEED_UNIT), or less Notifications 
-     * for User. UserName should be provided at runtime.
+     * for User. UserName should be provided at runtime. 
      * @param String   $UserName    The UserName. Default value is the Logged-In
      *                              UserName. Invalid UserNames are not processed.
      * @param Boolean  $Active      Return Read or Unread, or both notifications.
@@ -314,12 +325,40 @@ class Service {
      *                              this function SHOULD be used. Using the ::GetNew
      *                              function would ALWAYS return bad value.
      */
-    public static function GetPast($UserName = NULL, $Active = NULL, $Timestamp = time()) {
-        if (is_null($UserName)) $UserName = \TwoDot7\User\Session::Data()['UserName'];
-        $Query  = "SELECT * FROM _activity WHERE Target=:Target AND Timestamp<=:Timestamp";
-        $Query .= is_null($Active) ? ";" : " AND Active:Active;";
+    public static function GetPast($UserName = NULL, $Active = NULL, $Timestamp = NULL) {
+        if (is_null($UserName))  $UserName  = \TwoDot7\User\Session::Data()['UserName'];
+        if (is_null($Timestamp)) $Timestamp = time();
+        $Query  = "SELECT * FROM _activity WHERE Target = :Target AND Timestamp <= :Timestamp";
+        $Query .= is_null($Active) ? "" : " AND Active = :Active";
+        $Query .= " ORDER BY ID DESC LIMIT " . \TwoDot7\Config\BROADCAST_FEED_UNIT . ";";
 
-        // TODO.
+        $QueryParam = array(
+            'Target'    => $UserName,
+            'Timestamp' => $Timestamp
+        );
+
+        if (!is_null($Active)) {
+            $QueryParam = array_merge($QueryParam, array('Active' => $Active));
+        }
+
+        $Response = \TwoDot7\Database\Handler::Exec($Query, $QueryParam)->fetchAll(\PDO::FETCH_ASSOC);
+
+        $NotificationList = new \TwoDot7\Util\_List;
+        $NotificationList->linearToggle();
+
+        foreach ($Response as $Data) {
+            $Notification = new Notification(
+                $Data['ID'],
+                $Data['OriginType'],
+                $Data['Origin'],
+                $Data['Target'],
+                $Data['Data'],
+                $Data['Timestamp']
+            );
+            $NotificationList->add($Notification->Get(True));
+        }
+
+        return $NotificationList;
     }
 
     public static function GetNew($UserName, $Timestamp) {
