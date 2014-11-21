@@ -25,6 +25,7 @@ _Import('../inc/install.php');
 _Import('../inc/user.php');
 _Import('../inc/cron.php');
 _Import('../inc/mailer.php');
+_Import('../inc/notification.php');
 _Import('../inc/bits.php');
 _Import("_REST_Config.php");
 _Import("_REST_Account.php");
@@ -32,6 +33,7 @@ _Import("_REST_Broadcast.php");
 _Import("_REST_Direction.php");
 _Import("_REST_Group.php");
 _Import("_REST_Redundant.php");
+_Import("_REST_Notification.php");
 _Import("_REST_User.php");
 
 # Parse incoming URI and then process it.
@@ -103,6 +105,11 @@ switch(strtolower(isset($URI[BASE]) ? $URI[BASE] : False)) {
             'SubAction' => isset($URI[BASE+3]) ? $URI[BASE+3] : False
         );
         Group\initRoutine();
+        break;
+
+    case 'notificationsvc':
+        $_GET = array();
+        Notification\init();
         break;
 
     case 'echo':
