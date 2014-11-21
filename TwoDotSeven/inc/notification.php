@@ -343,6 +343,45 @@ class Service {
 
         $Response = \TwoDot7\Database\Handler::Exec($Query, $QueryParam)->fetchAll(\PDO::FETCH_ASSOC);
 
+        return self::AggregateNotifications($Response);
+    }
+
+    /**
+     * Returns Notifications, AFTER the given time. If no time is specified, it'll
+     * return 10 notifications after the epoch, that is 0.
+     * @param String   $UserName    The UserName. Default value is the Logged-In
+     *                              UserName. Invalid UserNames are not processed.
+     * @param Boolean  $Active      Return Read or Unread, or both notifications.
+     *                              Default: NULL. Which means, both are returned.
+     * @param Integer  $Timestamp   Time Stamp after which the Notifications are
+     *                              desired. Default value is 0.
+     */
+    public static function GetNew($UserName = NULL, $Active = NULL, $Timestamp = NULL) {
+        if (is_null($UserName))  $UserName  = \TwoDot7\User\Session::Data()['UserName'];
+        if (is_null($Timestamp)) $Timestamp = 0;
+        $Query  = "SELECT * FROM _activity WHERE Target = :Target AND Timestamp > :Timestamp";
+        $Query .= is_null($Active) ? "" : " AND Active = :Active";
+        $Query .= " ORDER BY ID DESC LIMIT " . \TwoDot7\Config\BROADCAST_FEED_UNIT . ";";
+
+        $QueryParam = array(
+            'Target'    => $UserName,
+            'Timestamp' => $Timestamp
+        );
+
+        if (!is_null($Active)) {
+            $QueryParam = array_merge($QueryParam, array('Active' => $Active));
+        }
+
+        $Response = \TwoDot7\Database\Handler::Exec($Query, $QueryParam)->fetchAll(\PDO::FETCH_ASSOC);
+
+        return self::AggregateNotifications($Response);
+    }
+
+    /**
+     * Private method that aggregates notifications into a TwoDot7\Util\_List and returns.
+     * @param Iterable $Response The data returned from the DB.
+     */
+    private static function AggregateNotifications($Response) {
         $NotificationList = new \TwoDot7\Util\_List;
         $NotificationList->linearToggle();
 
@@ -359,10 +398,6 @@ class Service {
         }
 
         return $NotificationList;
-    }
-
-    public static function GetNew($UserName, $Timestamp) {
-        //
     }
 
     public static function SetRead($ID) {
