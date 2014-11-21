@@ -328,7 +328,7 @@ class Service {
     public static function GetPast($UserName = NULL, $Active = NULL, $Timestamp = NULL) {
         if (is_null($UserName))  $UserName  = \TwoDot7\User\Session::Data()['UserName'];
         if (is_null($Timestamp)) $Timestamp = time();
-        $Query  = "SELECT * FROM _activity WHERE Target = :Target AND Timestamp <= :Timestamp";
+        $Query  = "SELECT * FROM _activity WHERE Target = :Target AND Timestamp < :Timestamp";
         $Query .= is_null($Active) ? "" : " AND Active = :Active";
         $Query .= " ORDER BY ID DESC LIMIT " . \TwoDot7\Config\BROADCAST_FEED_UNIT . ";";
 
