@@ -39,6 +39,11 @@ const READ = 1;
 const UNREAD = 2;
 
 /**
+ * Notification state Deleted
+ */
+const DELETED = 3;
+
+/**
  * The notification object.
  */
 class Notification {
@@ -328,18 +333,16 @@ class Service {
     public static function GetPast($UserName = NULL, $Active = NULL, $Timestamp = NULL) {
         if (is_null($UserName))  $UserName  = \TwoDot7\User\Session::Data()['UserName'];
         if (is_null($Timestamp)) $Timestamp = time();
-        $Query  = "SELECT * FROM _activity WHERE Target = :Target AND Timestamp < :Timestamp";
-        $Query .= is_null($Active) ? "" : " AND Active = :Active";
+        if (!is_null($Active) && !in_array($Active, array(READ, UNREAD))) throw new \TwoDot7\Exception\InvalidArgument("Argument Active should be a valid Notification Status.");
+        
+        $Query  = "SELECT * FROM _activity WHERE Target = :Target AND Timestamp < :Timestamp AND Active IN ";
+        $Query .= (is_null($Active)) ? "(" . READ . "," . UNREAD . ")" : "(".$Active.")";
         $Query .= " ORDER BY ID DESC LIMIT " . \TwoDot7\Config\BROADCAST_FEED_UNIT . ";";
 
         $QueryParam = array(
             'Target'    => $UserName,
-            'Timestamp' => $Timestamp
+            'Timestamp' => $Timestamp,
         );
-
-        if (!is_null($Active)) {
-            $QueryParam = array_merge($QueryParam, array('Active' => $Active));
-        }
 
         $Response = \TwoDot7\Database\Handler::Exec($Query, $QueryParam)->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -359,18 +362,16 @@ class Service {
     public static function GetNew($UserName = NULL, $Active = NULL, $Timestamp = NULL) {
         if (is_null($UserName))  $UserName  = \TwoDot7\User\Session::Data()['UserName'];
         if (is_null($Timestamp)) $Timestamp = 0;
-        $Query  = "SELECT * FROM _activity WHERE Target = :Target AND Timestamp > :Timestamp";
-        $Query .= is_null($Active) ? "" : " AND Active = :Active";
+        if (!is_null($Active) && !in_array($Active, array(READ, UNREAD))) throw new \TwoDot7\Exception\InvalidArgument("Argument Active should be a valid Notification Status.");
+        
+        $Query  = "SELECT * FROM _activity WHERE Target = :Target AND Timestamp > :Timestamp AND Active IN ";
+        $Query .= (is_null($Active)) ? "(" . READ . "," . UNREAD . ")" : "(".$Active.")";
         $Query .= " ORDER BY ID DESC LIMIT " . \TwoDot7\Config\BROADCAST_FEED_UNIT . ";";
 
         $QueryParam = array(
             'Target'    => $UserName,
-            'Timestamp' => $Timestamp
+            'Timestamp' => $Timestamp,
         );
-
-        if (!is_null($Active)) {
-            $QueryParam = array_merge($QueryParam, array('Active' => $Active));
-        }
 
         $Response = \TwoDot7\Database\Handler::Exec($Query, $QueryParam)->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -400,6 +401,10 @@ class Service {
         return $NotificationList;
     }
 
+    /**
+     * Sets the said Notification as "Read" status.
+     * @param Integer $ID The Notification ID.
+     */
     public static function SetRead($ID) {
         $Response = \TwoDot7\Database\Handler::Exec(
             "UPDATE _activity SET Active=:Active WHERE ID=:ID;",
@@ -411,6 +416,10 @@ class Service {
         return (bool)((int)((int)$Response->errorCode()[0] === 0) + $Response->rowCount());
     }
 
+    /**
+     * Sets the sais Notification as "Unread" status.
+     * @param Integer $ID The Notification ID.
+     */
     public static function SetUnread($ID) {
         $Response = \TwoDot7\Database\Handler::Exec(
             "UPDATE _activity SET Active=:Active WHERE ID=:ID;",
@@ -422,10 +431,19 @@ class Service {
         return (bool)((int)((int)$Response->errorCode()[0] === 0) + $Response->rowCount());
     }
 
+    /**
+     * Sets the delete flag on the notification. This is done by setting the Active flag as
+     * DELETED (which is 3).
+     * @param Integer $ID The Notification ID.
+     */
     public static function Delete($ID) {
         $Response = \TwoDot7\Database\Handler::Exec(
-            "DELETE FROM _activity WHERE ID=:ID;",
-            array('ID' => $ID));
+            "UPDATE _activity SET Active=:Active WHERE ID=:ID;",
+            array(
+                'ID' => $ID,
+                'Active' => DELETED
+            )
+        );
         return (bool)((int)((int)$Response->errorCode()[0] === 0) + $Response->rowCount());
     }
 
