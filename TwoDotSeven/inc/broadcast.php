@@ -194,7 +194,7 @@ class Action {
                 return False;
         }
 
-        $DBResponse = $DatabaseHandle->Query("DELETE FROM _broadcast WHERE ID = :BroadcastID;", array(
+        $DBResponse = $DatabaseHandle->Query("UPDATE _broadcast SET Visible = Visible+10 WHERE ID = :BroadcastID;", array(
             'BroadcastID' =>$BroadcastID
             ))->rowCount();
         return (bool)$DBResponse;
@@ -252,7 +252,7 @@ class _For {
         do {
             $Counter = 0;
             $Direction = 
-            $Query = "SELECT * FROM _broadcast WHERE Timestamp {$Direction} :Timestamp ORDER BY ID DESC LIMIT ".\TwoDot7\Config\BROADCAST_FEED_UNIT.";";
+            $Query = "SELECT * FROM _broadcast WHERE Timestamp {$Direction} :Timestamp AND Visible IN(7,8) ORDER BY ID DESC LIMIT ".\TwoDot7\Config\BROADCAST_FEED_UNIT.";";
 
             $Response = $DatabaseHandle->Query($Query, array(
                 'Timestamp' => (!$Begin || $Begin === 0) ? time() : $Begin,
