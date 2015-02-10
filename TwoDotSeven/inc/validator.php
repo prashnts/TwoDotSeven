@@ -19,7 +19,7 @@ namespace TwoDot7\Validate;
 function Alphanumeric($Candidate, $LengthMin = 0, $LengthMax = 0) {
     $PatternTail = "";
     
-    if ($LengthMin >= 0 && $LengthMax > $LengthMin) $PatternTail = "\{$LengthMin, $LengthMin}";
+    if ($LengthMin >= 0 && $LengthMax > $LengthMin) $PatternTail = "\{$LengthMin, $LengthMax}";
     if ($LengthMin == 0 && $LengthMax == 0) $PatternTail = "*"; 
     if ($LengthMin > 0 && $LengthMax == 0) $PatternTail = "\{$LengthMin,}";
     
